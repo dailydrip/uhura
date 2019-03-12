@@ -1,0 +1,38 @@
+# Bundler state
+/.bundle
+/vendor/bundle/
+/vendor/ruby/
+
+# Rails specific artifacts
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+
+# Scm revert files
+**.orig
+
+# Mac finder artifacts
+.DS_Store
+
+# RubyMine project files
+.idea
+
+# Vim artifacts
+**.swp
+
+# Environment files that may contain sensitive data
+.env
+.byebug_history
+*.dump
+node_modules
+yarn-error.log
+
+# Ignore Rails credentials key file
+config/master.key
+
+# Do not commit vcr cassetes, it contains some tokens
+/fixtures/vcr_cassettes/*
+
+# Directory for personal files
+personal
