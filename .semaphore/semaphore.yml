@@ -41,4 +41,4 @@ blocks:
         - name: PGHOST
           value: localhost
         - name: PGPASSWORD
-          value:
+          value: ""
