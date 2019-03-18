@@ -23,7 +23,7 @@ blocks:
     task:
       jobs:
         - name: rake
-        - commands:
+          commands:
           - bundle exec rake
       prologue:
         commands:
