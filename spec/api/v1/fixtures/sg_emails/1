@@ -1,0 +1,10 @@
+{
+  "id": 1,
+  "from_email": "alice@gmail.com",
+  "to_email": "bob@gmail.com",
+  "subject": "A test from Rails",
+  "content": "How r u?",
+  "response_status_code": "202",
+  "created_at": "2019-03-15T18:32:08.507Z",
+  "updated_at": "2019-03-15T18:32:08.507Z"
+}
