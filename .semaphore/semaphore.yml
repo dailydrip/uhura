@@ -18,13 +18,21 @@ blocks:
           - sem-version ruby 2.6.1
           - bundle install --deployment -j 4 --path vendor/bundle
           - cache store gems-$SEMAPHORE_GIT_BRANCH-$(checksum Gemfile.lock) vendor/bundle
-
-  - name: Rake
+  - name: Lint
     task:
       jobs:
         - name: rubocop
           commands:
           - bundle exec rake rubocop
+      prologue:
+        commands:
+          - checkout
+          - cache restore gems-$SEMAPHORE_GIT_BRANCH-$(checksum Gemfile.lock),gems-$SEMAPHORE_GIT_BRANCH-,gems-master-
+          - sem-version ruby 2.6.1
+          - bundle install --deployment --path vendor/bundle
+  - name: Tests
+    task:
+      jobs:
         - name: rspec
           commands:
           - bundle exec rake spec
