@@ -21,11 +21,16 @@ blocks:
 
   - name: Rake
     task:
+      prologue:
+        commands:
+          - checkout
+          - cache restore gems-$SEMAPHORE_GIT_BRANCH-$(checksum Gemfile.lock),gems-$SEMAPHORE_GIT_BRANCH-,gems-master-
+          - sem-version ruby 2.6.1
+          - sem-service start postgres
+          - bundle install --deployment --path vendor/bundle
+          - bundle exec rake db:setup
+
       jobs:
         - name: rake
-          commands:
-            - checkout
-            - cache restore gems-$SEMAPHORE_GIT_BRANCH-$(checksum Gemfile.lock),gems-$SEMAPHORE_GIT_BRANCH-,gems-master-
-            - sem-version ruby 2.6.1
-            - bundle install --deployment --path vendor/bundle
-            - bundle exec rake
+        - commands:
+          - bundle exec rake
