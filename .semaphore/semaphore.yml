@@ -21,9 +21,10 @@ blocks:
 
   - name: Rake
     task:
-      env_vars:
-        - name: RAILS_ENV
-          value: test
+      jobs:
+        - name: rake
+        - commands:
+          - bundle exec rake
       prologue:
         commands:
           - checkout
@@ -32,8 +33,6 @@ blocks:
           - sem-service start postgres
           - bundle install --deployment --path vendor/bundle
           - bundle exec rake db:setup
-
-      jobs:
-        - name: rake
-        - commands:
-          - bundle exec rake
+      env_vars:
+        - name: RAILS_ENV
+          value: test
