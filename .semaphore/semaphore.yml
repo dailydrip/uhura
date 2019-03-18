@@ -22,9 +22,12 @@ blocks:
   - name: Rake
     task:
       jobs:
-        - name: rake
+        - name: rubocop
           commands:
-          - bundle exec rake
+          - bundle exec rake rubocop
+        - name: rspec
+          commands:
+          - bundle exec rake spec
       prologue:
         commands:
           - checkout
