@@ -53,6 +53,7 @@ group :development, :test do
   gem 'awesome_print' # for irb and debugging
   gem 'hirb'          # for irb
   gem 'cuba'
+  gem 'rubocop', require: false
 end
 
 group :test do

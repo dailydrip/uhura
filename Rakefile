@@ -6,3 +6,14 @@
 require_relative 'config/application'
 
 Rails.application.load_tasks
+
+# Clearing here because I want them to run in this order, specifically.
+task(:default).clear
+
+task :default do
+  %i[rubocop spec].each do |task|
+    Rake::Task[task].invoke
+  rescue SystemExit
+    puts "\e[31mTask Failed\e[0m"
+  end
+end
