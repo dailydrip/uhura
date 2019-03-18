@@ -6,7 +6,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '2.6.1'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 6.0.0.beta1'
+gem 'rails', '~> 6.0.0.beta3'
 # Use postgresql as the database for Active Record
 gem 'pg', '>= 0.18', '< 2.0'
 # Use Puma as the app server
@@ -41,12 +41,18 @@ gem 'bootsnap', '>= 1.1.0', require: false
 # slim
 gem 'slim'
 
+# For sending emails
+gem 'sendgrid-ruby'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'rspec'
   gem 'rspec-rails', '~> 3.8'
   gem 'spinach-rails'
+  gem 'awesome_print' # for irb and debugging
+  gem 'hirb'          # for irb
+  gem 'cuba'
 end
 
 group :test do
