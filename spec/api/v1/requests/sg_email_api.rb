@@ -1,9 +1,10 @@
+# frozen_string_literal: true
+
 require 'net/http'
 require 'json'
 require 'uri'
 
 class SgEmailApi
-
   attr_accessor :id, :from_email, :to_email, :subject, :content, :response_status_code
 
   def initialize(attributes = {})
@@ -12,15 +13,15 @@ class SgEmailApi
     @to_email   = attributes[:to_email]
     @subject    = attributes[:subject]
     @content    = attributes[:content]
-    @response_status_code= attributes[:response_status_code]
+    @response_status_code = attributes[:response_status_code]
   end
 
   def self.post
     post_data = Net::HTTP.post_form(URI.parse("#{ENV['API_ENDPOINT']}/sg_emails/"),
-                                   {:from_email => 'lex.nospam@gmail.com',
-                                    :to_email => 'lex.sheehan@gmail.com',
-                                    :subject => 'A test from Postman',
-                                    :content => 'How r u?'})
+                                    from_email: 'lex.nospam@gmail.com',
+                                    to_email: 'lex.sheehan@gmail.com',
+                                    subject: 'A test from Postman',
+                                    content: 'How r u?')
 
     return_success(post_data.to_s)
   end
@@ -33,9 +34,7 @@ class SgEmailApi
     URI.parse([ENV.fetch('API_ENDPOINT'), *path].join('/'))
   end
 
-
   private_class_method def self.read_fixture(*path)
-    File.read [__dir__, '..',  '..',  '..', ENV['API_VER'], 'fixtures', *path].join('/')
+    File.read [__dir__, '..', '..', '..', ENV['API_VER'], 'fixtures', *path].join('/')
   end
-
 end

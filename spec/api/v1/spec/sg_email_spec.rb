@@ -1,11 +1,14 @@
+# frozen_string_literal: true
+
 require "#{__dir__}/../requests/sg_email_api.rb"
 require "#{__dir__}/with_fake_server.rb"
 require 'awesome_print'
 require 'rails_helper'
 
 RSpec.describe SgEmailApi do
-
-  around &method(:with_fake_server)
+  around do |ex|
+    with_fake_server(ex)
+  end
 
   attr_accessor :sg_email
 
@@ -28,5 +31,4 @@ RSpec.describe SgEmailApi do
   #     expect(sg_email.response_status_code).to eq '202'
   #   end
   # end
-
 end
