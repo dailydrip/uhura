@@ -30,6 +30,15 @@ blocks:
           - cache restore gems-$SEMAPHORE_GIT_BRANCH-$(checksum Gemfile.lock),gems-$SEMAPHORE_GIT_BRANCH-,gems-master-
           - sem-version ruby 2.6.1
           - bundle install --deployment --path vendor/bundle
+      env_vars:
+        - name: RAILS_ENV
+          value: test
+        - name: PGUSER
+          value: postgres
+        - name: PGHOST
+          value: localhost
+        - name: PGPASSWORD
+          value: ""
   - name: Tests
     task:
       jobs:
