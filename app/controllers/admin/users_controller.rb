@@ -7,7 +7,7 @@ module Admin
     #
     # def index
     #   super
-    #   @sendgrids = User.
+    #   @resources = User.
     #     page(params[:page]).
     #     per(10)
     # end
