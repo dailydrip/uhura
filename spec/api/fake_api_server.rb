@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'cuba'
 require 'awesome_print'
 
@@ -26,7 +28,6 @@ Cuba.define do
       end
     end
   end
-
 end
 
 # Run server if this file is executed on the command line

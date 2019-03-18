@@ -1,5 +1,6 @@
-def with_fake_server(example)
+# frozen_string_literal: true
 
+def with_fake_server(example)
   real_api_endpoint = ENV['API_ENDPOINT']
   # Set the API endpoint to the fake server.
   ENV['API_ENDPOINT'] = "http://localhost:8080/#{ENV['API_VER']}"
@@ -11,10 +12,10 @@ def with_fake_server(example)
   Thread.new do
     require "#{__dir__}/../../fake_api_server.rb"
     Rack::Handler::WEBrick.run(
-        Cuba,
-        Logger: WEBrick::Log.new(File.open(File::NULL, 'w')),
-        AccessLog: [],
-        StartCallback: -> { server_started = true }
+      Cuba,
+      Logger: WEBrick::Log.new(File.open(File::NULL, 'w')),
+      AccessLog: [],
+      StartCallback: -> { server_started = true }
     )
   end
 
@@ -23,7 +24,6 @@ def with_fake_server(example)
 
   # Run our tests
   example.run
-
 
   # Switch the Config.api_endpoin back to what it was before.
   ENV['API_ENDPOINT'] = real_api_endpoint

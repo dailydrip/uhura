@@ -9,9 +9,6 @@
 !/log/.keep
 !/tmp/.keep
 
-# Rubocop
-.rubocop*
-
 # Scm revert files
 **.orig
 

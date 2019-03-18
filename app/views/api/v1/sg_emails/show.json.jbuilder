@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 json.id @sg_email.id
 json.from_email @sg_email.from_email
 json.to_email @sg_email.to_email
