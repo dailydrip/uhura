@@ -21,6 +21,9 @@ blocks:
 
   - name: Rake
     task:
+      env_vars:
+        - name: RAILS_ENV
+          value: test
       prologue:
         commands:
           - checkout
