@@ -66,5 +66,8 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
   #
-  #
+
+  # Include spec/support helpers
+  config.include RequestSpecHelper
+  config.include ControllerSpecHelper
 end

@@ -10,8 +10,9 @@ class Api::V1::SgEmailsController < Api::V1::ApiController
     @sg_email.content     = params[:content]
 
     if !@sg_email.valid?
-      render json: { error: @sg_email.errors.full_messages,
-                     status: :unprocessable_entity }
+      # render json: { error: @sg_email.errors.full_messages,
+      #                status: :unprocessable_entity }
+      render json: return_error(@sg_email.errors)
     else
       send_via_sendgrid
     end
@@ -50,12 +51,12 @@ class Api::V1::SgEmailsController < Api::V1::ApiController
 
     # Send email via SendGrid
     response = sg.client.mail._('send').post request_body: mail.to_json
+    puts response
     if @sg_email.save!
       render json: @sg_email, status: :created
     else
-      render json: { error: @sg_email.errors.full_messages }, status: :not_found
+      render json: return_error(@sg_email.errors)
     end
-    "Email sent. #{response.status_code} #{response.body}"
   rescue StandardError => err
     render json: return_error("SendGrid: #{err.message}}")
   end
@@ -69,7 +70,6 @@ class Api::V1::SgEmailsController < Api::V1::ApiController
       type: 'text/plain',
       value: @sg_email.content
     )
-
     @mail ||= SendGrid::Mail.new(from, subject, to, content)
   end
 end
