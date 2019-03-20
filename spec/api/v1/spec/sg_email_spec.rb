@@ -23,7 +23,9 @@ RSpec.describe 'Request Test', type: :request do
       end
 
       it 'returns status code 201' do
-        expect(response).to have_http_status(201)
+        # 201 works locally, but on semaphore => expected the response to have status code 201 but it was 200
+        # expect(response).to have_http_status(201)
+        expect(response).to have_http_status(:created)
       end
     end
 
