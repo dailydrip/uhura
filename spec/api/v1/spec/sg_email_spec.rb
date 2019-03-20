@@ -3,16 +3,15 @@
 require 'rails_helper'
 
 RSpec.describe 'Request Test', type: :request do
-
   let(:headers) { valid_headers }
 
   describe 'POST /api/v1/sg_emails' do
     let(:valid_attributes) do
       {
-          "from_email": "alice@gmail.com",
-          "to_email": "bob@gmail.com",
-          "subject": "A test from Rails",
-          "content": "How R U?"
+        'from_email': 'alice@gmail.com',
+        'to_email': 'bob@gmail.com',
+        'subject': 'A test from Rails',
+        'content': 'How R U?'
       }.to_json
     end
 
@@ -39,10 +38,10 @@ RSpec.describe 'Request Test', type: :request do
 
       it 'returns a validation failure message' do
         expect(json['message'])
-              .to match("from_email" => ["can't be blank", "is invalid"],
-                        "to_email" => ["can't be blank", "is invalid", "should be different than from_email"],
-                        "subject" => ["can't be blank"],
-                        "content" => ["can't be blank"])
+          .to match('from_email' => ["can't be blank", 'is invalid'],
+                    'to_email' => ["can't be blank", 'is invalid', 'should be different than from_email'],
+                    'subject' => ["can't be blank"],
+                    'content' => ["can't be blank"])
       end
     end
   end

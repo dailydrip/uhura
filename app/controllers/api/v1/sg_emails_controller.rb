@@ -58,7 +58,7 @@ class Api::V1::SgEmailsController < Api::V1::ApiController
       render json: return_error(@sg_email.errors)
     end
   rescue StandardError => err
-    render json: return_error("SendGrid: #{err.message}}")
+    render json: return_error("SendGrid: #{err.message}")
   end
 
   def mail
