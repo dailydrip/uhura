@@ -9,8 +9,8 @@ RSpec.describe 'Request Test', type: :request do
   describe 'POST /api/v1/sg_emails' do
     let(:valid_attributes) do
       {
-          "from_email": "lex.nospam@gmail.com",
-          "to_email": "lex.sheehan@gmail.com",
+          "from_email": "alice@gmail.com",
+          "to_email": "bob@gmail.com",
           "subject": "A test from Rails",
           "content": "How R U?"
       }.to_json
