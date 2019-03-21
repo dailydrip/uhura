@@ -30,7 +30,7 @@ blocks:
           - cache restore gems-$SEMAPHORE_GIT_BRANCH-$(checksum Gemfile.lock),gems-$SEMAPHORE_GIT_BRANCH-,gems-master-
           - sem-version ruby 2.6.1
           - bundle install --deployment --path vendor/bundle
-          - echo "RAILS_MASTER_KEY: "${RAILS_MASTER_KEY}"
+          - echo "RAILS_MASTER_KEY: ${RAILS_MASTER_KEY}"
       env_vars:
         - name: RAILS_ENV
           value: test
@@ -50,7 +50,7 @@ blocks:
           - sem-service start postgres
           - bundle install --deployment --path vendor/bundle
           - bundle exec rake db:setup
-          - echo "RAILS_MASTER_KEY: "${RAILS_MASTER_KEY}"
+          - echo "RAILS_MASTER_KEY: ${RAILS_MASTER_KEY}"
       env_vars:
         - name: RAILS_ENV
           value: test
