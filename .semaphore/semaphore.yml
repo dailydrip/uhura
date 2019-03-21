@@ -24,7 +24,7 @@ blocks:
         - name: rubocop
           commands:
           - bundle exec rake rubocop
-          - echo "RAILS_MASTER_KEY: ${RAILS_MASTER_KEY}"
+          - echo "${RAILS_MASTER_KEY}"
       prologue:
         commands:
           - checkout
@@ -42,7 +42,7 @@ blocks:
         - name: rspec
           commands:
           - bundle exec rake spec
-          - echo "RAILS_MASTER_KEY: ${RAILS_MASTER_KEY}"
+          - echo "${RAILS_MASTER_KEY}"
       prologue:
         commands:
           - checkout
