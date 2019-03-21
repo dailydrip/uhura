@@ -444,4 +444,15 @@ data:
     - name: RAILS_MASTER_KEY
       value: <KEY VALUE GOES HERE>
 ```      
-sem create -f config/credentials/uhura_rails_secret.yml 
+
+```
+sem create -f config/credentials/uhura_rails_secret.yml
+
+sem get secrets
+NAME       AGE
+fastlane   41d
+GCP        42d
+uhura      17h
+ 
+sem delete secret uhura
+```
