@@ -54,3 +54,8 @@ blocks:
           value: test
         - name: RAILS_MASTER_KEY
           value: f8848b7ae9da83a65f6f0f6ed462f01c
+        - name: DATABASE_POSTGRESQL_USERNAME
+          value: postgres
+        - name: DATABASE_POSTGRESQL_PASSWORD
+          value: ""
+
