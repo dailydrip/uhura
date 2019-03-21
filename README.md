@@ -456,3 +456,16 @@ uhura      17h
  
 sem delete secret uhura
 ```
+
+#### Debugging Semaphore Sessions
+
+Add your github public key in Account Settings at https://semaphoreci.com/public_ssh_keys
+```
+sem config set debug.PublicSshKey "$(cat ~/.ssh/id_rsa.pub)"
+```
+
+Get Job ID from Semaphore admin page.
+
+```
+sem debug job 7855ba90-60fa-4578-9f3b-355638769577
+```
