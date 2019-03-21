@@ -24,7 +24,6 @@ blocks:
         - name: rubocop
           commands:
           - bundle exec rake rubocop
-          - echo "${RAILS_MASTER_KEY}"
       prologue:
         commands:
           - checkout
@@ -34,17 +33,14 @@ blocks:
       env_vars:
         - name: RAILS_ENV
           value: test
-        - name: DATABASE_URL
-          value: postgresql://postgres@localhost/test?encoding=utf8
-#        - name: RAILS_MASTER_KEY
-#          value: f8848b7ae9da83a65f6f0f6ed462f01c
+        - name: RAILS_MASTER_KEY
+          value: f8848b7ae9da83a65f6f0f6ed462f01c
   - name: Tests
     task:
       jobs:
         - name: rspec
           commands:
           - bundle exec rake spec
-          - echo "${RAILS_MASTER_KEY}"
       prologue:
         commands:
           - checkout
@@ -56,7 +52,7 @@ blocks:
       env_vars:
         - name: RAILS_ENV
           value: test
+        - name: RAILS_MASTER_KEY
+          value: f8848b7ae9da83a65f6f0f6ed462f01c
         - name: DATABASE_URL
           value: postgresql://postgres@localhost/test?encoding=utf8
-#        - name: RAILS_MASTER_KEY
-#          value: f8848b7ae9da83a65f6f0f6ed462f01c
