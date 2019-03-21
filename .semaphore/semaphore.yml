@@ -56,9 +56,5 @@ blocks:
       env_vars:
         - name: RAILS_ENV
           value: test
-        - name: PGUSER
-          value: postgres
-        - name: PGHOST
-          value: localhost
-        - name: PGPASSWORD
-          value: ""
+        - name: RAILS_MASTER_KEY
+          value: "$RAILS_MASTER_KEY"

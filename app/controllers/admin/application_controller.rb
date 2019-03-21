@@ -9,8 +9,8 @@
 module Admin
   class ApplicationController < Administrate::ApplicationController
     http_basic_authenticate_with(
-      name: ENV.fetch('ADMIN_NAME'),
-      password: ENV.fetch('ADMIN_PASSWORD')
+      name: Rails.application.credentials.basic_auth[:admin_name],
+      password: Rails.application.credentials.basic_auth[:admin_password]
     )
     before_action :authenticate_admin
 

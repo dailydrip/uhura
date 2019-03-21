@@ -10,9 +10,8 @@ class Api::V1::SgEmailsController < Api::V1::ApiController
     @sg_email.content     = params[:content]
 
     if !@sg_email.valid?
-      # render json: { error: @sg_email.errors.full_messages,
-      #                status: :unprocessable_entity }
-      render json: return_error(@sg_email.errors)
+      error_json = return_error(@sg_email.errors)
+      render json: error_json, status: error_json[:status]
     else
       send_via_sendgrid
     end
@@ -47,18 +46,20 @@ class Api::V1::SgEmailsController < Api::V1::ApiController
 
   def send_via_sendgrid
     # Create a new API Client to send the new email
-    sg = SendGrid::API.new(api_key: ENV['SENDGRID_API_KEY'])
+    sg = SendGrid::API.new(api_key: Rails.application.credentials.sendgrid[:api_key])
 
     # Send email via SendGrid
     response = sg.client.mail._('send').post request_body: mail.to_json
-    puts response
+    puts "SendGrid status code: #{response.status_code}"
     if @sg_email.save!
-      render json: @sg_email, status: :created
+      render json: return_success(@sg_email), status: 200
     else
-      render json: return_error(@sg_email.errors)
+      error_json = return_error(@sg_email.errors)
+      render json: error_json, status: error_json[:status]
     end
   rescue StandardError => err
-    render json: return_error("SendGrid: #{err.message}")
+    error_json = return_error("SendGrid: #{err.message}")
+    render json: error_json, status: error_json[:status]
   end
 
   def mail

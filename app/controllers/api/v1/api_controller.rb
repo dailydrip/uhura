@@ -12,6 +12,7 @@ class Api::V1::ApiController < ApplicationController
   end
 
   def show_errors(exception)
-    render json: return_error(exception.to_s)
+    error_json = return_error(exception.to_s)
+    render json: error_json, status: error_json[:status]
   end
 end

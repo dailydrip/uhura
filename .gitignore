@@ -28,11 +28,14 @@
 node_modules
 yarn-error.log
 
-# Ignore Rails credentials key file
-config/master.key
-
 # Do not commit vcr cassetes, it contains some tokens
 /fixtures/vcr_cassettes/*
 
 # Directory for personal files
 personal
+
+# Ignore Rails credentials key files
+/config/master.key
+/config/credentials/development.key
+/config/credentials/test.key
+/config/credentials/production.key
