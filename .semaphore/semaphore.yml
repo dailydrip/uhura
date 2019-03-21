@@ -53,6 +53,6 @@ blocks:
         - name: RAILS_ENV
           value: test
         - name: RAILS_MASTER_KEY
-          value: <%= ENV.fetch('RAILS_MASTER_KEY') %>
+          value: "${RAILS_MASTER_KEY}"
         - name: DATABASE_URL
           value: postgresql://postgres@localhost/test?encoding=utf8
