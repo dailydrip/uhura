@@ -52,7 +52,7 @@ blocks:
       env_vars:
         - name: RAILS_ENV
           value: test
-        - name: RAILS_MASTER_KEY
-          value: "${RAILS_MASTER_KEY}"
+#        - name: RAILS_MASTER_KEY
+#          value: "${RAILS_MASTER_KEY}"
         - name: DATABASE_URL
           value: postgresql://postgres@localhost/test?encoding=utf8
