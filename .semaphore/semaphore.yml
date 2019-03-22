@@ -23,7 +23,8 @@ blocks:
       jobs:
         - name: rubocop
           commands:
-          - bundle exec rake rubocop
+            - ls -l | grep secrets
+            - bundle exec rake rubocop
       prologue:
         commands:
           - checkout
@@ -41,6 +42,7 @@ blocks:
           - bundle exec rake spec
       prologue:
         commands:
+          - ls -l | grep secrets
           - checkout
           - cache restore gems-$SEMAPHORE_GIT_BRANCH-$(checksum Gemfile.lock),gems-$SEMAPHORE_GIT_BRANCH-,gems-master-
           - sem-version ruby 2.6.1
