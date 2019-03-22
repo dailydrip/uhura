@@ -23,8 +23,7 @@ blocks:
       jobs:
         - name: rubocop
           commands:
-            - ls -l | grep secrets
-            - bundle exec rake rubocop
+          - bundle exec rake rubocop
       prologue:
         commands:
           - checkout
@@ -34,6 +33,8 @@ blocks:
       env_vars:
         - name: RAILS_ENV
           value: test
+        - name: RAILS_MASTER_KEY
+          value: f8848b7ae9da83a65f6f0f6ed462f01c
   - name: Tests
     task:
       jobs:
@@ -42,7 +43,6 @@ blocks:
           - bundle exec rake spec
       prologue:
         commands:
-          - ls -l | grep secrets
           - checkout
           - cache restore gems-$SEMAPHORE_GIT_BRANCH-$(checksum Gemfile.lock),gems-$SEMAPHORE_GIT_BRANCH-,gems-master-
           - sem-version ruby 2.6.1
