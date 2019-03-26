@@ -11,7 +11,7 @@ class Api::V1::SgEmailsController < Api::V1::ApiController
 
     if !@sg_email.valid?
       error_json = return_error(@sg_email.errors)
-      render json: error_json, status: error_json[:status]
+      render json: error_json, status: 422  # Unprocessable Entity
     else
       send_via_sendgrid
     end
@@ -50,16 +50,16 @@ class Api::V1::SgEmailsController < Api::V1::ApiController
 
     # Send email via SendGrid
     response = sg.client.mail._('send').post request_body: mail.to_json
-    puts "SendGrid status code: #{response.status_code}"
+    rsc = status_code(response.status_code)
+    @sg_email.response_status_code = rsc
     if @sg_email.save!
-      render json: return_success(@sg_email), status: 200
+      render json: return_success(@sg_email, rsc), status: rsc
     else
-      error_json = return_error(@sg_email.errors)
-      render json: error_json, status: error_json[:status]
+      render json: return_error(@sg_email.errors, rsc), status: rsc
     end
   rescue StandardError => err
-    error_json = return_error("SendGrid: #{err.message}")
-    render json: error_json, status: error_json[:status]
+    error_json = return_error("send_via_sendgrid: #{err.message}")
+    render json: error_json, status: rsc
   end
 
   def mail

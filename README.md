@@ -1,4 +1,4 @@
-﻿﻿# Uhura
+﻿﻿﻿# Uhura
 
 [![Build Status](https://semaphoreci.com/api/v1/dailydrip/uhura/branches/master/badge.svg)](https://semaphoreci.com/dailydrip/uhura)
 
@@ -167,13 +167,15 @@ We'll start with two status codes:
   "data": {
     /* Application-specific data would go here. */
   },
-  "message": null /* Or optional success message */
+  "error": null /* Or optional success message */
 }
 ```
+Note that a successful status code can be any successful code (201 Created, 202 Accepted, etc.).
+
 #### Example
 ```
 {
-    "status": "200",
+    "status": "202",
     "data": {
         "id": 4,
         "from_email": "lex.nospam@gmail.com",
@@ -184,7 +186,7 @@ We'll start with two status codes:
         "created_at": "2019-03-20T23:33:17.292Z",
         "updated_at": "2019-03-20T23:33:17.292Z"
     },
-    "message": null
+    "error": null
 }
 ```
 
@@ -193,7 +195,7 @@ We'll start with two status codes:
 {
   "status": "422",
   "data": null, /* or optional error payload */
-  "message": "Error xyz has occurred"
+  "error": "Error xyz has occurred"
 }
 ```
 ### Failed request - server error
@@ -201,9 +203,10 @@ We'll start with two status codes:
 {
   "status": "500",
   "data": null, /* or optional error payload */
-  "message": "Error xyz has occurred"
+  "error": "Error xyz has occurred"
 }
 ```
+Note that an error status code can be any 4xx or 5xx status code.
 
 ## Suppress Annoying Warnings
 
@@ -329,7 +332,7 @@ Note: Unnecessary use of -X or --request, POST is already inferred.
 < Transfer-Encoding: chunked
 < 
 * Connection #0 to host localhost left intact
-{"status":422,"data":null,"message":{"from_email":["can't be blank","is invalid"],"to_email":["can't be blank","is invalid","should be different than from_email"],"subject":["can't be blank"],"content":["can't be blank"]}}
+{"status":422,"data":null,"error":{"from_email":["can't be blank","is invalid"],"to_email":["can't be blank","is invalid","should be different than from_email"],"subject":["can't be blank"],"content":["can't be blank"]}}
 ```
 
 ### After Fix 
@@ -372,7 +375,7 @@ Note: Unnecessary use of -X or --request, POST is already inferred.
 < Transfer-Encoding: chunked
 < 
 * Connection #0 to host localhost left intact
-{"status":422,"data":null,"message":{"from_email":["can't be blank","is invalid"],"to_email":["can't be blank","is invalid","should be different than from_email"],"subject":["can't be blank"],"content":["can't be blank"]}}
+{"status":422,"data":null,"error":{"from_email":["can't be blank","is invalid"],"to_email":["can't be blank","is invalid","should be different than from_email"],"subject":["can't be blank"],"content":["can't be blank"]}}
 ```
 
 ## Use Encrypted Rails Secrets .yml files

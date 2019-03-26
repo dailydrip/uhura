@@ -4,7 +4,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Request Test', type: :request do
+RSpec.describe 'SendGrid', type: :request do
   describe 'POST /api/v1/sg_emails' do
     let(:valid_attributes) do
       {
@@ -22,8 +22,8 @@ RSpec.describe 'Request Test', type: :request do
         expect(json['response_status_code']).to eq(nil)
       end
 
-      it 'returns status code 200' do
-        expect(response).to have_http_status(200)
+      it 'returns status code 202' do
+        expect(response).to have_http_status(202)
       end
     end
 
@@ -44,7 +44,7 @@ RSpec.describe 'Request Test', type: :request do
       end
 
       it 'returns a validation failure message' do
-        expect(json['message'])
+        expect(json['error'])
           .to match('from_email' => ["can't be blank", 'is invalid'],
                     'to_email'   => ["can't be blank", 'is invalid', 'should be different than from_email'],
                     'subject'    => ["can't be blank"],
