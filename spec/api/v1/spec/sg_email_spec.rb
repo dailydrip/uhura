@@ -4,7 +4,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'SendGrid', type: :request do
+RSpec.describe 'SendGrid API', type: :request do
   describe 'POST /api/v1/sg_emails' do
     let(:valid_attributes) do
       {
