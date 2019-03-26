@@ -1,4 +1,4 @@
-﻿﻿# Uhura
+﻿﻿﻿# Uhura
 
 [![Build Status](https://semaphoreci.com/api/v1/dailydrip/uhura/branches/master/badge.svg)](https://semaphoreci.com/dailydrip/uhura)
 
@@ -21,7 +21,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 To work with postgres, you must have `PGUSER` and `PGPASSWORD` as environment variables.
 
-To be able to see the admin and the app in staging environment, you must have `ADMIN_NAME` and `ADMIN_PASSWORD` as environment variables.
+To be able to see the admin and the app in test environment, you must have `ADMIN_NAME` and `ADMIN_PASSWORD` as environment variables.
 
 ### Installing
 
@@ -77,9 +77,9 @@ $ spinach
 
 You can deploy this [directly to Heroku](https://heroku.com/deploy?template=https://github.com/dailydrip/uhura), if you want to.
 
-## Staging
+## Test
 
-The application uses BASIC AUTH when in `staging`. We use the same password and username for the admin.
+The application uses BASIC AUTH when in `test`. We use the same password and username for the admin.
 
 ## License
 
@@ -113,8 +113,8 @@ mv /tmp/node_modules .
 be rake db:drop  db:create  db:migrate  db:seed
 ```
 
-## Run Fake Api Server from Command Line
-Load .env first!
+## Run Fake Api Server from Command Lin3
+Load .env first to export API_VER and API_ENDPOINT environment variables.
 ```
 [lex@k2 uhura]$ . .env
 [lex@k2 uhura]$ ruby /home/lex/Clients/Concur/Projects/uhura/spec/api/fake_api_server.rb 
@@ -126,6 +126,14 @@ Load .env first!
 - -> /api/v1/sg_emails/1
 ```
 
+### .env File Contents
+```
+export APP_NAME='uhura'
+export API_VER_NO="$(cat "lib/$(basename ${APP_NAME})/version.rb" | grep VERSION | head -n 1 | awk '{print $3}' | tr -d "'" | cut -d '.' -f1)"
+export API_VER="api/v${API_VER_NO}"
+export BASE_URI='http://localhost:3000'
+export API_ENDPOINT="${BASE_URI}/${API_VER}/"
+```
 
 ## Run Fake Api Server from Command Line -- with some 404's
 ```
@@ -159,15 +167,35 @@ We'll start with two status codes:
   "data": {
     /* Application-specific data would go here. */
   },
-  "message": null /* Or optional success message */
+  "error": null /* Or optional success message */
 }
 ```
+Note that a successful status code can be any successful code (201 Created, 202 Accepted, etc.).
+
+#### Example
+```
+{
+    "status": "202",
+    "data": {
+        "id": 4,
+        "from_email": "lex.nospam@gmail.com",
+        "to_email": "lex.sheehan@gmail.com",
+        "subject": "A test from Rails",
+        "content": "How R U?",
+        "response_status_code": null,
+        "created_at": "2019-03-20T23:33:17.292Z",
+        "updated_at": "2019-03-20T23:33:17.292Z"
+    },
+    "error": null
+}
+```
+
 ### Failed request - unprocessable entity
 ```
 {
   "status": "422",
   "data": null, /* or optional error payload */
-  "message": "Error xyz has occurred"
+  "error": "Error xyz has occurred"
 }
 ```
 ### Failed request - server error
@@ -175,9 +203,10 @@ We'll start with two status codes:
 {
   "status": "500",
   "data": null, /* or optional error payload */
-  "message": "Error xyz has occurred"
+  "error": "Error xyz has occurred"
 }
 ```
+Note that an error status code can be any 4xx or 5xx status code.
 
 ## Suppress Annoying Warnings
 
@@ -219,6 +248,8 @@ end
 
 # A Note About the Rspec
 
+## Avoid Metaprogramming, especially in RSpec
+
 I read this: https://blog.schembri.me/post/testing-apis-in-ruby-with-rspec/
 
 I thought I found a better way to test API's.
@@ -254,4 +285,190 @@ See that "around" symbol? Well, that piece of shit looks nifty, but caused much 
 
 When it comes to code, magic sucks.  So, this fancy API test framework won't be around long.
 
-Did you read that "Testing APIs in Ruby: An overview" article?  The fonts, colors and images are snazzy, but what that Jamie left out was what happens when you add more than one Rspec test. 
+Did you read that "Testing APIs in Ruby: An overview" article?  The fonts, colors and images are snazzy, but what that Jamie left out was what happens when you add more than one Rspec test.
+
+ 
+## Use Request Specs
+
+## Curls
+
+### Before Fix 
+#### app/controllers/api/v1/sg_emails_controller.rb
+```
+      render json: return_error(@sg_email.errors)
+```
+#### In Terminal
+```
+$ curl --verbose -d 'Content-Type=application/json' -u 'admin:Zm96_$F:p4zPt-r4' -X POST http://localhost:3000/api/v1/sg_emails
+Note: Unnecessary use of -X or --request, POST is already inferred.
+*   Trying ::1...
+* TCP_NODELAY set
+* connect to ::1 port 3000 failed: Connection refused
+*   Trying 127.0.0.1...
+* TCP_NODELAY set
+* Connected to localhost (127.0.0.1) port 3000 (#0)
+* Server auth using Basic with user 'admin'
+> POST /api/v1/sg_emails HTTP/1.1
+> Host: localhost:3000
+> Authorization: Basic YWRtaW46Wm05Nl8kRjpwNHpQdC1yNA==
+> User-Agent: curl/7.64.0
+> Accept: */*
+> Content-Length: 29
+> Content-Type: application/x-www-form-urlencoded
+> 
+* upload completely sent off: 29 out of 29 bytes
+< HTTP/1.1 200 OK
+< X-Frame-Options: SAMEORIGIN
+< X-XSS-Protection: 1; mode=block
+< X-Content-Type-Options: nosniff
+< X-Download-Options: noopen
+< X-Permitted-Cross-Domain-Policies: none
+< Referrer-Policy: strict-origin-when-cross-origin
+< Content-Type: application/json; charset=utf-8
+< ETag: W/"dee66c55f3efe92c9e16197d8f73dfeb"
+< Cache-Control: max-age=0, private, must-revalidate
+< X-Request-Id: 48fbc4ae-2a30-4ad7-9efe-14483cc13a7f
+< X-Runtime: 0.008309
+< Transfer-Encoding: chunked
+< 
+* Connection #0 to host localhost left intact
+{"status":422,"data":null,"error":{"from_email":["can't be blank","is invalid"],"to_email":["can't be blank","is invalid","should be different than from_email"],"subject":["can't be blank"],"content":["can't be blank"]}}
+```
+
+### After Fix 
+#### app/controllers/api/v1/sg_emails_controller.rb
+```
+      error_json = return_error(@sg_email.errors)
+      render json: error_json, status: error_json[:status]
+```
+#### In Terminal
+```
+$ curl --verbose -d 'Content-Type=application/json' -u 'admin:Zm96_$F:p4zPt-r4' -X POST http://localhost:3000/api/v1/sg_emails
+Note: Unnecessary use of -X or --request, POST is already inferred.
+*   Trying ::1...
+* TCP_NODELAY set
+* connect to ::1 port 3000 failed: Connection refused
+*   Trying 127.0.0.1...
+* TCP_NODELAY set
+* Connected to localhost (127.0.0.1) port 3000 (#0)
+* Server auth using Basic with user 'admin'
+> POST /api/v1/sg_emails HTTP/1.1
+> Host: localhost:3000
+> Authorization: Basic YWRtaW46Wm05Nl8kRjpwNHpQdC1yNA==
+> User-Agent: curl/7.64.0
+> Accept: */*
+> Content-Length: 29
+> Content-Type: application/x-www-form-urlencoded
+> 
+* upload completely sent off: 29 out of 29 bytes
+< HTTP/1.1 422 Unprocessable Entity
+< X-Frame-Options: SAMEORIGIN
+< X-XSS-Protection: 1; mode=block
+< X-Content-Type-Options: nosniff
+< X-Download-Options: noopen
+< X-Permitted-Cross-Domain-Policies: none
+< Referrer-Policy: strict-origin-when-cross-origin
+< Content-Type: application/json; charset=utf-8
+< Cache-Control: no-cache
+< X-Request-Id: b1c48d00-42e5-438f-ac3e-471775777ad8
+< X-Runtime: 0.243982
+< Transfer-Encoding: chunked
+< 
+* Connection #0 to host localhost left intact
+{"status":422,"data":null,"error":{"from_email":["can't be blank","is invalid"],"to_email":["can't be blank","is invalid","should be different than from_email"],"subject":["can't be blank"],"content":["can't be blank"]}}
+```
+
+## Use Encrypted Rails Secrets .yml files
+See https://www.engineyard.com/blog/encrypted-rails-secrets-on-rails-5.1
+
+### Create Files
+Following will open vscodium editor 
+```
+EDITOR="vscodium --wait" bundle exec rails credentials:edit --environment development
+EDITOR="vscodium --wait" bundle exec rails credentials:edit --environment test
+EDITOR="vscodium --wait" bundle exec rails credentials:edit --environment production
+```
+
+Make contents look similar to:
+```
+# aws:
+#   access_key_id: 123
+#   secret_access_key: 345
+
+postgres:
+  #database: uhura_development
+  username: <USER NAME HERE>
+  password: <PASSWORD NAME HERE>
+
+sendgrid:
+  api_key: <API KEY  HERE>
+
+basic_auth:
+  admin_name: admin
+  admin_password: <PLAINTEX PASSWORD HERE>
+```
+
+### Example Usage
+```
+module Admin
+  class ApplicationController < Administrate::ApplicationController
+    http_basic_authenticate_with(
+      name: Rails.application.credentials.basic_auth[:admin_name],
+      password: Rails.application.credentials.basic_auth[:admin_password]
+    )
+```
+
+### Semaphore
+
+```
+      env_vars:
+        - name: RAILS_ENV
+          value: test
+        - name: RAILS_MASTER_KEY
+          value: "$RAILS_MASTER_KEY"
+```
+
+#### Install Semaphore CLI
+
+curl https://storage.googleapis.com/sem-cli-releases/get.sh | bash
+sem connect smoothterminal.semaphoreci.com <PASSWORD>
+
+#### Create Semaphore Secret yml File
+
+##### config/credentials/uhura_rails_secret.yml
+```
+# sem_uhura_rails_secret.yml
+apiVersion: v1beta
+kind: Secret
+metadata:
+  name: uhura
+data:
+  env_vars:
+    - name: RAILS_MASTER_KEY
+      value: <KEY VALUE GOES HERE>
+```      
+
+```
+sem create -f config/credentials/uhura_rails_secret.yml
+
+sem get secrets
+NAME       AGE
+fastlane   41d
+GCP        42d
+uhura      17h
+ 
+sem delete secret uhura
+```
+
+#### Debugging Semaphore Sessions
+
+Add your github public key in Account Settings at https://semaphoreci.com/public_ssh_keys
+```
+sem config set debug.PublicSshKey "$(cat ~/.ssh/id_rsa.pub)"
+```
+
+Get Job ID from Semaphore admin page.
+
+```
+sem debug job 7855ba90-60fa-4578-9f3b-355638769577
+```

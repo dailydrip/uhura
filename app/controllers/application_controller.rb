@@ -4,10 +4,10 @@ class ApplicationController < ActionController::Base
   before_action :authenticate_on_staging
 
   def authenticate_on_staging
-    if Rails.env == 'staging'
+    if Rails.env == 'test'
       http_basic_authenticate_or_request_with(
-        name: ENV.fetch('ADMIN_NAME'),
-        password: ENV.fetch('ADMIN_PASSWORD')
+        name: Rails.application.credentials.basic_auth[:admin_name],
+        password: Rails.application.credentials.basic_auth[:admin_password]
       )
     end
   end

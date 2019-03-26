@@ -1,34 +1,57 @@
 # frozen_string_literal: true
 
-require "#{__dir__}/../requests/sg_email_api.rb"
-require "#{__dir__}/with_fake_server.rb"
-require 'awesome_print'
+# rubocop:disable Layout/AlignHash
+
 require 'rails_helper'
 
-RSpec.describe SgEmailApi do
-  around do |ex|
-    with_fake_server(ex)
-  end
+RSpec.describe 'SendGrid API', type: :request do
+  describe 'POST /api/v1/sg_emails' do
+    let(:valid_attributes) do
+      {
+        'from_email': 'alice@gmail.com',
+        'to_email':   'bob@gmail.com',
+        'subject':    'A test from Rails',
+        'content':    'How R U?'
+      }.to_json
+    end
 
-  attr_accessor :sg_email
+    context 'when request is valid' do
+      before { post '/api/v1/sg_emails', headers: valid_headers, params: valid_attributes }
 
-  describe '.post' do
-    it 'returns a valid SgEmail object' do
-      api_sg_email = SgEmailApi.post
-      expect(api_sg_email[:status]).to eq '200'
+      it 'sends sg_email' do
+        expect(json['response_status_code']).to eq(nil)
+      end
+
+      it 'returns status code 202' do
+        expect(response).to have_http_status(202)
+      end
+    end
+
+    context 'when the request header is missing basic auth info' do
+      before { post '/api/v1/sg_emails', headers: invalid_headers, params: valid_attributes }
+
+      it 'returns status code 401' do
+        expect(response).to have_http_status(401)
+      end
+    end
+
+    context 'when the request auth header is good, but the body is invalid' do
+      let(:invalid_attributes) { { from_email: nil }.to_json }
+      before { post '/api/v1/sg_emails', headers: valid_headers, params: invalid_attributes }
+
+      it 'returns status code 422' do
+        expect(response.status).to eq 422
+      end
+
+      it 'returns a validation failure message' do
+        expect(json['error'])
+          .to match('from_email' => ["can't be blank", 'is invalid'],
+                    'to_email'   => ["can't be blank", 'is invalid', 'should be different than from_email'],
+                    'subject'    => ["can't be blank"],
+                    'content'    => ["can't be blank"])
+      end
     end
   end
-
-  # describe '.get' do
-  #   it 'returns a valid SgEmail object' do
-  #     sg_email = SgEmailApi.get(1)
-  #
-  #     expect(sg_email.id).to eq 1
-  #     expect(sg_email.from_email).to eq 'alice@gmail.com'
-  #     expect(sg_email.to_email).to eq 'bob@gmail.com'
-  #     expect(sg_email.subject).to eq 'A test from Rails'
-  #     expect(sg_email.content).to eq 'How r u?'
-  #     expect(sg_email.response_status_code).to eq '202'
-  #   end
-  # end
 end
+
+# rubocop:enable Layout/AlignHash

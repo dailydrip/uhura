@@ -33,12 +33,8 @@ blocks:
       env_vars:
         - name: RAILS_ENV
           value: test
-        - name: PGUSER
-          value: postgres
-        - name: PGHOST
-          value: localhost
-        - name: PGPASSWORD
-          value: ""
+        - name: RAILS_MASTER_KEY
+          value: f8848b7ae9da83a65f6f0f6ed462f01c
   - name: Tests
     task:
       jobs:
@@ -56,9 +52,7 @@ blocks:
       env_vars:
         - name: RAILS_ENV
           value: test
-        - name: PGUSER
-          value: postgres
-        - name: PGHOST
-          value: localhost
-        - name: PGPASSWORD
-          value: ""
+        - name: RAILS_MASTER_KEY
+          value: f8848b7ae9da83a65f6f0f6ed462f01c
+        - name: DATABASE_URL
+          value: postgresql://postgres@localhost/test?encoding=utf8

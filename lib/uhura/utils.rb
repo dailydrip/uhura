@@ -1,26 +1,22 @@
 # frozen_string_literal: true
 
 # Error helpers are used on controllers and rspec
-def return_error(msg)
+def return_error(msg, status = 500)
   {
-    'status': '422',
-    'data': nil,
-    'message': msg
+    status: status, # return 422 for unprocessable or 500 for server error
+    data: nil,
+    error: msg
   }
 end
 
-def return_server_error(msg)
+def return_success(data, status = 200)
   {
-    'status': '500',
-    'data': nil,
-    'message': msg
+    status: status,
+    data: data,
+    error: nil
   }
 end
 
-def return_success(data)
-  {
-    'status': '200',
-    'data': data,
-    'message': nil
-  }
+def status_code(response_status_code)
+  response_status_code if defined?(response_status_code) && !response_status_code.nil?
 end
