@@ -11,7 +11,7 @@ class Api::V1::SgEmailsController < Api::V1::ApiController
 
     if !@sg_email.valid?
       error_json = return_error(@sg_email.errors)
-      render json: error_json, status: 422  # Unprocessable Entity
+      render json: error_json, status: 422 # Unprocessable Entity
     else
       send_via_sendgrid
     end
