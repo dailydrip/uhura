@@ -25,7 +25,8 @@ class Api::V1::ListsController < Api::V1::ApiController
   end
 
   def destroy
-    @list = ClearstreamClient::BaseClient.new(api_key: @api_key,
+    @list = ClearstreamClient::BaseClient.new(
+      api_key: @api_key,
                                               resource: RESOURCE).destroy(params[:id])
   end
 
