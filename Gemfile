@@ -44,6 +44,12 @@ gem 'slim'
 # For sending emails
 gem 'sendgrid-ruby'
 
+# For Clearstream
+gem 'faraday'
+gem 'faraday_middleware'
+gem 'json'
+gem 'typhoeus'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
@@ -52,7 +58,6 @@ group :development, :test do
   gem 'spinach-rails'
   gem 'awesome_print' # for irb and debugging
   gem 'hirb'          # for irb
-  gem 'cuba'
   gem 'rubocop', require: false
 end
 
