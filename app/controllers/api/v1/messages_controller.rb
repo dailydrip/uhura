@@ -4,8 +4,10 @@ class Api::V1::MessagesController < Api::V1::ApiController
   RESOURCE = 'messages'
 
   def index
-    @messages = ClearstreamClient::MessageClient.new(api_key: @api_key,
-                                                     resource: RESOURCE).index
+    @messages = ClearstreamClient::MessageClient.new(
+      api_key: @api_key,
+      resource: RESOURCE
+    ).index
   end
 
   def create
@@ -15,18 +17,24 @@ class Api::V1::MessagesController < Api::V1::ApiController
       render json: error_json, status: 422 # Unprocessable Entity
     else
       # Send message and render app/views/api/v1/messages/create.json.jbuilder view
-      ClearstreamClient::MessageClient.new(data: @message,
-                                           resource: RESOURCE).create
+      ClearstreamClient::MessageClient.new(
+        data: @message,
+        resource: RESOURCE
+      ).create
     end
   end
 
   def show
-    @message = ClearstreamClient::MessageClient.new(api_key: @api_key,
-                                                    resource: RESOURCE).show(params[:id])
+    @message = ClearstreamClient::MessageClient.new(
+      api_key: @api_key,
+      resource: RESOURCE
+    ).show(params[:id])
   end
 
   def destroy
-    @message = ClearstreamClient::MessageClient.new(api_key: @api_key,
-                                                    resource: RESOURCE).destroy(params[:id])
+    @message = ClearstreamClient::MessageClient.new(
+      api_key: @api_key,
+      resource: RESOURCE
+    ).destroy(params[:id])
   end
 end

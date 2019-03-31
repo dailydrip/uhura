@@ -17,6 +17,7 @@ module ClearstreamClient
       response = connection.get do |req|
         req.url "#{CS_BASE_URL}/#{@resource}"
       end
+
       JSONConverter.to_hash(response.body)
     end
 
