@@ -41,6 +41,9 @@ gem 'bootsnap', '>= 1.1.0', require: false
 # slim
 gem 'slim'
 
+gem 'highlands_auth', git: 'git@github.com:highlands/highlands_auth.git', branch: 'master'
+
+
 # For sending emails
 gem 'sendgrid-ruby'
 
@@ -59,6 +62,8 @@ group :development, :test do
   gem 'awesome_print' # for irb and debugging
   gem 'hirb'          # for irb
   gem 'rubocop', require: false
+  gem 'rubocop-performance'
+  gem 'webmock'
 end
 
 group :test do
@@ -78,9 +83,6 @@ group :development do
   gem 'web-console', '>= 3.3.0'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'brakeman'
-  gem 'rubocop', require: false
-  gem 'spring'
-  gem 'spring-watcher-listen', '~> 2.0.0'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

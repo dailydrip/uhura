@@ -17,6 +17,9 @@
 
 # RubyMine project files
 .idea
+.RubyMine
+.java
+rubymine64.vmoptions
 
 # Vim artifacts
 **.swp

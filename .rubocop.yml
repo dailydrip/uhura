@@ -1653,7 +1653,7 @@ Metrics/BlockLength:
   VersionAdded: '0.44'
   VersionChanged: '0.58'
   CountComments: false  # count full line comments?
-  Max: 25
+  Max: 40
   ExcludedMethods:
     # By default, exclude the `#refine` method, as it tends to have larger
     # associated blocks.
@@ -2084,7 +2084,7 @@ Performance/InefficientHashSearch:
   VersionAdded: '0.56'
   Safe: false
 
-Performance/LstripRstrip:
+Style/Strip:
   Description: 'Use `strip` instead of `lstrip.rstrip`.'
   Enabled: true
   VersionAdded: '0.36'
@@ -2123,7 +2123,7 @@ Performance/RedundantMerge:
   # Max number of key-value pairs to consider an offense
   MaxKeyValuePairs: 2
 
-Performance/RedundantSortBy:
+Style:
   Description: 'Use `sort` instead of `sort_by { |x| x }`.'
   Enabled: true
   VersionAdded: '0.36'
@@ -2142,7 +2142,7 @@ Performance/ReverseEach:
   Enabled: true
   VersionAdded: '0.30'
 
-Performance/Sample:
+Style/Sample:
   Description: >-
                   Use `sample` instead of `shuffle.first`,
                   `shuffle.last`, and `shuffle[Integer]`.
@@ -2192,7 +2192,7 @@ Performance/UnfreezeString:
   Enabled: true
   VersionAdded: '0.50'
 
-Performance/UnneededSort:
+Style/UnneededSort:
   Description: >-
                   Use `min` instead of `sort.first`,
                   `max_by` instead of `sort_by...last`, etc.

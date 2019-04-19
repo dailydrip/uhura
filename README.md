@@ -495,8 +495,20 @@ You can add params to request like this:
 
 ## Messages
 
+We are using Clearstream for SMS messaging.
+
+See https://api-docs.clearstream.io/#send-schedule-a-message
+
+
+
 ### GET api/v1/messages
-Following will open vscodium editor 
+```
+curl -X GET \
+  http://localhost:3000/api/v1/messages \
+  -H 'Content-Type: application/json' \
+  -H 'cache-control: no-cache'
+```
+
 ```
 {
     "all": {
@@ -771,7 +783,21 @@ Following will open vscodium editor
 ```
 
 ### POST api/v1/messages
-
+```
+curl -X POST \
+  'http://localhost:3000/api/v1/messages?Content-Type=application/json' \
+  -H 'Content-Type: application/json' \
+  -H 'Postman-Token: f3e5649b-eabd-4a1b-b6a6-f0b7d5e8e272' \
+  -H 'cache-control: no-cache' \
+  -d '{
+    "message_header": "Blue Sushi 2",
+    "message_body": "Come in now for 50% off all rolls!",
+    "lists": "25041",
+    "schedule": false,
+    "send_to_fb": false,
+    "send_to_tw": false
+}'
+```
 #### Request Body 
 ```
 {
@@ -805,7 +831,12 @@ Following will open vscodium editor
 ```
 
 ### GET api/v1/messages/108047
-
+```
+curl -X GET \
+  http://localhost:3000/api/v1/messages/108047 \
+  -H 'Content-Type: application/json' \
+  -H 'cache-control: no-cache'
+```
 #### Response
 ```
 {
@@ -852,7 +883,12 @@ Following will open vscodium editor
 ```
 
 ### DEL api/v1/messages/108041
-
+```
+curl -X DELETE \
+  http://localhost:3000/api/v1/messages/108041 \
+  -H 'Content-Type: application/json' \
+  -H 'cache-control: no-cache'
+```
 #### Response
 ```
 {
@@ -864,14 +900,15 @@ Following will open vscodium editor
 
 ## Lists
 
-### DEL api/v1/messages/108041
+### DEL api/v1/lists
+```
+curl -X DELETE \
+  http://localhost:3000/api/v1/lists/25054 \
+  -H 'Content-Type: application/json' \
+  -H "X-Api-Key: 6836ebd143050a72b33c30a56bc8bc8b" \
+  -H 'cache-control: no-cache'
+```
 
-#### Request Body
-```
-{
-    "name": "New List 15"
-}
-```
 
 #### Response
 ```

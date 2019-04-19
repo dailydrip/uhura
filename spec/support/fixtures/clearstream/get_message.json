@@ -1,0 +1,41 @@
+{
+  "message": {
+    "data": {
+      "id": 108047,
+      "status": "SENT",
+      "sent_at": "2019-03-28T21:54:20+00:00",
+      "completed_at": "2019-03-28T21:54:21+00:00",
+      "text": {
+        "full": "Blue Sushi: Come in now for 50% off all rolls!",
+        "header": "Blue Sushi",
+        "body": "Come in now for 50% off all rolls!"
+      },
+      "lists": [
+        {
+          "id": 25041,
+          "name": "New List 15"
+        }
+      ],
+      "subscribers": [],
+      "stats": {
+        "recipients": 1,
+        "failures": 0,
+        "throughput": 0,
+        "replies": 0,
+        "opt_outs": 0
+      },
+      "social": {
+        "twitter": {
+          "enabled": false,
+          "id": null,
+          "url": null
+        },
+        "facebook": {
+          "enabled": false,
+          "id": null,
+          "url": null
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "list": {
+    "data": {
+      "id": 25041,
+      "name": "New List UPDATED",
+      "subscriber_count": 1,
+      "linked_to": {
+        "keywords": [],
+        "longcodes": [],
+        "forms": []
+      }
+    }
+  }
+}
