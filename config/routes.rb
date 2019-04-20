@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  mount HighlandsAuth::Engine => "/highlands_sso", :as => "auth"
 
   namespace :api do
     namespace :v1 do
