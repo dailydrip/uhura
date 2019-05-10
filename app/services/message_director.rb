@@ -52,7 +52,6 @@ class MessageDirector
   private
 
   def self.create_message(message_vo)
-    # byebug
     manager_id = message_vo.manager_id   # A manager is the sending app.
     manager_email = message_vo.manager_email
     receiver = User.find_by(email: message_vo.receiver_email)
