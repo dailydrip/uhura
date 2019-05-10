@@ -121,6 +121,7 @@ ActiveRecord::Schema.define(version: 2019_05_09_014853) do
 
   create_table "users", force: :cascade do |t|
     t.string "email"
+    t.string "phone"
     t.string "first_name"
     t.string "last_name"
     t.json "preferences"

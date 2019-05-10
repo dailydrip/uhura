@@ -16,7 +16,6 @@ class Clearstream
         "lists": "1,2"
     }
 
-
     data = SendgridMailVo.new(
         from: message_vo.manager_email,
         to:  message_vo.receiver_email,
@@ -27,7 +26,6 @@ class Clearstream
     token = ENV['CLEARSTREAM_KEY']
     uri = "#{ENV['CLEARSTREAM_URL']}/messages"
     cs_request = Request.new(token: token, uri: uri, verb: :post, body: body)
-
 
 
     cs_message = ClearstreamClient::Message.new(params)

@@ -12,7 +12,7 @@ bundle exec rails g model Manager name:string:uniq public_token:string:uniq emai
 bundle exec rails g model ApiKey auth_token:token manager:references
 bundle exec rails g model Team name:string:uniq name_prefix:string:uniq email:index
 bundle exec rails g model Template name:string:uniq template_id sample_template_data:json
-bundle exec rails g model User email:string:uniq first_name last_name preferences:json
+bundle exec rails g model User email:string:uniq phone first_name last_name preferences:json
 bundle exec rails g model SendgridMsg sent_to_sendgrid:datetime mail_json:json got_response_at:datetime sendgrid_response:text read_by_user_at:datetime
 bundle exec rails g model ClearstreamMsg sent_to_clearstream:datetime clearstream_response:text
 # If we get more than Sendgrid and Clearstream for 3rd party messaging services, consider factoring sendgrid & clearstream => target_msg_svc
