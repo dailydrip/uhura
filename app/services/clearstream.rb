@@ -11,7 +11,7 @@ class Clearstream
   def self.send(message_vo)
 
     body = {
-        "message_header=": "Blue Sushi",
+        "template_id=": "Blue Sushi",
         "message_body": "Come in now for 50% off all rolls!",
         "lists": "1,2"
     }
@@ -20,7 +20,7 @@ class Clearstream
     data = SendgridMailVo.new(
         from: message_vo.manager_email,
         to:  message_vo.receiver_email,
-        message_header: message_vo.message_header,
+        template_id: message_vo.template_id,
         dynamic_template_data: template_data
     )
 
@@ -53,7 +53,7 @@ class Clearstream
     data = SendgridMailVo.new(
         from: message_vo.manager_email,
         to:  message_vo.receiver_email,
-        message_header: message_vo.message_header,
+        template_id: message_vo.template_id,
         dynamic_template_data: template_data
     )
     clearstream_msg = SendgridMsg.create!(sent_to_clearstream: Time.now,

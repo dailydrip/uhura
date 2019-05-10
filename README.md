@@ -771,7 +771,7 @@ uhura> m1.api_key.auth_token
 
 # SendGrid Errors
 
-The Mangager.email value must be valid or you'll get a 404 error from SendGrid and clues as to what happened.
+The Manager.email value must be valid or you'll get a 404 error from SendGrid and clues as to what happened.
 
 
 

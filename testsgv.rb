@@ -24,7 +24,7 @@ ap sgv
 sgv = SendgridMailVo.new(
     from: "lex@smoothterminal.com",
     to:  "lex@smoothterminal.com",
-    message_header: "d-f986df533e514f978f4460bedca50db0",
+    template_id: "d-f986df533e514f978f4460bedca50db0",
     dynamic_template_data: {
         "header":"test header",
         "text":"blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah",

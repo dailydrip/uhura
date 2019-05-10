@@ -62,18 +62,18 @@ team_sta = Team.create!(name: 'Sample Team A', name_prefix: 'STA', email: 'team.
 team_stb = Team.create!(name: 'Sample Team B', name_prefix: 'STB', email: 'team.b@highlands.org')
 
 log "6. Seeding Templates"
-template_a = Template.create!(name: 'Sample Template A', message_header: 'd-f986df533e514f978f4460bedca50db0', sample_template_data: '{
+template_a = Template.create!(name: 'Sample Template A', template_id: 'd-f986df533e514f978f4460bedca50db0', sample_template_data: '{
   "header": Faker::Games::Pokemon.move.titleize,
   "section1": Faker::Quote.matz,
   "button": Faker::Verb.base.capitalize
 }')
-template_b = Template.create!(name: 'Sample Template B', message_header: 'd-4d10bf26b57247deba602127dab1ba60', sample_template_data: '{
+template_b = Template.create!(name: 'Sample Template B', template_id: 'd-4d10bf26b57247deba602127dab1ba60', sample_template_data: '{
   "header": Faker::Games::Pokemon.move.titleize,
   "section1": Faker::Quote.matz,
   "section2": Faker::Quote.matz,
   "button": Faker::Verb.base.capitalize
 }')
-template_c = Template.create!(name: 'Sample Template C', message_header: 'd-211d56caaf0544038d353a98ece2b367', sample_template_data: '{
+template_c = Template.create!(name: 'Sample Template C', template_id: 'd-211d56caaf0544038d353a98ece2b367', sample_template_data: '{
   "header": Faker::Games::Pokemon.move.titleize,
   "section1": Faker::Quote.matz,
   "section2": Faker::Quote.matz,
@@ -107,7 +107,7 @@ msg1 = Message.create!(manager_id: app1.id, # <= source (an application)
                        user_id: bob.id, # <= receiver (a user)
                        email_subject: 'Sample - Picnic this Saturday',
                        email_message: {headers: {key1: 'val1', key2: 'val2'}, sections: {name: 'val1', body: 'val2'}},
-                       message_header: template_a.id,
+                       template_id: template_a.id,
                        sms_message:  'Sample - Picnic this Saturday. Bring drinks.')
 
 msg2 = Message.create!(manager_id: app1.id,
@@ -115,7 +115,7 @@ msg2 = Message.create!(manager_id: app1.id,
                        user_id: bob.id,
                        email_subject: 'Sample - Fund Raiser',
                        email_message: {headers: {key1: 'val1', key2: 'val2'}, sections: {key1: 'val1', key2: 'val2'}},
-                       message_header: template_b.id,
+                       template_id: template_b.id,
                        sms_message:  'Sample - Fund raiser this week. Be generous.')
 
 msg3 = Message.create!(manager_id: app1.id,
@@ -123,7 +123,7 @@ msg3 = Message.create!(manager_id: app1.id,
                        user_id: cindy.id,
                        email_subject: 'Sample - Picnic this Saturday',
                        email_message: {headers: {key1: 'val1', key2: 'val2'}, sections: {key1: 'val1', key2: 'val2'}},
-                       message_header: template_a.id,
+                       template_id: template_a.id,
                        sms_message:  'Sample - Picnic this Saturday. Bring drinks.')
 
 msg4 = Message.create!(manager_id: app2.id,
@@ -131,7 +131,7 @@ msg4 = Message.create!(manager_id: app2.id,
                        user_id: alice.id, # <= receiver (a user)
                        email_subject: 'Sample - Picnic this Saturday',
                        email_message: {headers: {key1: 'val1', key2: 'val2'}, sections: {key1: 'val1', key2: 'val2'}},
-                       message_header: template_a.id,
+                       template_id: template_a.id,
                        sms_message:  'Sample - Picnic this Saturday. Bring drinks.')
 
 msg5 = Message.create!(manager_id: app2.id,
@@ -139,7 +139,7 @@ msg5 = Message.create!(manager_id: app2.id,
                        user_id: alice.id, # <= receiver (a user)
                        email_subject: 'Sample - W2 Available',
                        email_message: {headers: {key1: 'val1', key2: 'val2'}, sections: {key1: 'val1', key2: 'val2'}},
-                       message_header: template_c.id,
+                       template_id: template_c.id,
                        sms_message:  'Sample - Get your W2 from https://benefits.example.com')
 
 msg6 = Message.create!(manager_id: app2.id,
@@ -147,7 +147,7 @@ msg6 = Message.create!(manager_id: app2.id,
                        user_id: cindy.id, # <= receiver (a user)
                        email_subject: 'Sample - Choir Practice Tonight!',
                        email_message: {headers: {key1: 'val1', key2: 'val2'}, sections: {key1: 'val1', key2: 'val2'}},
-                       message_header: template_a.id,
+                       template_id: template_a.id,
                        sms_message:  'Sample - Choir practice tonight at 7:00 p.m.')
 
 log "9. Seeding SendgridMsg and ClearstreamMsg"

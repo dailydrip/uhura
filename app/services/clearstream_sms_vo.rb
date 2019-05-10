@@ -3,8 +3,8 @@ class ClearstreamSmsVo
   include ActiveModel::Model
   include ActiveModel::Validations
 
-  attr_accessor :message_header, :from, :to, :dynamic_template_data, :personalizations
-  validates :message_header, :from, presence: true
+  attr_accessor :template_id, :from, :to, :dynamic_template_data, :personalizations
+  validates :template_id, :from, presence: true
 
   def initialize(*args)
     super
@@ -37,7 +37,7 @@ class ClearstreamSmsVo
     if !valid?
       raise Invalid, errors.full_messages
     end
-    {message_header: @message_header, from: @from, "personalizations": [@personalizations.get]}
+    {template_id: @template_id, from: @from, "personalizations": [@personalizations.get]}
   end
 
 

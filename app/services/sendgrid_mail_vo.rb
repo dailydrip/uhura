@@ -4,7 +4,7 @@ class SendgridMailVo
   include ActiveModel::Validations
 
   attr_accessor :template_id, :from, :to, :dynamic_template_data, :personalizations
-  validates :message_header, :from, presence: true
+  validates :template_id, :from, presence: true
   validate :valid_personalizations?
 
   def valid_personalizations?
@@ -45,7 +45,7 @@ class SendgridMailVo
     if !valid?
       raise Invalid, errors.full_messages
     end
-    {message_header: @template_id, from: @from, "personalizations": [@personalizations.get]}
+    {template_id: @template_id, from: @from, "personalizations": [@personalizations.get]}
   end
 
 

@@ -5,7 +5,7 @@ class Api::V1::ClearstreamController < Api::V1::ApiController
 
     @message = Message.new
 
-    @message.message_header = params[:message_header]
+    @message.template_id = params[:template_id]
     @message.message_body   = params[:message_body]
     # Fields NOT required below:
     @message.lists          = params[:lists]
@@ -57,7 +57,7 @@ class Api::V1::ClearstreamController < Api::V1::ApiController
     params
         .require(:sg_email)
         .permit(
-            :message_header,
+            :template_id,
             :message_body,
             :from_label,
             :to_label,
@@ -73,7 +73,7 @@ class Api::V1::ClearstreamController < Api::V1::ApiController
   def send_sms
 
     body = {
-        "message_header=": "Blue Sushi",
+        "template_id=": "Blue Sushi",
         "message_body": "Come in now for 50% off all rolls!",
         "lists": "1,2"
     }
@@ -98,7 +98,7 @@ class Api::V1::ClearstreamController < Api::V1::ApiController
 
   def mail
     # Got valid input
-    from    = SendGrid::Email.new(email: @message.message_header)
+    from    = SendGrid::Email.new(email: @message.template_id)
     to      = SendGrid::Email.new(email: @message.message_body)
     lists = @message.lists
     subscribers = SendGrid::Content.new(

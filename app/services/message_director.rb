@@ -57,12 +57,12 @@ class MessageDirector
     manager_email = message_vo.manager_email
     receiver = User.find_by(email: message_vo.receiver_email)
     team = Team.find_by(name: message_vo.team_name)
-    template = Template.find_by(message_header: message_vo.message_header)
+    template = Template.find_by(template_id: message_vo.template_id)
     errs = []
     errs << "manager_id is nil"                                       if manager_id.nil?
     errs << "team_name (#{message_vo.team_name}) not found"           if team.nil?
     errs << "receiver_email (#{message_vo.receiver_email}) not found" if receiver.nil?
-    errs << "template_id (#{message_vo.message_header}) not found"       if template.nil?
+    errs << "template_id (#{message_vo.template_id}) not found"       if template.nil?
     if errs.size > 0
       ReturnVo.new({value: nil, error: error_json = return_error(errs, :unprocessable_entity)})
     else
@@ -71,7 +71,7 @@ class MessageDirector
                                 team_id: team.id, # <= message coming from this team
                                 email_subject: message_vo.email_subject,
                                 email_message: message_vo.email_message,
-                                message_header: template.id,
+                                template_id: template.id,
                                 sms_message: message_vo.sms_message)
 
       ReturnVo.new({value: message, error: nil})

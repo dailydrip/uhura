@@ -19,7 +19,7 @@ class Sendgrid
     data = SendgridMailVo.new(
         from: message_vo.manager_email,
         to:  message_vo.receiver_email,
-        message_header: message_vo.message_header,
+        template_id: message_vo.template_id,
         dynamic_template_data: template_data
     )
     sendgrid_msg = SendgridMsg.create!(sent_to_sendgrid: Time.now,

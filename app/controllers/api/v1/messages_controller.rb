@@ -10,7 +10,7 @@ class Api::V1::MessagesController < Api::V1::ApiBaseController
                                 receiver_email: params[:receiver_email],
                                 email_subject: params[:email_subject],
                                 email_message: params[:email_message],
-                                message_header: params[:message_header],
+                                template_id: params[:template_id],
                                 sms_message: params[:sms_message]
                             })
 

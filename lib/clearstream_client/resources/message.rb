@@ -2,13 +2,13 @@
 
 module ClearstreamClient
   class Message < BaseResource
-    validates :message_header, presence: true
+    validates :template_id, presence: true
     validates :message_body, presence: true
     validates :schedule, inclusion: [true, false]
     validates :send_to_fb, inclusion: [true, false]
     validates :send_to_tw, inclusion: [true, false]
 
-    attr_accessor :id, :message_header, :message_body, :lists, :subscribers,
+    attr_accessor :id, :template_id, :message_body, :lists, :subscribers,
                   :schedule, :datetime, :timezone, :send_to_fb, :send_to_tw
 
     def initialize(attributes = {})
@@ -16,7 +16,7 @@ module ClearstreamClient
     end
 
     def to_h
-      methodize_attributes(:id, :message_header, :message_body, :lists, :subscribers,
+      methodize_attributes(:id, :template_id, :message_body, :lists, :subscribers,
                            :schedule, :datetime, :timezone, :send_to_fb, :send_to_tw)
     end
 
@@ -24,7 +24,7 @@ module ClearstreamClient
 
     def deserialize(json)
       self.id = json['id']
-      self.message_header = json['message_header']
+      self.template_id = json['template_id']
       self.message_body = json['message_body']
       self.lists = json['lists']
       self.subscribers = json['subscribers']
