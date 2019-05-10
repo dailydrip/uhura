@@ -47,25 +47,13 @@ default: &default
     - .gif
     - .jpeg
     - .jpg
-    - .jsx
-    - .js
-    - .sass
-    - .scss
-    - .css
-    - .png
-    - .svg
-    - .gif
-    - .jpeg
-    - .jpg
-    - .tsx
-    - .ts
 
 development:
   <<: *default
   compile: true
 
   # Verifies that versions and hashed value of the package contents in the project's package.json
-  check_yarn_integrity: false
+  check_yarn_integrity: true
 
   # Reference: https://webpack.js.org/configuration/dev-server/
   dev_server:

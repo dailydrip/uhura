@@ -1,0 +1,39 @@
+{
+  "data": {
+    "id": 110450,
+    "status": "QUEUED",
+    "sent_at": "2019-04-09T15:44:47+00:00",
+    "completed_at": null,
+    "text": {
+      "full": "Blue Sushi 9: Come in now for 50% off all rolls!",
+      "header": "Blue Sushi 9",
+      "body": "Come in now for 50% off all rolls!"
+    },
+    "lists": [
+      {
+        "id": 25041,
+        "name": "New List 15"
+      }
+    ],
+    "subscribers": [],
+    "stats": {
+      "recipients": 1,
+      "failures": 0,
+      "throughput": 0,
+      "replies": 0,
+      "opt_outs": 0
+    },
+    "social": {
+      "twitter": {
+        "enabled": false,
+        "id": null,
+        "url": null
+      },
+      "facebook": {
+        "enabled": false,
+        "id": null,
+        "url": null
+      }
+    }
+  }
+}

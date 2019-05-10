@@ -1,0 +1,101 @@
+{
+  "all": {
+    "data": [
+      {
+        "id": 25041,
+        "name": "New List 15",
+        "subscriber_count": 1,
+        "linked_to": {
+          "keywords": [],
+          "longcodes": [],
+          "forms": []
+        }
+      },
+      {
+        "id": 25056,
+        "name": "Red List",
+        "subscriber_count": 0,
+        "linked_to": {
+          "keywords": [],
+          "longcodes": [],
+          "forms": []
+        }
+      },
+      {
+        "id": 25057,
+        "name": "Blue List",
+        "subscriber_count": 0,
+        "linked_to": {
+          "keywords": [],
+          "longcodes": [],
+          "forms": []
+        }
+      },
+      {
+        "id": 25072,
+        "name": "Orange List",
+        "subscriber_count": 0,
+        "linked_to": {
+          "keywords": [],
+          "longcodes": [],
+          "forms": []
+        }
+      },
+      {
+        "id": 25073,
+        "name": "Green List",
+        "subscriber_count": 0,
+        "linked_to": {
+          "keywords": [],
+          "longcodes": [],
+          "forms": []
+        }
+      },
+      {
+        "id": 25074,
+        "name": "Black List",
+        "subscriber_count": 0,
+        "linked_to": {
+          "keywords": [],
+          "longcodes": [],
+          "forms": []
+        }
+      },
+      {
+        "id": 25075,
+        "name": "White List",
+        "subscriber_count": 0,
+        "linked_to": {
+          "keywords": [],
+          "longcodes": [],
+          "forms": []
+        }
+      },
+      {
+        "id": 25076,
+        "name": "Pink List",
+        "subscriber_count": 0,
+        "linked_to": {
+          "keywords": [],
+          "longcodes": [],
+          "forms": []
+        }
+      },
+      {
+        "id": 25108,
+        "name": "Lavenar List",
+        "subscriber_count": 0,
+        "linked_to": {
+          "keywords": [],
+          "longcodes": [],
+          "forms": []
+        }
+      }
+    ],
+    "count": 9,
+    "total": 9,
+    "current_page": 1,
+    "pages": 1,
+    "limit": 100
+  }
+}

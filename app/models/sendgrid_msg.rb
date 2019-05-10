@@ -1,0 +1,2 @@
+class SendgridMsg < ApplicationRecord
+end

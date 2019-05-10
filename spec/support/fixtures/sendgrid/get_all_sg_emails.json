@@ -1,0 +1,54 @@
+{
+  "all": [
+    {
+      "id": 1,
+      "from_email": "lex.nospam@gmail.com",
+      "to_email": "lex.sheehan@gmail.com",
+      "subject": "A test from Rails",
+      "content": "How R U?",
+      "response_status_code": "202",
+      "created_at": "2019-04-04T15:22:54.789Z",
+      "updated_at": "2019-04-04T15:22:54.789Z"
+    },
+    {
+      "id": 2,
+      "from_email": "lex.nospam@gmail.com",
+      "to_email": "lex.sheehan@gmail.com",
+      "subject": "A test from Rails",
+      "content": "How R U?",
+      "response_status_code": "202",
+      "created_at": "2019-04-04T15:23:13.801Z",
+      "updated_at": "2019-04-04T15:23:13.801Z"
+    },
+    {
+      "id": 3,
+      "from_email": "lex.nospam@gmail.com",
+      "to_email": "lex.sheehan@gmail.com",
+      "subject": "A test from Rails",
+      "content": "How R U?",
+      "response_status_code": "202",
+      "created_at": "2019-04-04T15:57:45.661Z",
+      "updated_at": "2019-04-04T15:57:45.661Z"
+    },
+    {
+      "id": 4,
+      "from_email": "lex.nospam@gmail.com",
+      "to_email": "lex.sheehan@gmail.com",
+      "subject": "A test from Rails",
+      "content": "How R U?",
+      "response_status_code": "202",
+      "created_at": "2019-04-08T20:18:35.846Z",
+      "updated_at": "2019-04-08T20:18:35.846Z"
+    },
+    {
+      "id": 5,
+      "from_email": "lex.nospam@gmail.com",
+      "to_email": "lex.sheehan@gmail.com",
+      "subject": "A test from Rails",
+      "content": "How R U?",
+      "response_status_code": "202",
+      "created_at": "2019-04-08T20:18:57.212Z",
+      "updated_at": "2019-04-08T20:18:57.212Z"
+    }
+  ]
+}
