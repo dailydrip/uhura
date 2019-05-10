@@ -1,0 +1,6 @@
+{
+  "error": {
+    "message": "Only unsent messages can be deleted.",
+    "http_code": 403
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "error": {
+    "message": "The name has already been taken.",
+    "http_code": 422,
+    "fields": {
+      "name": [
+        "The name has already been taken."
+      ]
+    }
+  }
+}

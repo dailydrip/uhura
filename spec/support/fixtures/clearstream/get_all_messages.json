@@ -1,0 +1,751 @@
+{
+  "all": {
+    "data": [
+      {
+        "id": 110299,
+        "status": "SENT",
+        "sent_at": "2019-04-08T21:11:05+00:00",
+        "completed_at": "2019-04-08T21:11:05+00:00",
+        "text": {
+          "full": "Blue Sushi 8: Come in now for 50% off all rolls!",
+          "header": "Blue Sushi 8",
+          "body": "Come in now for 50% off all rolls!"
+        },
+        "lists": [
+          {
+            "id": 25041,
+            "name": "New List 15"
+          }
+        ],
+        "subscribers": [],
+        "stats": {
+          "recipients": 1,
+          "failures": 0,
+          "throughput": 0,
+          "replies": 0,
+          "opt_outs": 0
+        },
+        "social": {
+          "twitter": {
+            "enabled": false,
+            "id": null,
+            "url": null
+          },
+          "facebook": {
+            "enabled": false,
+            "id": null,
+            "url": null
+          }
+        }
+      },
+      {
+        "id": 110298,
+        "status": "SENT",
+        "sent_at": "2019-04-08T21:09:56+00:00",
+        "completed_at": "2019-04-08T21:09:57+00:00",
+        "text": {
+          "full": "Blue Sushi 7: Come in now for 50% off all rolls!",
+          "header": "Blue Sushi 7",
+          "body": "Come in now for 50% off all rolls!"
+        },
+        "lists": [
+          {
+            "id": 25041,
+            "name": "New List 15"
+          }
+        ],
+        "subscribers": [],
+        "stats": {
+          "recipients": 1,
+          "failures": 0,
+          "throughput": 0,
+          "replies": 0,
+          "opt_outs": 0
+        },
+        "social": {
+          "twitter": {
+            "enabled": false,
+            "id": null,
+            "url": null
+          },
+          "facebook": {
+            "enabled": false,
+            "id": null,
+            "url": null
+          }
+        }
+      },
+      {
+        "id": 110283,
+        "status": "SENT",
+        "sent_at": "2019-04-08T20:28:15+00:00",
+        "completed_at": "2019-04-08T20:28:16+00:00",
+        "text": {
+          "full": "Blue Sushi 5: Come in now for 50% off all rolls!",
+          "header": "Blue Sushi 5",
+          "body": "Come in now for 50% off all rolls!"
+        },
+        "lists": [
+          {
+            "id": 25041,
+            "name": "New List 15"
+          }
+        ],
+        "subscribers": [],
+        "stats": {
+          "recipients": 1,
+          "failures": 0,
+          "throughput": 0,
+          "replies": 0,
+          "opt_outs": 0
+        },
+        "social": {
+          "twitter": {
+            "enabled": false,
+            "id": null,
+            "url": null
+          },
+          "facebook": {
+            "enabled": false,
+            "id": null,
+            "url": null
+          }
+        }
+      },
+      {
+        "id": 109517,
+        "status": "SENT",
+        "sent_at": "2019-04-04T15:49:48+00:00",
+        "completed_at": "2019-04-04T15:49:49+00:00",
+        "text": {
+          "full": "Blue Sushi: Come in now for 50% off all rolls!",
+          "header": "Blue Sushi",
+          "body": "Come in now for 50% off all rolls!"
+        },
+        "lists": [
+          {
+            "id": 25041,
+            "name": "New List 15"
+          }
+        ],
+        "subscribers": [],
+        "stats": {
+          "recipients": 1,
+          "failures": 0,
+          "throughput": 0,
+          "replies": 0,
+          "opt_outs": 0
+        },
+        "social": {
+          "twitter": {
+            "enabled": false,
+            "id": null,
+            "url": null
+          },
+          "facebook": {
+            "enabled": false,
+            "id": null,
+            "url": null
+          }
+        }
+      },
+      {
+        "id": 109518,
+        "status": "SENT",
+        "sent_at": "2019-04-04T15:49:48+00:00",
+        "completed_at": "2019-04-04T15:49:49+00:00",
+        "text": {
+          "full": "Blue Sushi: Come in now for 50% off all rolls!",
+          "header": "Blue Sushi",
+          "body": "Come in now for 50% off all rolls!"
+        },
+        "lists": [
+          {
+            "id": 25041,
+            "name": "New List 15"
+          }
+        ],
+        "subscribers": [],
+        "stats": {
+          "recipients": 1,
+          "failures": 0,
+          "throughput": 0,
+          "replies": 0,
+          "opt_outs": 0
+        },
+        "social": {
+          "twitter": {
+            "enabled": false,
+            "id": null,
+            "url": null
+          },
+          "facebook": {
+            "enabled": false,
+            "id": null,
+            "url": null
+          }
+        }
+      },
+      {
+        "id": 109519,
+        "status": "FAILED",
+        "sent_at": "2019-04-04T15:49:48+00:00",
+        "completed_at": null,
+        "text": {
+          "full": "Blue Sushi: Come in now for 50% off all rolls!",
+          "header": "Blue Sushi",
+          "body": "Come in now for 50% off all rolls!"
+        },
+        "lists": [
+          {
+            "id": 25041,
+            "name": "New List 15"
+          }
+        ],
+        "subscribers": [],
+        "stats": {
+          "recipients": 0,
+          "failures": 0,
+          "throughput": 0,
+          "replies": 0,
+          "opt_outs": 0
+        },
+        "social": {
+          "twitter": {
+            "enabled": false,
+            "id": null,
+            "url": null
+          },
+          "facebook": {
+            "enabled": false,
+            "id": null,
+            "url": null
+          }
+        }
+      },
+      {
+        "id": 109514,
+        "status": "SENT",
+        "sent_at": "2019-04-04T15:49:20+00:00",
+        "completed_at": "2019-04-04T15:49:20+00:00",
+        "text": {
+          "full": "Blue Sushi: Come in now for 50% off all rolls!",
+          "header": "Blue Sushi",
+          "body": "Come in now for 50% off all rolls!"
+        },
+        "lists": [
+          {
+            "id": 25041,
+            "name": "New List 15"
+          }
+        ],
+        "subscribers": [],
+        "stats": {
+          "recipients": 1,
+          "failures": 0,
+          "throughput": 0,
+          "replies": 0,
+          "opt_outs": 0
+        },
+        "social": {
+          "twitter": {
+            "enabled": false,
+            "id": null,
+            "url": null
+          },
+          "facebook": {
+            "enabled": false,
+            "id": null,
+            "url": null
+          }
+        }
+      },
+      {
+        "id": 109515,
+        "status": "SENT",
+        "sent_at": "2019-04-04T15:49:20+00:00",
+        "completed_at": "2019-04-04T15:49:20+00:00",
+        "text": {
+          "full": "Blue Sushi: Come in now for 50% off all rolls!",
+          "header": "Blue Sushi",
+          "body": "Come in now for 50% off all rolls!"
+        },
+        "lists": [
+          {
+            "id": 25041,
+            "name": "New List 15"
+          }
+        ],
+        "subscribers": [],
+        "stats": {
+          "recipients": 1,
+          "failures": 0,
+          "throughput": 0,
+          "replies": 0,
+          "opt_outs": 0
+        },
+        "social": {
+          "twitter": {
+            "enabled": false,
+            "id": null,
+            "url": null
+          },
+          "facebook": {
+            "enabled": false,
+            "id": null,
+            "url": null
+          }
+        }
+      },
+      {
+        "id": 109516,
+        "status": "SENT",
+        "sent_at": "2019-04-04T15:49:20+00:00",
+        "completed_at": "2019-04-04T15:49:21+00:00",
+        "text": {
+          "full": "Blue Sushi: Come in now for 50% off all rolls!",
+          "header": "Blue Sushi",
+          "body": "Come in now for 50% off all rolls!"
+        },
+        "lists": [
+          {
+            "id": 25041,
+            "name": "New List 15"
+          }
+        ],
+        "subscribers": [],
+        "stats": {
+          "recipients": 1,
+          "failures": 0,
+          "throughput": 0,
+          "replies": 0,
+          "opt_outs": 0
+        },
+        "social": {
+          "twitter": {
+            "enabled": false,
+            "id": null,
+            "url": null
+          },
+          "facebook": {
+            "enabled": false,
+            "id": null,
+            "url": null
+          }
+        }
+      },
+      {
+        "id": 109508,
+        "status": "SENT",
+        "sent_at": "2019-04-04T15:47:57+00:00",
+        "completed_at": "2019-04-04T15:47:57+00:00",
+        "text": {
+          "full": "Blue Sushi: Come in now for 50% off all rolls!",
+          "header": "Blue Sushi",
+          "body": "Come in now for 50% off all rolls!"
+        },
+        "lists": [
+          {
+            "id": 25041,
+            "name": "New List 15"
+          }
+        ],
+        "subscribers": [],
+        "stats": {
+          "recipients": 1,
+          "failures": 0,
+          "throughput": 0,
+          "replies": 0,
+          "opt_outs": 0
+        },
+        "social": {
+          "twitter": {
+            "enabled": false,
+            "id": null,
+            "url": null
+          },
+          "facebook": {
+            "enabled": false,
+            "id": null,
+            "url": null
+          }
+        }
+      },
+      {
+        "id": 109509,
+        "status": "SENT",
+        "sent_at": "2019-04-04T15:47:57+00:00",
+        "completed_at": "2019-04-04T15:47:57+00:00",
+        "text": {
+          "full": "Blue Sushi: Come in now for 50% off all rolls!",
+          "header": "Blue Sushi",
+          "body": "Come in now for 50% off all rolls!"
+        },
+        "lists": [
+          {
+            "id": 25041,
+            "name": "New List 15"
+          }
+        ],
+        "subscribers": [],
+        "stats": {
+          "recipients": 1,
+          "failures": 0,
+          "throughput": 0,
+          "replies": 0,
+          "opt_outs": 0
+        },
+        "social": {
+          "twitter": {
+            "enabled": false,
+            "id": null,
+            "url": null
+          },
+          "facebook": {
+            "enabled": false,
+            "id": null,
+            "url": null
+          }
+        }
+      },
+      {
+        "id": 109510,
+        "status": "SENT",
+        "sent_at": "2019-04-04T15:47:57+00:00",
+        "completed_at": "2019-04-04T15:47:58+00:00",
+        "text": {
+          "full": "Blue Sushi: Come in now for 50% off all rolls!",
+          "header": "Blue Sushi",
+          "body": "Come in now for 50% off all rolls!"
+        },
+        "lists": [
+          {
+            "id": 25041,
+            "name": "New List 15"
+          }
+        ],
+        "subscribers": [],
+        "stats": {
+          "recipients": 1,
+          "failures": 0,
+          "throughput": 0,
+          "replies": 0,
+          "opt_outs": 0
+        },
+        "social": {
+          "twitter": {
+            "enabled": false,
+            "id": null,
+            "url": null
+          },
+          "facebook": {
+            "enabled": false,
+            "id": null,
+            "url": null
+          }
+        }
+      },
+      {
+        "id": 109494,
+        "status": "SENT",
+        "sent_at": "2019-04-04T15:34:07+00:00",
+        "completed_at": "2019-04-04T15:34:07+00:00",
+        "text": {
+          "full": "Blue Sushi: Come in now for 50% off all rolls!",
+          "header": "Blue Sushi",
+          "body": "Come in now for 50% off all rolls!"
+        },
+        "lists": [
+          {
+            "id": 25041,
+            "name": "New List 15"
+          }
+        ],
+        "subscribers": [],
+        "stats": {
+          "recipients": 1,
+          "failures": 0,
+          "throughput": 0,
+          "replies": 0,
+          "opt_outs": 0
+        },
+        "social": {
+          "twitter": {
+            "enabled": false,
+            "id": null,
+            "url": null
+          },
+          "facebook": {
+            "enabled": false,
+            "id": null,
+            "url": null
+          }
+        }
+      },
+      {
+        "id": 109495,
+        "status": "SENT",
+        "sent_at": "2019-04-04T15:34:07+00:00",
+        "completed_at": "2019-04-04T15:34:08+00:00",
+        "text": {
+          "full": "Blue Sushi: Come in now for 50% off all rolls!",
+          "header": "Blue Sushi",
+          "body": "Come in now for 50% off all rolls!"
+        },
+        "lists": [
+          {
+            "id": 25041,
+            "name": "New List 15"
+          }
+        ],
+        "subscribers": [],
+        "stats": {
+          "recipients": 1,
+          "failures": 0,
+          "throughput": 0,
+          "replies": 0,
+          "opt_outs": 0
+        },
+        "social": {
+          "twitter": {
+            "enabled": false,
+            "id": null,
+            "url": null
+          },
+          "facebook": {
+            "enabled": false,
+            "id": null,
+            "url": null
+          }
+        }
+      },
+      {
+        "id": 109444,
+        "status": "SENT",
+        "sent_at": "2019-04-04T12:24:39+00:00",
+        "completed_at": "2019-04-04T12:24:41+00:00",
+        "text": {
+          "full": "Blue Sushi: Come in now for 50% off all rolls!",
+          "header": "Blue Sushi",
+          "body": "Come in now for 50% off all rolls!"
+        },
+        "lists": [
+          {
+            "id": 25041,
+            "name": "New List 15"
+          }
+        ],
+        "subscribers": [],
+        "stats": {
+          "recipients": 1,
+          "failures": 0,
+          "throughput": 0,
+          "replies": 0,
+          "opt_outs": 0
+        },
+        "social": {
+          "twitter": {
+            "enabled": false,
+            "id": null,
+            "url": null
+          },
+          "facebook": {
+            "enabled": false,
+            "id": null,
+            "url": null
+          }
+        }
+      },
+      {
+        "id": 109445,
+        "status": "SENT",
+        "sent_at": "2019-04-04T12:24:39+00:00",
+        "completed_at": "2019-04-04T12:24:40+00:00",
+        "text": {
+          "full": "Blue Sushi: Come in now for 50% off all rolls!",
+          "header": "Blue Sushi",
+          "body": "Come in now for 50% off all rolls!"
+        },
+        "lists": [
+          {
+            "id": 25041,
+            "name": "New List 15"
+          }
+        ],
+        "subscribers": [],
+        "stats": {
+          "recipients": 1,
+          "failures": 0,
+          "throughput": 0,
+          "replies": 0,
+          "opt_outs": 0
+        },
+        "social": {
+          "twitter": {
+            "enabled": false,
+            "id": null,
+            "url": null
+          },
+          "facebook": {
+            "enabled": false,
+            "id": null,
+            "url": null
+          }
+        }
+      },
+      {
+        "id": 109442,
+        "status": "SENT",
+        "sent_at": "2019-04-04T12:16:06+00:00",
+        "completed_at": "2019-04-04T12:16:07+00:00",
+        "text": {
+          "full": "Blue Sushi: Come in now for 50% off all rolls!",
+          "header": "Blue Sushi",
+          "body": "Come in now for 50% off all rolls!"
+        },
+        "lists": [
+          {
+            "id": 25041,
+            "name": "New List 15"
+          }
+        ],
+        "subscribers": [],
+        "stats": {
+          "recipients": 1,
+          "failures": 0,
+          "throughput": 0,
+          "replies": 0,
+          "opt_outs": 0
+        },
+        "social": {
+          "twitter": {
+            "enabled": false,
+            "id": null,
+            "url": null
+          },
+          "facebook": {
+            "enabled": false,
+            "id": null,
+            "url": null
+          }
+        }
+      },
+      {
+        "id": 109443,
+        "status": "SENT",
+        "sent_at": "2019-04-04T12:16:06+00:00",
+        "completed_at": "2019-04-04T12:16:07+00:00",
+        "text": {
+          "full": "Blue Sushi: Come in now for 50% off all rolls!",
+          "header": "Blue Sushi",
+          "body": "Come in now for 50% off all rolls!"
+        },
+        "lists": [
+          {
+            "id": 25041,
+            "name": "New List 15"
+          }
+        ],
+        "subscribers": [],
+        "stats": {
+          "recipients": 1,
+          "failures": 0,
+          "throughput": 0,
+          "replies": 0,
+          "opt_outs": 0
+        },
+        "social": {
+          "twitter": {
+            "enabled": false,
+            "id": null,
+            "url": null
+          },
+          "facebook": {
+            "enabled": false,
+            "id": null,
+            "url": null
+          }
+        }
+      },
+      {
+        "id": 109441,
+        "status": "SENT",
+        "sent_at": "2019-04-04T12:15:10+00:00",
+        "completed_at": "2019-04-04T12:15:10+00:00",
+        "text": {
+          "full": "Blue Sushi 3: Come in now for 50% off all rolls!",
+          "header": "Blue Sushi 3",
+          "body": "Come in now for 50% off all rolls!"
+        },
+        "lists": [
+          {
+            "id": 25041,
+            "name": "New List 15"
+          }
+        ],
+        "subscribers": [],
+        "stats": {
+          "recipients": 1,
+          "failures": 0,
+          "throughput": 0,
+          "replies": 0,
+          "opt_outs": 0
+        },
+        "social": {
+          "twitter": {
+            "enabled": false,
+            "id": null,
+            "url": null
+          },
+          "facebook": {
+            "enabled": false,
+            "id": null,
+            "url": null
+          }
+        }
+      },
+      {
+        "id": 109439,
+        "status": "SENT",
+        "sent_at": "2019-04-04T12:13:54+00:00",
+        "completed_at": "2019-04-04T12:13:56+00:00",
+        "text": {
+          "full": "Blue Sushi 2: Come in now for 50% off all rolls!",
+          "header": "Blue Sushi 2",
+          "body": "Come in now for 50% off all rolls!"
+        },
+        "lists": [
+          {
+            "id": 25041,
+            "name": "New List 15"
+          }
+        ],
+        "subscribers": [],
+        "stats": {
+          "recipients": 1,
+          "failures": 0,
+          "throughput": 0,
+          "replies": 0,
+          "opt_outs": 0
+        },
+        "social": {
+          "twitter": {
+            "enabled": false,
+            "id": null,
+            "url": null
+          },
+          "facebook": {
+            "enabled": false,
+            "id": null,
+            "url": null
+          }
+        }
+      }
+    ],
+    "count": 20,
+    "total": 29,
+    "current_page": 1,
+    "pages": 2,
+    "limit": 20
+  }
+}

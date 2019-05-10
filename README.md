@@ -1,474 +1,777 @@
-﻿﻿﻿# Uhura
+# Intial App Configuration
 
-[![Build Status](https://semaphoreci.com/api/v1/dailydrip/uhura/branches/master/badge.svg)](https://semaphoreci.com/dailydrip/uhura)
+## Create Rails 6 app
+```
+$ create-rails6-app uhura
+Fetching https://github.com/rails/rails.git
+Fetching gem metadata from https://rubygems.org/.............
+Fetching gem metadata from https://rubygems.org/............
+Fetching gem metadata from https://rubygems.org/............
+Resolving dependencies...
+Using rake 12.3.2
+Using concurrent-ruby 1.1.5
+Using i18n 1.6.0
+Using minitest 5.11.3
+Using thread_safe 0.3.6
+Using tzinfo 1.2.5
+Using zeitwerk 2.1.5
+Using activesupport 6.1.0.alpha from https://github.com/rails/rails.git (at master@7575242)
+Using builder 3.2.3
+Using erubi 1.8.0
+Using mini_portile2 2.4.0
+Using nokogiri 1.10.3
+Using rails-dom-testing 2.0.3
+Using crass 1.0.4
+Using loofah 2.2.3
+Using rails-html-sanitizer 1.0.4
+Using actionview 6.1.0.alpha from https://github.com/rails/rails.git (at master@7575242)
+Using rack 2.0.7
+Using rack-test 1.1.0
+Using actionpack 6.1.0.alpha from https://github.com/rails/rails.git (at master@7575242)
+Using nio4r 2.3.1
+Using websocket-extensions 0.1.3
+Using websocket-driver 0.7.0
+Using actioncable 6.1.0.alpha from https://github.com/rails/rails.git (at master@7575242)
+Using globalid 0.4.2
+Using activejob 6.1.0.alpha from https://github.com/rails/rails.git (at master@7575242)
+Using activemodel 6.1.0.alpha from https://github.com/rails/rails.git (at master@7575242)
+Using activerecord 6.1.0.alpha from https://github.com/rails/rails.git (at master@7575242)
+Using mimemagic 0.3.3
+Using marcel 0.3.3
+Using activestorage 6.1.0.alpha from https://github.com/rails/rails.git (at master@7575242)
+Using mini_mime 1.0.1
+Using mail 2.7.1
+Using actionmailbox 6.1.0.alpha from https://github.com/rails/rails.git (at master@7575242)
+Using actionmailer 6.1.0.alpha from https://github.com/rails/rails.git (at master@7575242)
+Using actiontext 6.1.0.alpha from https://github.com/rails/rails.git (at master@7575242)
+Using bundler 2.0.1
+Using method_source 0.9.2
+Using thor 0.20.3
+Using railties 6.1.0.alpha from https://github.com/rails/rails.git (at master@7575242)
+Using sprockets 3.7.2
+Using sprockets-rails 3.2.1
+Using rails 6.1.0.alpha from https://github.com/rails/rails.git (at master@7575242)
+Bundle complete! 1 Gemfile dependency, 43 gems now installed.
+Use `bundle info [gemname]` to see where a bundled gem is installed.
+       exist  
+      create  README.md
+      create  Rakefile
+      create  .ruby-version
+      create  config.ru
+      create  .gitignore
+       force  Gemfile
+         run  git init from "."
+Initialized empty Git repository in /home/lex/Clients/Concur/Projects/uhura/.git/
+      create  package.json
+      create  app
+      create  app/assets/config/manifest.js
+      create  app/assets/stylesheets/application.css
+      create  app/channels/application_cable/channel.rb
+      create  app/channels/application_cable/connection.rb
+      create  app/controllers/application_controller.rb
+      create  app/helpers/application_helper.rb
+      create  app/javascript/channels/consumer.js
+      create  app/javascript/channels/index.js
+      create  app/javascript/packs/application.js
+      create  app/jobs/application_job.rb
+      create  app/mailers/application_mailer.rb
+      create  app/models/application_record.rb
+      create  app/views/layouts/application.html.erb
+      create  app/views/layouts/mailer.html.erb
+      create  app/views/layouts/mailer.text.erb
+      create  app/assets/images/.keep
+      create  app/controllers/concerns/.keep
+      create  app/models/concerns/.keep
+      create  bin
+      create  bin/rails
+      create  bin/rake
+      create  bin/setup
+      create  bin/yarn
+      create  config
+      create  config/routes.rb
+      create  config/application.rb
+      create  config/environment.rb
+      create  config/cable.yml
+      create  config/puma.rb
+      create  config/storage.yml
+      create  config/environments
+      create  config/environments/development.rb
+      create  config/environments/production.rb
+      create  config/environments/test.rb
+      create  config/initializers
+      create  config/initializers/application_controller_renderer.rb
+      create  config/initializers/assets.rb
+      create  config/initializers/backtrace_silencers.rb
+      create  config/initializers/content_security_policy.rb
+      create  config/initializers/cookies_serializer.rb
+      create  config/initializers/cors.rb
+      create  config/initializers/filter_parameter_logging.rb
+      create  config/initializers/inflections.rb
+      create  config/initializers/mime_types.rb
+      create  config/initializers/new_framework_defaults_6_0.rb
+      create  config/initializers/wrap_parameters.rb
+      create  config/locales
+      create  config/locales/en.yml
+      create  config/master.key
+      append  .gitignore
+      create  config/boot.rb
+      create  config/database.yml
+      create  db
+      create  db/seeds.rb
+      create  lib
+      create  lib/tasks
+      create  lib/tasks/.keep
+      create  lib/assets
+      create  lib/assets/.keep
+      create  log
+      create  log/.keep
+      create  public
+      create  public/404.html
+      create  public/422.html
+      create  public/500.html
+      create  public/apple-touch-icon-precomposed.png
+      create  public/apple-touch-icon.png
+      create  public/favicon.ico
+      create  public/robots.txt
+      create  tmp
+      create  tmp/.keep
+      create  tmp/cache
+      create  tmp/cache/assets
+      create  vendor
+      create  vendor/.keep
+      create  test/fixtures
+      create  test/fixtures/.keep
+      create  test/fixtures/files
+      create  test/fixtures/files/.keep
+      create  test/controllers
+      create  test/controllers/.keep
+      create  test/mailers
+      create  test/mailers/.keep
+      create  test/models
+      create  test/models/.keep
+      create  test/helpers
+      create  test/helpers/.keep
+      create  test/integration
+      create  test/integration/.keep
+      create  test/channels/application_cable/connection_test.rb
+      create  test/test_helper.rb
+      create  test/system
+      create  test/system/.keep
+      create  test/application_system_test_case.rb
+      create  storage
+      create  storage/.keep
+      create  tmp/storage
+      create  tmp/storage/.keep
+      remove  config/initializers/cors.rb
+      remove  config/initializers/new_framework_defaults_6_0.rb
+         run  bundle install
+Fetching https://github.com/rails/webpacker.git
+Fetching https://github.com/rails/web-console.git
+The dependency tzinfo-data (>= 0) will be unused by any of the platforms Bundler is installing for. Bundler is installing for ruby but the dependency is only for x86-mingw32, x86-mswin32, x64-mingw32, java. To add those platforms to the bundle, run `bundle lock --add-platform x86-mingw32 x86-mswin32 x64-mingw32 java`.
+Fetching gem metadata from https://rubygems.org/............
+Fetching gem metadata from https://rubygems.org/.
+Resolving dependencies...
+Bundler could not find compatible versions for gem "activesupport":
+  In Gemfile:
+    rails was resolved to 6.1.0.alpha, which depends on
+      activesupport (= 6.1.0.alpha)
+
+    webpacker was resolved to 4.0.2, which depends on
+      activesupport (>= 4.2)
+
+Bundler could not find compatible versions for gem "railties":
+  In Gemfile:
+    rails was resolved to 6.1.0.alpha, which depends on
+      railties (= 6.1.0.alpha)
+
+    sass-rails (~> 5) was resolved to 5.0.4, which depends on
+      railties (>= 4.0.0, < 5.0)
+
+    web-console was resolved to 4.0.0, which depends on
+      railties (>= 6.0.0.a)
+
+    webpacker was resolved to 4.0.2, which depends on
+      railties (>= 4.2)
+         run  bundle binstubs bundler
+The git source https://github.com/rails/webpacker.git is not yet checked out. Please run `bundle install` before trying to start
+your application
+       rails  webpacker:install
+The git source https://github.com/rails/webpacker.git is not yet checked out. Please run `bundle install` before trying to start your application
+The git source https://github.com/rails/webpacker.git is not yet checked out. Please run `bundle install` before trying to start your application
+
+Having problems with webpack & webpacker?
+If so, run : bundle pack and bundle install --path vendor/cache to solve it.
 
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/dailydrip/uhura)
+Create a lib/uhura directory and a lib/lib/uhura.rb file.
+
+# Update Gemfile - At least add following:
+
+group :development, :test do
+  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  gem 'rspec'
+  gem 'rspec-rails'
+  gem 'webmock'
+  gem 'awesome_print'
+  gem 'hirb'
+end
 
 
-Yet another rails boilerplate, but now using cutting edge libraries.
+Add envied gem.
+Add EnvFile
+Run bundle exec envied init:rails
+Run be envied check
+ 
+# Add to config/application.rb
+Bundler.require(*Rails.groups)
+ENVied.require(*ENV['ENVIED_GROUPS'] || Rails.groups)
 
-## Getting Started
-
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
-
-### Prerequisites
-
-- Ruby 2.6
-- Rails 6
-
-##### Environment variables
-
-To work with postgres, you must have `PGUSER` and `PGPASSWORD` as environment variables.
-
-To be able to see the admin and the app in test environment, you must have `ADMIN_NAME` and `ADMIN_PASSWORD` as environment variables.
-
-### Installing
-
-1. Install Rails at the command prompt if you haven't yet:
-
-        $ gem install rails
-
-2. Install Bundler to manage this application's dependencies:
-
-        $ gem install bundler
-
-3. In project root directory, install dependencies (in vendor directory):
-
-        $ bundle install
-
-4. Update npm packages:
-
-        $ yarn install --check-files
-
-5. Go to `http://localhost:3000` and you'll see the app.
-
-#### Installation Exceptions
-
-You might need to install a specfic version of bundler if you get this message:
+Run bundle exec rails generate rspec:install
 
 ```
-$ bundle install
+
+### Command History
+```
+ 2075  create-rails6-app uhura
+ 2076  cp jump1/.env uhura/
+ 2077  gem uhura/.env 
+ 2078  ge uhura/.env 
+ 2079  cp jump1/Gemfile uhura/
+ 2080  cp jump1/Envfile uhura/
+ 2081  cd uhura
+ 2082  mhe
+ 2083  bundle
+ 2084  bundle install
+ 2085  bundle exec envied init:rails
+ 2086  be envied check
+ 2087  bundle exec rails generate rspec:install
+ 2088  bundle exec rails generate rspec:install
+ 2089  be rake webpacker:install
+ 2090  bundle exec rails generate rspec:install
+```
+
+## Gemfile
+```
+source 'https://rubygems.org'
+git_source(:github) { |repo| "https://github.com/#{repo}.git" }
+
+ruby '2.6.1'
+
+gem 'rails', '~> 6.0.0.rc1'   # You can bundle edge Rails instead: gem 'rails', github: 'rails/rails'
+gem 'pg', '>= 0.18', '< 2.0'  # Use postgresql as the database for Active Record
+gem 'puma', '~> 3.11'         # Use Puma as the app server
+gem 'sass-rails', '~> 5'      # Use SCSS for stylesheets
+gem 'webpacker', '~> 4.0'     # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
+gem 'turbolinks', '~> 5'      # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
+gem 'jbuilder', '~> 2.5'      # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
+
+# gem 'redis', '~> 4.0'         # Use Redis adapter to run Action Cable in production
+# gem 'bcrypt', '~> 3.1.7'      # Use Active Model has_secure_password
+# gem 'image_processing', '~> 1.2' # Use Active Storage variant
+# gem 'bootsnap', '>= 1.4.2', require: false  # Reduces boot times through caching; required in config/boot.rb
+
+gem 'rack-timeout'            # Configure Rails middleware with a default timeout of 15
+gem 'envied'                  # Ensure presence and type of your app's ENV-variables
+gem 'sendgrid-ruby'           # For sending emails
+
+# For Clearstream
+gem 'faraday'
+gem 'faraday_middleware'
+gem 'json'
+gem 'typhoeus'
+
+group :development, :test do
+  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  gem 'rspec'
+  gem 'rspec-rails'
+  gem 'webmock'
+  gem 'awesome_print'
+  gem 'hirb'
+end
+
+group :development do
+  # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
+  gem 'web-console', '>= 3.3.0'
+  gem 'listen', '>= 3.0.5', '< 3.2'
+end
+
+group :test do
+  gem 'capybara', '>= 2.15'
+  gem 'selenium-webdriver'
+  gem 'webdrivers'    # Easy installation and use of web drivers to run system tests with browsers
+  gem 'database_cleaner'
+  gem 'factory_bot'
+  gem 'faker'
+end
+
+gem 'bootstrap', '~> 4.3', '>= 4.3.1'
+gem 'font-awesome-sass', '~> 5.6', '>= 5.6.1'
+# gem 'administrate', github: 'l3x/administrate'
+# gem 'devise', '~> 4.6', '>= 4.6.1'
+# gem 'devise-bootstrapped', github: 'l3x/devise-bootstrapped'
+# gem 'friendly_id', '~> 5.2', '>= 5.2.5'
+# gem 'gravatar_image_tag', github: 'mdeering/gravatar_image_tag'
+# gem 'mini_magick', '~> 4.9', '>= 4.9.2'
+# gem 'name_of_person', '~> 1.1'
+# gem 'omniauth-facebook', '~> 5.0'
+# gem 'omniauth-github', '~> 1.3'
+# gem 'omniauth-twitter', '~> 1.4'
+```
+
+## config/application.rb
+```
+module Uhura
+  class Application < Rails::Application
+    # Initialize configuration defaults for originally generated Rails version.
+    config.load_defaults 6.1
+```
+
+Try to install rspec:
+```
+$ bundle exec rails generate rspec:install
 Traceback (most recent call last):
-	2: from /home/lex/.gem/ruby/2.6.0/bin/bundle:23:in `<main>'
-	1: from /usr/lib/ruby/2.6.0/rubygems.rb:302:in `activate_bin_path'
-/usr/lib/ruby/2.6.0/rubygems.rb:283:in `find_spec_for_exe': Could not find 'bundler' (1.17.2) required by your /home/lex/Clients/Concur/Projects/uhura/Gemfile.lock. (Gem::GemNotFoundException)
-To update to the latest version installed on your system, run `bundle update --bundler`.
-To install the missing version, run `gem install bundler:1.17.2`
-
-```
-If that happens, do as it recommands and run `gem install bundler:1.17.2`
-
-## Running the tests
-
-### rspec tests
-
-```sh
-$ rspec
-```
-
-### spinach tests
-
-```sh
-$ spinach
+	15: from bin/rails:4:in `<main>'
+	14: from bin/rails:4:in `require'
+	13: from /home/lex/.rvm/gems/ruby-2.6.1/gems/railties-6.0.0.rc1/lib/rails/commands.rb:18:in `<top (required)>'
+	12: from /home/lex/.rvm/gems/ruby-2.6.1/gems/railties-6.0.0.rc1/lib/rails/command.rb:46:in `invoke'
+	11: from /home/lex/.rvm/gems/ruby-2.6.1/gems/railties-6.0.0.rc1/lib/rails/command/base.rb:65:in `perform'
+	10: from /home/lex/.rvm/gems/ruby-2.6.1/gems/thor-0.20.3/lib/thor.rb:387:in `dispatch'
+	 9: from /home/lex/.rvm/gems/ruby-2.6.1/gems/thor-0.20.3/lib/thor/invocation.rb:126:in `invoke_command'
+	 8: from /home/lex/.rvm/gems/ruby-2.6.1/gems/thor-0.20.3/lib/thor/command.rb:27:in `run'
+	 7: from /home/lex/.rvm/gems/ruby-2.6.1/gems/railties-6.0.0.rc1/lib/rails/commands/generate/generate_command.rb:21:in `perform'
+	 6: from /home/lex/.rvm/gems/ruby-2.6.1/gems/railties-6.0.0.rc1/lib/rails/command/actions.rb:14:in `require_application_and_environment!'
+	 5: from /home/lex/.rvm/gems/ruby-2.6.1/gems/railties-6.0.0.rc1/lib/rails/command/actions.rb:22:in `require_application!'
+	 4: from /home/lex/.rvm/gems/ruby-2.6.1/gems/railties-6.0.0.rc1/lib/rails/command/actions.rb:22:in `require'
+	 3: from /home/lex/Clients/Concur/Projects/uhura/config/application.rb:10:in `<top (required)>'
+	 2: from /home/lex/Clients/Concur/Projects/uhura/config/application.rb:11:in `<module:Uhura>'
+	 1: from /home/lex/Clients/Concur/Projects/uhura/config/application.rb:13:in `<class:Application>'
+/home/lex/.rvm/gems/ruby-2.6.1/gems/railties-6.0.0.rc1/lib/rails/application/configuration.rb:150:in `load_defaults': Unknown version "6.1" (RuntimeError)
 ```
 
-## Deployment
 
-You can deploy this [directly to Heroku](https://heroku.com/deploy?template=https://github.com/dailydrip/uhura), if you want to.
-
-## Test
-
-The application uses BASIC AUTH when in `test`. We use the same password and username for the admin.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
-
-
-
-# NEW STUFF
-
-Add this to top of spec/rails_helper.rb
-
-```
-require 'database_cleaner'
-```
-
-## Add lib/uhura
-
-## Clear Cache
-```
-uhura> Rails.cache.clear
-rmrf tmp/cache/bootsnap-compile-cache/
-mv node_modules /tmp/
-pushd ..
-make-zip-here uhura
-popd
-mv /tmp/node_modules .
-```
-
-## Reset DB
-```
-be rake db:drop  db:create  db:migrate  db:seed
-```
-
-## Run Fake Api Server from Command Lin3
-Load .env first to export API_VER and API_ENDPOINT environment variables.
-```
-[lex@k2 uhura]$ . .env
-[lex@k2 uhura]$ ruby /home/lex/Clients/Concur/Projects/uhura/spec/api/fake_api_server.rb 
-[2019-03-15 23:30:47] INFO  WEBrick 1.4.2
-[2019-03-15 23:30:47] INFO  ruby 2.6.1 (2019-01-30) [x86_64-linux]
-[2019-03-15 23:30:47] INFO  WEBrick::HTTPServer#start: pid=2592 port=8080
->>-sg_emails/1
-::1 - - [15/Mar/2019:23:30:50 EDT] "GET /api/v1/sg_emails/1 HTTP/1.1" 200 259
-- -> /api/v1/sg_emails/1
-```
-
-### .env File Contents
-```
-export APP_NAME='uhura'
-export API_VER_NO="$(cat "lib/$(basename ${APP_NAME})/version.rb" | grep VERSION | head -n 1 | awk '{print $3}' | tr -d "'" | cut -d '.' -f1)"
-export API_VER="api/v${API_VER_NO}"
-export BASE_URI='http://localhost:3000'
-export API_ENDPOINT="${BASE_URI}/${API_VER}/"
-```
-
-## Run Fake Api Server from Command Line -- with some 404's
-```
-[lex@k2 uhura]$ ruby /home/lex/Clients/Concur/Projects/uhura/spec/api/fake_api_server.rb 
-[2019-03-15 17:21:53] INFO  WEBrick 1.4.2
-[2019-03-15 17:21:53] INFO  ruby 2.6.1 (2019-01-30) [x86_64-linux]
-[2019-03-15 17:21:53] INFO  WEBrick::HTTPServer#start: pid=7602 port=8080
-::1 - - [15/Mar/2019:17:21:58 EDT] "GET /sg_emails/1 HTTP/1.1" 404 0
-- -> /sg_emails/1
-::1 - - [15/Mar/2019:17:26:27 EDT] "GET /sg_emails/1 HTTP/1.1" 404 0
-- -> /sg_emails/1
-::1 - - [15/Mar/2019:17:27:21 EDT] "GET /sg_emails/1 HTTP/1.1" 404 0
-- -> /sg_emails/1
-::1 - - [15/Mar/2019:17:28:40 EDT] "GET /sg_emails/1 HTTP/1.1" 404 0
-- -> /sg_emails/1
-::1 - - [15/Mar/2019:17:28:54 EDT] "GET /api/v1/sg_emails/1 HTTP/1.1" 404 0
-- -> /api/v1/sg_emails/1
-::1 - - [15/Mar/2019:17:32:24 EDT] "GET /posts/1 HTTP/1.1" 200 79
-- -> /posts/1
-```
-
-## Return Payloads
-We'll start with two status codes:
-* 200 = Success
-* 500 = Error
-
-### Successful request:
-```
-{
-  "status": "200",
-  "data": {
-    /* Application-specific data would go here. */
-  },
-  "error": null /* Or optional success message */
-}
-```
-Note that a successful status code can be any successful code (201 Created, 202 Accepted, etc.).
-
-#### Example
-```
-{
-    "status": "202",
-    "data": {
-        "id": 4,
-        "from_email": "lex.nospam@gmail.com",
-        "to_email": "lex.sheehan@gmail.com",
-        "subject": "A test from Rails",
-        "content": "How R U?",
-        "response_status_code": null,
-        "created_at": "2019-03-20T23:33:17.292Z",
-        "updated_at": "2019-03-20T23:33:17.292Z"
-    },
-    "error": null
-}
-```
-
-### Failed request - unprocessable entity
-```
-{
-  "status": "422",
-  "data": null, /* or optional error payload */
-  "error": "Error xyz has occurred"
-}
-```
-### Failed request - server error
-```
-{
-  "status": "500",
-  "data": null, /* or optional error payload */
-  "error": "Error xyz has occurred"
-}
-```
-Note that an error status code can be any 4xx or 5xx status code.
-
-## Suppress Annoying Warnings
-
-To remove the following Warnings when running be rspec...
-```
-/usr/lib/ruby/gems/2.6.0/gems/shoulda-matchers-2.8.0/lib/shoulda/matchers/active_model/validate_inclusion_of_matcher.rb:251: warning: BigDecimal.new is deprecated; use BigDecimal() method instead.
-DEPRECATION WARNING: Single arity template handlers are deprecated.  Template handlers must
-now accept two parameters, the view object and the source for the view object.
-Change:
-  >> Class#call(template)
-To:
-  >> Class#call(template, source)
- (called from <top (required)> at /home/lex/Clients/Concur/Projects/uhura/config/environment.rb:7)
-DEPRECATION WARNING: action_view.finalize_compiled_template_methods is deprecated and has no effect (called from <top (required)> at /home/lex/Clients/Concur/Projects/uhura/config/environment.rb:7)
-
-```
-
-...Add the ActiveSupport::Deprecation.silenced = true to your config/application.rb file
-
+## config/application.rb
+Change 6.1 to 6.0
 ```
 module Uhura
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.0
+```
 
-    # Settings in config/environments/* take precedence over those specified here.
-    # Application configuration can go into files in config/initializers
-    # -- all .rb files in that directory are automatically loaded after loading
-    # the framework and any gems in your application.
+Try to install rspec:
+```
+$ bundle exec rails generate rspec:install
+RAILS_ENV=development environment is not defined in config/webpacker.yml, falling back to production environment
+      create  .rspec
+      create  spec
+      create  spec/spec_helper.rb
+      create  spec/rails_helper.rb
+```
 
-    # Don't generate system test files.
-    config.generators.system_tests = nil
+## Install webpacker
+```
+$ bundle exec rails generate rspec:install
+RAILS_ENV=development environment is not defined in config/webpacker.yml, falling back to production environment
+      create  .rspec
+      create  spec
+      create  spec/spec_helper.rb
+      create  spec/rails_helper.rb
+[lex@k2 uhura]$ be rake webpacker:install
+RAILS_ENV=development environment is not defined in config/webpacker.yml, falling back to production environment
+      create  config/webpacker.yml
+Copying webpack core config
+      create  config/webpack
+      create  config/webpack/development.js
+      create  config/webpack/environment.js
+      create  config/webpack/production.js
+      create  config/webpack/test.js
+Copying postcss.config.js to app root directory
+      create  postcss.config.js
+Copying babel.config.js to app root directory
+      create  babel.config.js
+Copying .browserslistrc to app root directory
+      create  .browserslistrc
+The JavaScript app source directory already exists
+       apply  /home/lex/.rvm/gems/ruby-2.6.1/gems/webpacker-4.0.2/lib/install/binstubs.rb
+  Copying binstubs
+       exist    bin
+      create    bin/webpack
+      create    bin/webpack-dev-server
+      append  .gitignore
+Installing all JavaScript dependencies [4.0.2]
+         run  yarn add @rails/webpacker from "."
+yarn add v1.15.2
+info No lockfile found.
+[1/4] Resolving packages...
+[2/4] Fetching packages...
+info fsevents@1.2.9: The platform "linux" is incompatible with this module.
+info "fsevents@1.2.9" is an optional dependency and failed compatibility check. Excluding it from installation.
+[3/4] Linking dependencies...
+[4/4] Building fresh packages...
+success Saved lockfile.
+success Saved 585 new dependencies.
+info Direct dependencies
+├─ @rails/actioncable@6.0.0-alpha
+├─ @rails/activestorage@6.0.0-alpha
+├─ @rails/ujs@6.0.0-alpha
+├─ @rails/webpacker@4.0.2
+└─ turbolinks@5.2.0
+info All dependencies
+├─ @babel/core@7.4.4
+├─ @babel/helper-builder-binary-assignment-operator-visitor@7.1.0
+├─ @babel/helper-call-delegate@7.4.4
+. . .
+├─ webpack-dev-middleware@3.6.2
+├─ webpack-dev-server@3.3.1
+└─ websocket-extensions@0.1.3
+Done in 4.24s.
+Webpacker successfully installed
+```
 
-    # Suppress warnings when running rspec
-    ActiveSupport::Deprecation.silenced = true
+## Re-install Rspec
+```
+ $ bundle exec rails generate rspec:install
+    identical  .rspec
+        exist  spec
+    identical  spec/spec_helper.rb
+    identical  spec/rails_helper.rb
+```
+No warnings about webpack!
+
+
+# Exchang-ify Uhura
+
+## db/seeds.rb
+```
+# rubocop:disable Rails/Output
+puts 'Creating a Manager'
+manager = Manager.create!(name: 'Generated Manager')
+
+puts 'Creating an Api Key'
+ApiKey.create!(manager: manager)
+```
+
+## Create Manager Migrations
+
+NOTE: Manager table represents non-interactive service accounts (that make API calls)
+
+* Manager
+* ApiKey
+
+```
+be rails g model Manager name public_token
+#be rails g model ApiKey auth_token:string{10}:uniq manager:references
+be rails g model ApiKey auth_token:token manager:references
+be rake db:drop db:create db:migrate db:seed
+```
+
+## Generated db/schema.rb
+```
+ActiveRecord::Schema.define(version: 2019_04_30_202506) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "api_keys", force: :cascade do |t|
+    t.string "auth_token", limit: 10
+    t.bigint "manager_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["auth_token"], name: "index_api_keys_on_auth_token", unique: true
+    t.index ["manager_id"], name: "index_api_keys_on_manager_id"
   end
+
+  create_table "managers", force: :cascade do |t|
+    t.string "name"
+    t.string "public_token"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  add_foreign_key "api_keys", "managers"
 end
-```
-
-# A Note About the Rspec
-
-## Avoid Metaprogramming, especially in RSpec
-
-I read this: https://blog.schembri.me/post/testing-apis-in-ruby-with-rspec/
-
-I thought I found a better way to test API's.
-
-"A little gem named Cuba. Cuba gives us a simple DSL to define routes and responses, which is really all we need. It also doesn’t pull in a bunch of unnecessary dependencies."
-
-I found it to be handy to test JSON API's.  Without changing code or configuration, I could run a Cuba server in one terminal and and run curl commands in another (or just use Postman).
-
- ```
-$ ruby /home/lex/Clients/Concur/Projects/uhura/spec/api/fake_api_server.rb 
-```
-
-When running Rspec tests, the Rspec file includes some meta programming magic:
 
 ```
-RSpec.describe SgEmailApi do
 
-  around &method(:with_fake_server)
+# Add Administration Framework
 
-  attr_accessor :sg_email
+Found ApiKey usage in exchequer-server
 
-  describe '.post' do
-    it 'returns a valid SgEmail object' do
-      api_sg_email = SgEmailApi.post
-      expect(api_sg_email[:status]).to eq '200'
+## app/admin/api_key.rb
+```
+ActiveAdmin.register ApiKey do
+  permit_params do
+    %i[auth_token manager_id]
+  end
+
+  form do |f|
+    f.semantic_errors
+    f.inputs do
+      f.input :manager
+      f.input :auth_token unless f.object.new_record?
     end
+    f.actions
   end
-
 end
 ```
 
-See that "around" symbol? Well, that piece of shit looks nifty, but caused much frustration.
+Clearly, we need to add and Administrative Application to view ApiKeys.
 
-When it comes to code, magic sucks.  So, this fancy API test framework won't be around long.
+## Add Administrate
 
-Did you read that "Testing APIs in Ruby: An overview" article?  The fonts, colors and images are snazzy, but what that Jamie left out was what happens when you add more than one Rspec test.
+See https://github.com/l3x/administrate
 
- 
-## Use Request Specs
-
-## Curls
-
-### Before Fix 
-#### app/controllers/api/v1/sg_emails_controller.rb
+### Add Gem
 ```
-      render json: return_error(@sg_email.errors)
-```
-#### In Terminal
-```
-$ curl --verbose -d 'Content-Type=application/json' -u 'admin:Zm96_$F:p4zPt-r4' -X POST http://localhost:3000/api/v1/sg_emails
-Note: Unnecessary use of -X or --request, POST is already inferred.
-*   Trying ::1...
-* TCP_NODELAY set
-* connect to ::1 port 3000 failed: Connection refused
-*   Trying 127.0.0.1...
-* TCP_NODELAY set
-* Connected to localhost (127.0.0.1) port 3000 (#0)
-* Server auth using Basic with user 'admin'
-> POST /api/v1/sg_emails HTTP/1.1
-> Host: localhost:3000
-> Authorization: Basic YWRtaW46Wm05Nl8kRjpwNHpQdC1yNA==
-> User-Agent: curl/7.64.0
-> Accept: */*
-> Content-Length: 29
-> Content-Type: application/x-www-form-urlencoded
-> 
-* upload completely sent off: 29 out of 29 bytes
-< HTTP/1.1 200 OK
-< X-Frame-Options: SAMEORIGIN
-< X-XSS-Protection: 1; mode=block
-< X-Content-Type-Options: nosniff
-< X-Download-Options: noopen
-< X-Permitted-Cross-Domain-Policies: none
-< Referrer-Policy: strict-origin-when-cross-origin
-< Content-Type: application/json; charset=utf-8
-< ETag: W/"dee66c55f3efe92c9e16197d8f73dfeb"
-< Cache-Control: max-age=0, private, must-revalidate
-< X-Request-Id: 48fbc4ae-2a30-4ad7-9efe-14483cc13a7f
-< X-Runtime: 0.008309
-< Transfer-Encoding: chunked
-< 
-* Connection #0 to host localhost left intact
-{"status":422,"data":null,"error":{"from_email":["can't be blank","is invalid"],"to_email":["can't be blank","is invalid","should be different than from_email"],"subject":["can't be blank"],"content":["can't be blank"]}}
+gem 'administrate', github: 'l3x/administrate'
+bundle install
 ```
 
-### After Fix 
-#### app/controllers/api/v1/sg_emails_controller.rb
+### Install Administrate app files
 ```
-      error_json = return_error(@sg_email.errors)
-      render json: error_json, status: error_json[:status]
-```
-#### In Terminal
-```
-$ curl --verbose -d 'Content-Type=application/json' -u 'admin:Zm96_$F:p4zPt-r4' -X POST http://localhost:3000/api/v1/sg_emails
-Note: Unnecessary use of -X or --request, POST is already inferred.
-*   Trying ::1...
-* TCP_NODELAY set
-* connect to ::1 port 3000 failed: Connection refused
-*   Trying 127.0.0.1...
-* TCP_NODELAY set
-* Connected to localhost (127.0.0.1) port 3000 (#0)
-* Server auth using Basic with user 'admin'
-> POST /api/v1/sg_emails HTTP/1.1
-> Host: localhost:3000
-> Authorization: Basic YWRtaW46Wm05Nl8kRjpwNHpQdC1yNA==
-> User-Agent: curl/7.64.0
-> Accept: */*
-> Content-Length: 29
-> Content-Type: application/x-www-form-urlencoded
-> 
-* upload completely sent off: 29 out of 29 bytes
-< HTTP/1.1 422 Unprocessable Entity
-< X-Frame-Options: SAMEORIGIN
-< X-XSS-Protection: 1; mode=block
-< X-Content-Type-Options: nosniff
-< X-Download-Options: noopen
-< X-Permitted-Cross-Domain-Policies: none
-< Referrer-Policy: strict-origin-when-cross-origin
-< Content-Type: application/json; charset=utf-8
-< Cache-Control: no-cache
-< X-Request-Id: b1c48d00-42e5-438f-ac3e-471775777ad8
-< X-Runtime: 0.243982
-< Transfer-Encoding: chunked
-< 
-* Connection #0 to host localhost left intact
-{"status":422,"data":null,"error":{"from_email":["can't be blank","is invalid"],"to_email":["can't be blank","is invalid","should be different than from_email"],"subject":["can't be blank"],"content":["can't be blank"]}}
+$ be rails generate administrate:install
+       route  namespace :admin do
+    resources :api_keys
+    resources :managers
+
+    root to: "api_keys#index"
+  end
+      create  app/controllers/admin/application_controller.rb
+      create  app/dashboards/api_key_dashboard.rb
+      create  app/controllers/admin/api_keys_controller.rb
+      create  app/dashboards/manager_dashboard.rb
+      create  app/controllers/admin/managers_controller.rb
 ```
 
-## Use Encrypted Rails Secrets .yml files
-See https://www.engineyard.com/blog/encrypted-rails-secrets-on-rails-5.1
-
-### Create Files
-Following will open vscodium editor 
+#### Change root to managers
+##### config/routes.rb
 ```
-EDITOR="vscodium --wait" bundle exec rails credentials:edit --environment development
-EDITOR="vscodium --wait" bundle exec rails credentials:edit --environment test
-EDITOR="vscodium --wait" bundle exec rails credentials:edit --environment production
+root to: "managers#index"
 ```
 
-Make contents look similar to:
-```
-# aws:
-#   access_key_id: 123
-#   secret_access_key: 345
 
-postgres:
-  #database: uhura_development
-  username: <USER NAME HERE>
-  password: <PASSWORD NAME HERE>
 
-sendgrid:
-  api_key: <API KEY  HERE>
+## Create API Migrations
 
-basic_auth:
-  admin_name: admin
-  admin_password: <PLAINTEX PASSWORD HERE>
-```
+NOTE: Manager table represents non-interactive service accounts (that make API calls)
 
-### Example Usage
-```
-module Admin
-  class ApplicationController < Administrate::ApplicationController
-    http_basic_authenticate_with(
-      name: Rails.application.credentials.basic_auth[:admin_name],
-      password: Rails.application.credentials.basic_auth[:admin_password]
-    )
-```
-
-### Semaphore
+* Team
+* Sendgrid
+* Clearstream
 
 ```
-      env_vars:
-        - name: RAILS_ENV
-          value: test
-        - name: RAILS_MASTER_KEY
-          value: "$RAILS_MASTER_KEY"
+be rails g model Team name:string:uniq
+be rails g model Template name:string:uniq sendgrid_id
+
+# manager == app
+be rails g model Message manager:references user:references team:references email_subject email_message:text template:references sms_message:text
+
+# Create! message upon receipt from app
+be rails g model Sendgrid message:references sent_to_sendgrid:datetime sendgrid_response:text read:datetime 
+be rails g model Clearstream message:references sent_to_clearstream:datetime clearstream_response:text  --test-framework=rspec
+
+be rake db:drop db:create db:migrate db:seed
 ```
 
-#### Install Semaphore CLI
+### Note
+If we get more email or sms providers, we can refactor using STI.
 
-curl https://storage.googleapis.com/sem-cli-releases/get.sh | bash
-sem connect smoothterminal.semaphoreci.com <PASSWORD>
-
-#### Create Semaphore Secret yml File
-
-##### config/credentials/uhura_rails_secret.yml
+## Generated db/schema.rb
 ```
-# sem_uhura_rails_secret.yml
-apiVersion: v1beta
-kind: Secret
-metadata:
-  name: uhura
-data:
-  env_vars:
-    - name: RAILS_MASTER_KEY
-      value: <KEY VALUE GOES HERE>
-```      
+ActiveRecord::Schema.define(version: 2019_04_30_202506) do
 
-```
-sem create -f config/credentials/uhura_rails_secret.yml
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
 
-sem get secrets
-NAME       AGE
-fastlane   41d
-GCP        42d
-uhura      17h
- 
-sem delete secret uhura
-```
+  create_table "api_keys", force: :cascade do |t|
+    t.string "auth_token", limit: 10
+    t.bigint "manager_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["auth_token"], name: "index_api_keys_on_auth_token", unique: true
+    t.index ["manager_id"], name: "index_api_keys_on_manager_id"
+  end
 
-#### Debugging Semaphore Sessions
+  create_table "managers", force: :cascade do |t|
+    t.string "name"
+    t.string "public_token"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
-Add your github public key in Account Settings at https://semaphoreci.com/public_ssh_keys
-```
-sem config set debug.PublicSshKey "$(cat ~/.ssh/id_rsa.pub)"
+  add_foreign_key "api_keys", "managers"
+end
+
 ```
 
-Get Job ID from Semaphore admin page.
+## RSpec/Shoulda Matchers Change
 
 ```
-sem debug job 7855ba90-60fa-4578-9f3b-355638769577
+Testing started at 11:04 AM ...
+/bin/bash -c "/home/lex/.rvm/bin/rvm ruby-2.6.1 do bundle exec /home/lex/.rvm/rubies/ruby-2.6.1/bin/ruby /home/lex/.rvm/gems/ruby-2.6.1/bin/rspec /home/lex/Clients/Concur/Projects/uhura --require teamcity/spec/runner/formatter/teamcity/formatter --format Spec::Runner::Formatter::TeamcityFormatter --pattern '**/*_spec.rb' --no-color"
+
+Expected ApiKey to validate that :manager cannot be empty/falsy, but
+this could not be proved.
+  After setting :manager to ‹nil›, the matcher expected the ApiKey to be
+  invalid and to produce the validation error "can't be blank" on
+  :manager. The record was indeed invalid, but it produced these
+  validation errors instead:
+
+  * manager: ["must exist"]
+
+  0) ApiKey validations should validate that :manager cannot be empty/falsy
+     Failure/Error: it { should validate_presence_of(:manager) }
+
+       Expected ApiKey to validate that :manager cannot be empty/falsy, but
+       this could not be proved.
+         After setting :manager to ‹nil›, the matcher expected the ApiKey to be
+         invalid and to produce the validation error "can't be blank" on
+         :manager. The record was indeed invalid, but it produced these
+         validation errors instead:
+
+         * manager: ["must exist"]
+     # ./spec/models/api_key_spec.rb:5:in `block (3 levels) in <top (required)>'
 ```
+
+### Fix
+https://github.com/thoughtbot/shoulda-matchers/issues/1095
+
+
+# Up & Running Shortcuts
+
+Generate Rails models
+Copy back logic to .rb model files
+
+
+# Things to be aware of
+
+## Envied
+
+The envied gem ensures that the environment variables you specify in Envfile exist.
+
+If they don't you'll get initialization errors like the following:
+
+```
+[lex@k2 uhura]$ unset SOURCE_CLI_ID
+[lex@k2 uhura]$ irb
+Loading Rails...Error : 'load /home/lex/.irbrc' : uninitialized constant Source
+irb: warn: can't alias context from irb_context.
+2.6.1 :001 > 
+```
+
+Export the missing environment variable:
+
+```
+[lex@k2 uhura]$ export SOURCE_CLI_ID=4
+[lex@k2 uhura]$ irb
+Loading Rails...SUCCESS!  Loaded ENV['IRB_LOGGER']: development, ENV['IRB_LOGGER']: 
+ActiveRecord::Base.connection.instance_values['config'][:adapter]: postgresql
+@db = ActiveRecord::Base.connection
+Example:  @db.tables
+Loaded logger (standard_logger).  <= Can set using ENV['IRB_LOGGER'] values: standard | loud | quiet
+irb: warn: can't alias context from irb_context.
+uhura> AppCfg['SOURCE_CLI_ID']
+4
+uhura> 
+```
+
+## auth_token gets reset when you rake db:drop
+
+If you happen to do that and get a message like the following, the use the new auth_token value (or replace it with the old one you saved) 
+
+### Request
+```
+POST /api/v1/messages HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer: eebdd83200c6ab4df957
+Host: localhost:3000
+Accept: */*
+Cache-Control: no-cache
+
+{
+    "receiver_email": "alice@aol.com",
+    "team_name": "Corporate Finance Team",
+    "template_name": "Simple Template",
+    "email_subject": "Picnic this Saturday",
+    "email_message": "{:headers=>{:key1=>\"val1\", :key2=>\"val2\"}, :sections=>{:name=>\"val1\", :body=>\"val2\"}}",
+    "sms_message": "Bring Drinks to the Picnic this Saturday"
+}
+```
+
+### Response
+```
+{"error":"This Api Key does not exist."}
+```
+
+### auth_token value in ApiKey table
+```
+uhura> ApiKey.all
++----+--------------------------+------------+-------------------------+-------------------------+
+| id | auth_token               | manager_id | created_at              | updated_at              |
++----+--------------------------+------------+-------------------------+-------------------------+
+| 1  | r42z2dFig7Yqi5DVbUUKuDP6 | 1          | 2019-05-04 17:39:36 UTC | 2019-05-04 17:39:36 UTC |
+| 2  | j5usM2ht5sy1GVukyZPBcqG5 | 2          | 2019-05-04 17:39:36 UTC | 2019-05-04 17:39:36 UTC |
++----+--------------------------+------------+-------------------------+-------------------------+
+```
+
+# Ruby Style Guide
+
+https://github.com/rubocop-hq/ruby-style-guide#no-explicit-return
+
+
+# Authentication
+
+To maintain consistency with Exchequer-Server, Uhura implements auth security as follows:
+
+* The message sender is a Manager, which is really an Application (App).
+* The Manager identifies itself with a public_token (that's stored in the manager table)
+* An auth_token is created when a Manager is created (it's stored in the api_keys table)
+* When an application makes a send_message request, it passes the auth_token in the Authorization HTTP header
+* The application also sends its public_token in the POST body.
+* Uhura looks up the application in the Manager table and verifies the auth_token in the api_keys table.
+
+
+# Sendgrid
+Create an account at https://app.sendgrid.com/ 
+* Get API key
+* View sent email statistics.
+
+
+Create Support Ticket to Activiate Account
+
+https://stackoverflow.com/questions/42214048/sendgrid-returns-202-but-doesnt-send-email
+
+
+# Add email account for testing
+In Rails console:
+
+```
+lex = User.create!(
+    first_name: 'Lex',
+    last_name: 'text',
+    email: 'lex@smoothterminal.com',
+    preferences: {email: true, sms: true}
+)
+lex.save!
+
+m1 = Manager.first
+m1.email = 'lex@smoothterminal.com'
+m1.save!
+
+# Use new keys in curl commands:
+uhura> m1.public_token
+"69ff29903f2ea2f40d14"
+
+uhura> m1.api_key.auth_token
+"456003882429ee7da561"
+
+```
+
+# SendGrid Errors
+
+The Mangager.email value must be valid or you'll get a 404 error from SendGrid and clues as to what happened.
+
+
+

@@ -10,61 +10,132 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_15_153741) do
+ActiveRecord::Schema.define(version: 2019_05_09_014853) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "active_storage_attachments", force: :cascade do |t|
-    t.string "name", null: false
-    t.string "record_type", null: false
-    t.bigint "record_id", null: false
-    t.bigint "blob_id", null: false
-    t.datetime "created_at", null: false
-    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
-    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+  create_table "api_keys", force: :cascade do |t|
+    t.string "auth_token"
+    t.bigint "manager_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["auth_token"], name: "index_api_keys_on_auth_token", unique: true
+    t.index ["manager_id"], name: "index_api_keys_on_manager_id"
   end
 
-  create_table "active_storage_blobs", force: :cascade do |t|
-    t.string "key", null: false
-    t.string "filename", null: false
-    t.string "content_type"
-    t.text "metadata"
-    t.bigint "byte_size", null: false
-    t.string "checksum", null: false
-    t.datetime "created_at", null: false
-    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  create_table "clearstream_msgs", force: :cascade do |t|
+    t.datetime "sent_to_clearstream"
+    t.text "clearstream_response"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "identities", force: :cascade do |t|
+  create_table "event_types", force: :cascade do |t|
     t.string "name"
+    t.string "label"
+    t.text "description"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["name"], name: "index_event_types_on_name", unique: true
+  end
+
+  create_table "managers", force: :cascade do |t|
+    t.string "name"
+    t.string "public_token"
     t.string "email"
-    t.string "password_digest"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["email"], name: "index_managers_on_email"
+    t.index ["name"], name: "index_managers_on_name", unique: true
+    t.index ["public_token"], name: "index_managers_on_public_token", unique: true
+  end
+
+  create_table "messages", force: :cascade do |t|
+    t.bigint "sendgrid_msg_id"
+    t.bigint "clearstream_msg_id"
+    t.bigint "manager_id", null: false
+    t.bigint "user_id", null: false
+    t.bigint "team_id", null: false
+    t.string "email_subject"
+    t.text "email_message"
+    t.bigint "template_id", null: false
+    t.text "sms_message"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["clearstream_msg_id"], name: "index_messages_on_clearstream_msg_id"
+    t.index ["manager_id"], name: "index_messages_on_manager_id"
+    t.index ["sendgrid_msg_id"], name: "index_messages_on_sendgrid_msg_id"
+    t.index ["team_id"], name: "index_messages_on_team_id"
+    t.index ["template_id"], name: "index_messages_on_template_id"
+    t.index ["user_id"], name: "index_messages_on_user_id"
+  end
+
+  create_table "sendgrid_msgs", force: :cascade do |t|
+    t.datetime "sent_to_sendgrid"
+    t.json "mail_json"
+    t.datetime "got_response_at"
+    t.text "sendgrid_response"
+    t.datetime "read_by_user_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "sg_emails", force: :cascade do |t|
-    t.string "from_email"
-    t.string "to_email"
-    t.string "subject"
-    t.text "content"
-    t.string "response_status_code"
+  create_table "sources", force: :cascade do |t|
+    t.string "name"
+    t.json "details"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["name"], name: "index_sources_on_name", unique: true
+  end
+
+  create_table "teams", force: :cascade do |t|
+    t.string "name"
+    t.string "name_prefix"
+    t.string "email"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["email"], name: "index_teams_on_email"
+    t.index ["name"], name: "index_teams_on_name", unique: true
+    t.index ["name_prefix"], name: "index_teams_on_name_prefix", unique: true
+  end
+
+  create_table "templates", force: :cascade do |t|
+    t.string "name"
+    t.string "template_id"
+    t.json "sample_template_data"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["name"], name: "index_templates_on_name", unique: true
+  end
+
+  create_table "ulogs", force: :cascade do |t|
+    t.bigint "source_id", null: false
+    t.bigint "event_type_id", null: false
+    t.text "details"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["event_type_id"], name: "index_ulogs_on_event_type_id"
+    t.index ["source_id"], name: "index_ulogs_on_source_id"
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "email", default: "", null: false
-    t.string "encrypted_password", default: "", null: false
-    t.string "reset_password_token"
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
+    t.string "email"
+    t.string "first_name"
+    t.string "last_name"
+    t.json "preferences"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
-    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "api_keys", "managers"
+  add_foreign_key "messages", "clearstream_msgs"
+  add_foreign_key "messages", "managers"
+  add_foreign_key "messages", "sendgrid_msgs"
+  add_foreign_key "messages", "teams"
+  add_foreign_key "messages", "templates"
+  add_foreign_key "messages", "users"
+  add_foreign_key "ulogs", "event_types"
+  add_foreign_key "ulogs", "sources"
 end

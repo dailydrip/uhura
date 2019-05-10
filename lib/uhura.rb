@@ -2,4 +2,7 @@
 
 require "#{__dir__}/uhura/config"
 require "#{__dir__}/uhura/version"
-require "#{__dir__}/uhura/utils"
+require "#{__dir__}/uhura/status"
+require "#{__dir__}/uhura/logging"
+
+require_relative 'clearstream_client'

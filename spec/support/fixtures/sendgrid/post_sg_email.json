@@ -1,0 +1,14 @@
+{
+  "status": "202",
+  "data": {
+    "id": 5,
+    "from_email": "lex.nospam@gmail.com",
+    "to_email": "lex.sheehan@gmail.com",
+    "subject": "A test from Rails",
+    "content": "How R U?",
+    "response_status_code": "202",
+    "created_at": "2019-04-08T20:18:57.212Z",
+    "updated_at": "2019-04-08T20:18:57.212Z"
+  },
+  "error": null
+}

@@ -4,7 +4,7 @@ module ControllerSpecHelper
   # return valid headers
   def valid_headers
     {
-      'Authorization' => 'Basic ' + Base64.encode64("#{Rails.application.credentials.basic_auth[:admin_name]}:#{Rails.application.credentials.basic_auth[:admin_password]}"),
+      'Authorization' => 'Token token=' + Base64.encode64("#{AppCfg['TOKEN_AUTH_USER']}:#{AppCfg['TOKEN_AUTH_PASSWORD']}").strip,
       'Content-Type' => 'application/json'
     }
   end
