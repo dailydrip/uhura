@@ -27,7 +27,6 @@ class Clearstream
     uri = "#{ENV['CLEARSTREAM_URL']}/messages"
     cs_request = Request.new(token: token, uri: uri, verb: :post, body: body)
 
-
     cs_message = ClearstreamClient::Message.new(params)
     if !cs_message.valid?
       error_json = return_error(cs_message.errors)

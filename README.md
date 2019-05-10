@@ -783,7 +783,7 @@ The Manager.email value must be valid or you'll get a 404 error from SendGrid an
 bundle exec rake db:drop db:create db:migrate db:seed
 ```
 
-## In the begging of this project we ran following script to create models and database migrations:
+## In the begining of this project we ran following script to create models and database migrations:
 
 ```
 uhu-drop-tables-gen-and-seed
