@@ -19,7 +19,7 @@ class Api::V1::MessagesController < Api::V1::ApiBaseController
       # Failed to deliver message
       render json: ret.error
     else
-      render json: return_success(ret.value)
+      render json: ret.value
     end
   end
 

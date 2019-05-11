@@ -26,6 +26,8 @@ ActiveRecord::Schema.define(version: 2019_05_09_014853) do
 
   create_table "clearstream_msgs", force: :cascade do |t|
     t.datetime "sent_to_clearstream"
+    t.json "sms_json"
+    t.datetime "got_response_at"
     t.text "clearstream_response"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -121,6 +123,7 @@ ActiveRecord::Schema.define(version: 2019_05_09_014853) do
 
   create_table "users", force: :cascade do |t|
     t.string "email"
+    t.string "mobile_number"
     t.string "first_name"
     t.string "last_name"
     t.json "preferences"

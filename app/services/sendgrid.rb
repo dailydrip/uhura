@@ -1,11 +1,17 @@
 class Sendgrid
 
   def self.link_sendgrid_msg_to_message(message_id, sendgrid_msg_id)
-    message = Message.find_by(id: message_id)
-    if message.nil?
-      log_error("Unable to find message (#{message_id}) for sendgrid_id (#{sendgrid_msg_id})")
+    sendgrid_msg = SendgridMsg.find_by(id: sendgrid_msg_id)
+    if sendgrid_msg.nil?
+      log_error("Unable to find sendgrid_msg (#{sendgrid_msg_id}). Did not link message (#{message_id})")
+      return false
     end
-    message
+    message = Message.find_by(id: message_id)
+    if sendgrid_msg.nil?
+      log_error("Unable to find message (#{message_id}). Did not link sendgrid_msg (#{sendgrid_msg_id})")
+      return false
+    end
+    message.sendgrid_msg_id = sendgrid_msg_id
   end
 
   def self.send(message_vo)
@@ -35,7 +41,7 @@ class Sendgrid
     sendgrid_msg.sendgrid_response = rsc
 
     if sendgrid_msg.save! && self.link_sendgrid_msg_to_message(message_vo.message_id,  sendgrid_msg.id)
-      return ReturnVo.new({value: sendgrid_msg, error: nil})
+      return ReturnVo.new({value: return_success(sendgrid_msg), error: nil})
     else
       err = sendgrid_msg.errors || "Error for sendgrid_id (#{sendgrid_id})"
       return ReturnVo.new({value: nil, error: error_json = return_error(err, :unprocessable_entity)})

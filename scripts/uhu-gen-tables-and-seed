@@ -1,6 +1,12 @@
 #!/bin/bash
 
-msg="Look at history for Manager, ApiKey, Message, SendgridMsg and ClearstreamMsg, etc. after this completes. (CTRL)+C"
+msg="
+Run this only at the beginning of a project.  After it's been run once, and migrations exist, just urn the following:
+
+bundle exec rake db:drop db:create db:migrate db:seed
+
+If you do run this after migrations and models have been created, check the history for Manager, ApiKey, Message, SendgridMsg and ClearstreamMsg, etc. after this completes. (CTRL)+C
+"
 echo "$msg"
 
 rm ./db/migrate/*
@@ -12,9 +18,9 @@ bundle exec rails g model Manager name:string:uniq public_token:string:uniq emai
 bundle exec rails g model ApiKey auth_token:token manager:references
 bundle exec rails g model Team name:string:uniq name_prefix:string:uniq email:index
 bundle exec rails g model Template name:string:uniq template_id sample_template_data:json
-bundle exec rails g model User email:string:uniq first_name last_name preferences:json
+bundle exec rails g model User email:string:uniq mobile_number first_name last_name preferences:json
 bundle exec rails g model SendgridMsg sent_to_sendgrid:datetime mail_json:json got_response_at:datetime sendgrid_response:text read_by_user_at:datetime
-bundle exec rails g model ClearstreamMsg sent_to_clearstream:datetime clearstream_response:text
+bundle exec rails g model ClearstreamMsg sent_to_clearstream:datetime sms_json:json got_response_at:datetime clearstream_response:text
 # If we get more than Sendgrid and Clearstream for 3rd party messaging services, consider factoring sendgrid & clearstream => target_msg_svc
 bundle exec rails g model Message sendgrid_msg:references clearstream_msg:references manager:references user:references team:references email_subject email_message:text template:references sms_message:text
 # Message.sendgrid_msg_id and Message.clearstream_msg_id can be nil

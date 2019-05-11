@@ -107,7 +107,8 @@ lex = User.create!(
     first_name: 'Lex',
     last_name: 'text',
     email: 'lex@smoothterminal.com',
-    preferences: {email: true, sms: true}
+    mobile_number: '4048844200',
+    preferences: {email: false, sms: true}
 )
 lex.save!
 
@@ -129,4 +130,27 @@ uhura> m1.api_key.auth_token
 The Manager.email value must be valid or you'll get a 404 error from SendGrid and clues as to what happened.
 
 
+# Bootstrapping
+
+
+## To bootstrap a cloned project, that already has migrations (and code you don't want overridden in your models), run:
+``` 
+bundle exec rake db:drop db:create db:migrate db:seed
+```
+
+## In the begining of this project we ran following script to create models and database migrations:
+
+```
+uhu-drop-tables-gen-and-seed
+```
+
+# Things to do before running Uhura in production
+
+# Update user data
+
+Ensure that each ser that you want to receive an Email or SMS messages exists in the **users** table.
+
+The **users** table contains a `phone` field that is used by Uhura to send the user a text message (via Clearstream).
+
+The `email` field is used to send the user an email via SendGrid.
 
