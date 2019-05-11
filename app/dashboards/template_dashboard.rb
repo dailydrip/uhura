@@ -10,7 +10,8 @@ class TemplateDashboard < Administrate::BaseDashboard
   ATTRIBUTE_TYPES = {
     id: Field::Number,
     name: Field::String,
-    sendgrid_msg_id: Field::String,
+    template_id: Field::String,
+    sample_template_data: Field::String.with_options(searchable: false),
     created_at: Field::DateTime,
     updated_at: Field::DateTime,
   }.freeze
@@ -23,8 +24,8 @@ class TemplateDashboard < Administrate::BaseDashboard
   COLLECTION_ATTRIBUTES = [
     :id,
     :name,
-    :sendgrid_msg_id,
-    :created_at,
+    :template_id,
+    :sample_template_data,
   ].freeze
 
   # SHOW_PAGE_ATTRIBUTES
@@ -32,7 +33,8 @@ class TemplateDashboard < Administrate::BaseDashboard
   SHOW_PAGE_ATTRIBUTES = [
     :id,
     :name,
-    :sendgrid_msg_id,
+    :template_id,
+    :sample_template_data,
     :created_at,
     :updated_at,
   ].freeze
@@ -42,7 +44,8 @@ class TemplateDashboard < Administrate::BaseDashboard
   # on the model's form (`new` and `edit`) pages.
   FORM_ATTRIBUTES = [
     :name,
-    :sendgrid_msg_id,
+    :template_id,
+    :sample_template_data,
   ].freeze
 
   # Overwrite this method to customize how templates are displayed

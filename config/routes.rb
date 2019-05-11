@@ -1,7 +1,7 @@
 # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 Rails.application.routes.draw do
 
-  namespace :admin do
+  namespace :uhura do
       resources :api_keys
       resources :clearstream_msgs
       resources :event_types
@@ -15,7 +15,8 @@ Rails.application.routes.draw do
       resources :users
 
       root to: "managers#index"
-    end
+  end
+
   namespace :api do
     namespace :v1 do
       resources :messages
