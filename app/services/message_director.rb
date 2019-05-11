@@ -15,7 +15,8 @@ class MessageDirector
       end
 
       receiver = message.value.user
-      case receiver.preferred_channel
+      preferred_channel = HighlandsSSO.preferred_channel(receiver)
+      case preferred_channel
       when :email
         message = Sendgrid.send(message_vo)
         if message.error
