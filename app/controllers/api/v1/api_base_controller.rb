@@ -6,7 +6,7 @@ class Api::V1::ApiBaseController < ApplicationController
 
   def verify_auth_token
     authorization_header = request.headers['Authorization']
-    api_key =  authorization_header.gsub('Bearer: ', '').strip if authorization_header
+    api_key =  authorization_header.gsub('Bearer ', '').strip if authorization_header
 
     @manager = ApiKey.find_by(auth_token: api_key).try(:manager)
     unauthenticated_request unless @manager

@@ -92,6 +92,7 @@ variable :SENDGRID_API_KEY, :String
 variable :CLEARSTREAM_KEY, :String
 variable :CLEARSTREAM_BASE_URL, :String, default: 'https://api.getclearstream.com/v1'
 variable :CLEARSTREAM_URL, :String
+variable :CLEARSTREAM_DEFAULT_LIST_ID, :String
 
 # Twitter Access
 variable :TWITTER_ACCESS_TOKEN, :String

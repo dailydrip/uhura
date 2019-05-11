@@ -3,81 +3,50 @@ class ClearstreamSmsVo
   include ActiveModel::Model
   include ActiveModel::Validations
 
-  attr_accessor :template_id, :from, :to, :dynamic_template_data, :personalizations
-  validates :template_id, :from, presence: true
+  attr_accessor :receiver_email, :sms_message, :mobile_number, :message_header, :message_body, :lists, :schedule, :send_to_fb, :send_to_tw
+  validates :mobile_number, :message_header, :message_body, :lists, presence: true
+  validates :schedule, :send_to_fb, :send_to_tw, inclusion: [true, false]
 
   def initialize(*args)
     super
+    # Following required by https://api.getclearstream.com/v1/messages
+    self.lists ||= AppCfg['CLEARSTREAM_DEFAULT_LIST_ID']
+    self.schedule ||= false
+    self.send_to_fb ||= false
+    self.send_to_tw ||= false
   end
 
-  def from=(from)
-    @from = {
-        "email":from
-    }
+  def receiver_email=(receiver_email)
+    @receiver_email = receiver_email
+    # Find mobile_number for this receiver
+    receiver = User.find_by(email: receiver_email)
+    if receiver
+      # Following required by https://api.getclearstream.com/v1/messages
+      @mobile_number = receiver.mobile_number
+    end
   end
-  def from
-    @from
-  end
-
-  def to=(to)
-    @personalizations.to = to
-  end
-  def to
-    @personalizations.to
+  def receiver_email
+    @receiver_email
   end
 
-  def dynamic_template_data=(dynamic_template_data)
-    @personalizations.dynamic_template_data = dynamic_template_data
+  # "sms_message": {
+  #     "header": "Blue Sushi 2",
+  #     "body": "Come in now for 60% off all rolls!"
+  # }
+  def sms_message=(sms_message)
+    @sms_message = sms_message
+    # Following required by https://api.getclearstream.com/v1/messages
+    @message_header = sms_message['header']
+    @message_body = sms_message['body']
   end
-  def dynamic_template_data
-    @personalizations.dynamic_template_data
+  def sms_message
+    sms_message
   end
 
   def get
     if !valid?
       raise Invalid, errors.full_messages
     end
-    {template_id: @template_id, from: @from, "personalizations": [@personalizations.get]}
+    {mobile_number: @mobile_number, message_header: @message_header, message_body: @message_body, lists: @lists, schedule: @schedule, send_to_fb: @send_to_fb, send_to_tw: @send_to_tw}
   end
-
-
-  class Personalizations
-    Invalid = Class.new(StandardError)
-    include ActiveModel::Model
-    include ActiveModel::Validations
-
-    attr_accessor :to, :dynamic_template_data
-    validates :to, :dynamic_template_data, presence: true
-
-    def ActiveModel::initialize(*args)
-      super
-      validate!
-    end
-
-    # sgv_personalizations.dynamic_template_data" = {
-    #     "header":"test header",
-    #     "text":"blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah",
-    #     "c2a_button": "Sign me up!"
-    # }
-
-    def to=(to)
-      @to = [
-          {
-              "email":to
-          }
-      ]
-    end
-
-    def get
-      if !valid?
-        raise Invalid, errors.full_messages
-      end
-      {to: @to, dynamic_template_data: @dynamic_template_data}
-    end
-
-    def as_json(*)
-      super.except("validation_context", "errors")
-    end
-  end
-
 end

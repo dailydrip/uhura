@@ -86,21 +86,21 @@ alice = User.create!(
   first_name: 'Alice',
   last_name: 'Red',
   email: 'alice@aol.com',
-  phone: '4048844201',
+  mobile_number: '4048844201',
   preferences: {email: true, sms: false}
 )
 bob = User.create!(
   first_name: 'Bob',
   last_name: 'Brown',
   email: 'bob@hotmail.com',
-  phone: '4048844202',
+  mobile_number: '4048844202',
   preferences: {email: false, sms: true}
 )
 cindy = User.create!(
   first_name: 'Cindy',
   last_name: 'Green',
   email: 'cindy@msn.com',
-  phone: '4048844203',
+  mobile_number: '4048844203',
   preferences: {email: true, sms: false}
 )
 

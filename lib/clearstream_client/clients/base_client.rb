@@ -8,7 +8,7 @@ module ClearstreamClient
     CS_BASE_URL = ClearstreamClient::Config.base_url
 
     def initialize(options = {})
-      @data = options[:data].to_h
+      @data = options[:data]
       @api_key = ENV['CLEARSTREAM_KEY']
       @resource = options[:resource]
     end

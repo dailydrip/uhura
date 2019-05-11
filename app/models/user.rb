@@ -5,7 +5,7 @@ class User < ApplicationRecord
   PHONE_REGEXP = /\A(?:\+?\d{1,3}\s*-?)?\(?(?:\d{3})?\)?[- ]?\d{3}[- ]?\d{4}\z/
 
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
-  validates :phone, format: { with: PHONE_REGEXP }
+  validates :mobile_number, format: { with: PHONE_REGEXP }
 
   def valid_preferences?
     if self.preferences['email'] && self.preferences['sms']

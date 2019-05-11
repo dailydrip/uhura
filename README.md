@@ -752,7 +752,7 @@ lex = User.create!(
     first_name: 'Lex',
     last_name: 'text',
     email: 'lex@smoothterminal.com',
-    phone: '4048844200',
+    mobile_number: '4048844200',
     preferences: {email: false, sms: true}
 )
 lex.save!
