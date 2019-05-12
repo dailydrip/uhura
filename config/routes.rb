@@ -14,6 +14,7 @@ Rails.application.routes.draw do
       resources :teams
       resources :templates
       resources :ulogs
+      resources :receivers
       resources :users
 
       root to: "managers#index"

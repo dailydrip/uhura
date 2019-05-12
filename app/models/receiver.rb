@@ -1,4 +1,4 @@
-class User < ApplicationRecord
+class Receiver < ApplicationRecord
 
   validate :valid_preferences?
 

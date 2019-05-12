@@ -1,13 +1,11 @@
+# This migration comes from highlands_auth (originally 20151103030232)
 class CreateUsers < ActiveRecord::Migration[6.0]
   def change
     create_table :users do |t|
       t.string :email
-      t.string :mobile_number # Uhura unique
+      t.string :username
       t.string :first_name
       t.string :last_name
-      t.json :preferences     # Uhura unique
-      # New Administrate columns
-      t.string :username
       t.string :gender
       t.integer :household_id
       t.string :token
@@ -24,6 +22,5 @@ class CreateUsers < ActiveRecord::Migration[6.0]
 
       t.timestamps null: false
     end
-    add_index :users, :email, unique: true
   end
 end

@@ -82,21 +82,21 @@ template_c = Template.create!(name: 'Sample Template C', template_id: 'd-211d56c
 }')
 
 log "7. Seeding Users"
-alice = User.create!(
+alice = Receiver.create!(
   first_name: 'Alice',
   last_name: 'Red',
   email: 'alice@aol.com',
   mobile_number: '4048844201',
   preferences: {email: true, sms: false}
 )
-bob = User.create!(
+bob = Receiver.create!(
   first_name: 'Bob',
   last_name: 'Brown',
   email: 'bob@hotmail.com',
   mobile_number: '4048844202',
   preferences: {email: false, sms: true}
 )
-cindy = User.create!(
+cindy = Receiver.create!(
   first_name: 'Cindy',
   last_name: 'Green',
   email: 'cindy@msn.com',
@@ -107,7 +107,7 @@ cindy = User.create!(
 log "8. Seeding Messages"
 msg1 = Message.create!(manager_id: app1.id, # <= source (an application)
                        team_id: team_sta.id, # <= message coming from this team
-                       user_id: bob.id, # <= receiver (a user)
+                       receiver_id: bob.id, # <= receiver (a user)
                        email_subject: 'Sample - Picnic this Saturday',
                        email_message: {headers: {key1: 'val1', key2: 'val2'}, sections: {name: 'val1', body: 'val2'}},
                        template_id: template_a.id,
@@ -115,7 +115,7 @@ msg1 = Message.create!(manager_id: app1.id, # <= source (an application)
 
 msg2 = Message.create!(manager_id: app1.id,
                        team_id: team_stb.id,
-                       user_id: bob.id,
+                       receiver_id: bob.id,
                        email_subject: 'Sample - Fund Raiser',
                        email_message: {headers: {key1: 'val1', key2: 'val2'}, sections: {key1: 'val1', key2: 'val2'}},
                        template_id: template_b.id,
@@ -123,7 +123,7 @@ msg2 = Message.create!(manager_id: app1.id,
 
 msg3 = Message.create!(manager_id: app1.id,
                        team_id: team_sta.id,
-                       user_id: cindy.id,
+                       receiver_id: cindy.id,
                        email_subject: 'Sample - Picnic this Saturday',
                        email_message: {headers: {key1: 'val1', key2: 'val2'}, sections: {key1: 'val1', key2: 'val2'}},
                        template_id: template_a.id,
@@ -131,7 +131,7 @@ msg3 = Message.create!(manager_id: app1.id,
 
 msg4 = Message.create!(manager_id: app2.id,
                        team_id: team_sta.id,
-                       user_id: alice.id, # <= receiver (a user)
+                       receiver_id: alice.id, # <= receiver (a user)
                        email_subject: 'Sample - Picnic this Saturday',
                        email_message: {headers: {key1: 'val1', key2: 'val2'}, sections: {key1: 'val1', key2: 'val2'}},
                        template_id: template_a.id,
@@ -139,7 +139,7 @@ msg4 = Message.create!(manager_id: app2.id,
 
 msg5 = Message.create!(manager_id: app2.id,
                        team_id: team_stb.id,
-                       user_id: alice.id, # <= receiver (a user)
+                       receiver_id: alice.id, # <= receiver (a user)
                        email_subject: 'Sample - W2 Available',
                        email_message: {headers: {key1: 'val1', key2: 'val2'}, sections: {key1: 'val1', key2: 'val2'}},
                        template_id: template_c.id,
@@ -147,7 +147,7 @@ msg5 = Message.create!(manager_id: app2.id,
 
 msg6 = Message.create!(manager_id: app2.id,
                        team_id: team_sta.id,
-                       user_id: cindy.id, # <= receiver (a user)
+                       receiver_id: cindy.id, # <= receiver (a user)
                        email_subject: 'Sample - Choir Practice Tonight!',
                        email_message: {headers: {key1: 'val1', key2: 'val2'}, sections: {key1: 'val1', key2: 'val2'}},
                        template_id: template_a.id,

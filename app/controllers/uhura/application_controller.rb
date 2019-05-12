@@ -12,7 +12,6 @@ module Uhura
 
     def authenticate_admin!
       redirect_to auth.new_session_path unless current_user
-      # redirect_to root_url unless current_user && current_user.admin
     end
 
 
