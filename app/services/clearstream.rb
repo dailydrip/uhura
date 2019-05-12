@@ -14,17 +14,20 @@ class Clearstream
     message.clearstream_msg_id = clearstream_msg_id
   end
 
-  def self.send(message_vo)
-    # Populate and sanitize data
-    data = ClearstreamSmsVo.new(
-        receiver_email: message_vo.receiver_email,
-        sms_message: message_vo.sms_message
-    ).get()
+  def self.submit_sms(data, err, retry_cntr)
+
+    if retry_cntr > 1
+      return err
+    else
+      retry_cntr += 1
+    end
 
     clearstream_msg = ClearstreamMsg.create!(sent_to_clearstream: Time.now,
-                                          sms_json: data,
-                                          clearstream_response: nil)
+                                             sms_json: data,
+                                             clearstream_response: nil)
 
+    data[:lists] = nil
+    data[:subscribers]= '2013790742'
     cs_client = ClearstreamClient::MessageClient.new({data: data, resource: 'messages'})
     response = cs_client.create
 
@@ -38,8 +41,42 @@ class Clearstream
       err = clearstream_msg.errors || "Error for clearstream_id (#{clearstream_id})"
       return ReturnVo.new({value: nil, error: error_json = return_error(err, :unprocessable_entity)})
     end
+  end
+
+
+  def self.send(message_vo)
+    # Populate and sanitize data
+    data = ClearstreamSmsVo.new(
+        receiver_email: message_vo.receiver_email,
+        sms_message: message_vo.sms_message
+    ).get()
+
+
+    submit_sms(data, nil, 0)
+
+
   rescue StandardError => err
-    msg = "send_via_clearstream: #{err.message}"
+
+    if JSON.parse(err.message)['error']['message'].include?('supplied subscribers is invalid')
+      data = {
+          "mobile_number": "2013790742",
+          "first": "Bogus",
+          "last": "Test",
+          "email": "bogus@smooothterminal.com",
+          "autoresponse_header": "Higlands SMS",
+          "autoresponse_body": "Your SMS Opt-in setting has been updated.",
+          "lists": "25057"
+      }
+
+      # Create subscriber
+      # Wait for subscriber to opt in, then...  Q: Clearstream support: How do we know when a user opts in?
+      # Ideally, get user-opted-in event hook and run submit_sms for that newly opted-in user
+      submit_sms(data, err, 1)
+
+    end
+
+
+    msg = "send_via_clearstream: #{err.message}, for #{message_vo.to_json}"
     log_error(msg)
     return ReturnVo.new({value: nil, error: error_json = return_error(msg, :unprocessable_entity)})
   end

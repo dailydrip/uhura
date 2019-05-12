@@ -25,7 +25,7 @@ class TemplateDashboard < Administrate::BaseDashboard
     :id,
     :name,
     :template_id,
-    :sample_template_data,
+    sample_template_data,
   ].freeze
 
   # SHOW_PAGE_ATTRIBUTES

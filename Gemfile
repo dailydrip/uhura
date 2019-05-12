@@ -26,8 +26,8 @@ gem 'faraday_middleware'
 gem 'json'
 gem 'typhoeus'
 
-# gem 'highlands_auth', :git => 'git@github.com:highlands/highlands_auth.git', :branch => 'master'
-# gem "haml-rails" #, "~> 2.0"
+gem 'highlands_auth', :git => 'git@github.com:highlands/highlands_auth.git', :branch => 'master'
+gem "haml-rails" #, "~> 2.0"
 
 # gem 'bootstrap', '~> 4.3', '>= 4.3.1'
 gem 'font-awesome-sass', '~> 5.6', '>= 5.6.1'
@@ -42,7 +42,6 @@ gem 'administrate', github: 'l3x/administrate'
 # gem 'omniauth-facebook', '~> 5.0'
 # gem 'omniauth-github', '~> 1.3'
 # gem 'omniauth-twitter', '~> 1.4'
-
 
 
 group :development, :test do

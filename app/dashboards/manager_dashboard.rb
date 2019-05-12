@@ -26,6 +26,8 @@ class ManagerDashboard < Administrate::BaseDashboard
     :api_keys,
     :id,
     :name,
+    :email,
+    :public_token,
   ].freeze
 
   # SHOW_PAGE_ATTRIBUTES

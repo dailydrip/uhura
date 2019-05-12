@@ -10,9 +10,9 @@ class UserDashboard < Administrate::BaseDashboard
   ATTRIBUTE_TYPES = {
     id: Field::Number,
     email: Field::String,
-    mobile_number: Field::String,
     first_name: Field::String,
     last_name: Field::String,
+    mobile_number: Field::String,
     preferences: Field::String.with_options(searchable: false),
     created_at: Field::DateTime,
     updated_at: Field::DateTime,
@@ -26,8 +26,9 @@ class UserDashboard < Administrate::BaseDashboard
   COLLECTION_ATTRIBUTES = [
     :id,
     :email,
-    :mobile_number,
     :first_name,
+    :last_name,
+    :mobile_number
   ].freeze
 
   # SHOW_PAGE_ATTRIBUTES
@@ -35,9 +36,9 @@ class UserDashboard < Administrate::BaseDashboard
   SHOW_PAGE_ATTRIBUTES = [
     :id,
     :email,
-    :mobile_number,
     :first_name,
     :last_name,
+    :mobile_number,
     :preferences,
     :created_at,
     :updated_at,
@@ -48,9 +49,9 @@ class UserDashboard < Administrate::BaseDashboard
   # on the model's form (`new` and `edit`) pages.
   FORM_ATTRIBUTES = [
     :email,
-    :mobile_number,
     :first_name,
     :last_name,
+    :mobile_number,
     :preferences,
   ].freeze
 
