@@ -14,7 +14,7 @@ class MessageDirector
         return message
       end
 
-      receiver = message.value.user
+      receiver = message.value.receiver
       preferred_channel = HighlandsSSO.preferred_channel(receiver)
       case preferred_channel
       when :email
@@ -55,7 +55,7 @@ class MessageDirector
   def self.create_message(message_vo)
     manager_id = message_vo.manager_id   # A manager is the sending app.
     manager_email = message_vo.manager_email
-    receiver = User.find_by(email: message_vo.receiver_email)
+    receiver = Receiver.find_by(email: message_vo.receiver_email)
     team = Team.find_by(name: message_vo.team_name)
     template = Template.find_by(template_id: message_vo.template_id)
     errs = []
@@ -67,7 +67,7 @@ class MessageDirector
       ReturnVo.new({value: nil, error: error_json = return_error(errs, :unprocessable_entity)})
     else
       message = Message.create!(manager_id: manager_id, # <= source of message (an application)
-                                user_id: receiver.id,
+                                receiver_id: receiver.id,
                                 team_id: team.id, # <= message coming from this team
                                 email_subject: message_vo.email_subject,
                                 email_message: message_vo.email_message,

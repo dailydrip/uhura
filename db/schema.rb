@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_09_014853) do
+ActiveRecord::Schema.define(version: 2019_05_12_215905) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -57,7 +57,7 @@ ActiveRecord::Schema.define(version: 2019_05_09_014853) do
     t.bigint "sendgrid_msg_id"
     t.bigint "clearstream_msg_id"
     t.bigint "manager_id", null: false
-    t.bigint "user_id", null: false
+    t.bigint "receiver_id", null: false
     t.bigint "team_id", null: false
     t.string "email_subject"
     t.text "email_message"
@@ -67,10 +67,18 @@ ActiveRecord::Schema.define(version: 2019_05_09_014853) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["clearstream_msg_id"], name: "index_messages_on_clearstream_msg_id"
     t.index ["manager_id"], name: "index_messages_on_manager_id"
+    t.index ["receiver_id"], name: "index_messages_on_receiver_id"
     t.index ["sendgrid_msg_id"], name: "index_messages_on_sendgrid_msg_id"
     t.index ["team_id"], name: "index_messages_on_team_id"
     t.index ["template_id"], name: "index_messages_on_template_id"
-    t.index ["user_id"], name: "index_messages_on_user_id"
+  end
+
+  create_table "receivers", force: :cascade do |t|
+    t.string "email"
+    t.string "mobile_number"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["email"], name: "index_receivers_on_email", unique: true
   end
 
   create_table "sendgrid_msgs", force: :cascade do |t|
@@ -123,22 +131,33 @@ ActiveRecord::Schema.define(version: 2019_05_09_014853) do
 
   create_table "users", force: :cascade do |t|
     t.string "email"
-    t.string "mobile_number"
+    t.string "username"
     t.string "first_name"
     t.string "last_name"
-    t.json "preferences"
+    t.string "gender"
+    t.integer "household_id"
+    t.string "token"
+    t.string "secret"
+    t.string "url"
+    t.string "type"
+    t.json "data"
+    t.string "slug"
+    t.string "last_sign_in_ip"
+    t.datetime "last_sign_in_at"
+    t.boolean "admin", default: false
+    t.boolean "superadmin", default: false
+    t.boolean "editor", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["email"], name: "index_users_on_email", unique: true
   end
 
   add_foreign_key "api_keys", "managers"
   add_foreign_key "messages", "clearstream_msgs"
   add_foreign_key "messages", "managers"
+  add_foreign_key "messages", "receivers"
   add_foreign_key "messages", "sendgrid_msgs"
   add_foreign_key "messages", "teams"
   add_foreign_key "messages", "templates"
-  add_foreign_key "messages", "users"
   add_foreign_key "ulogs", "event_types"
   add_foreign_key "ulogs", "sources"
 end

@@ -105,7 +105,7 @@ In Rails console:
 ```
 lex = User.create!(
     first_name: 'Lex',
-    last_name: 'text',
+    last_name: 'test',
     email: 'lex@smoothterminal.com',
     mobile_number: '4048844200',
     preferences: {email: false, sms: true}
@@ -122,6 +122,17 @@ uhura> m1.public_token
 
 uhura> m1.api_key.auth_token
 "456003882429ee7da561"
+
+
+bogus = User.create!(
+    first_name: 'Bogus',
+    last_name: 'test',
+    email: 'bogus@smoothterminal.com',
+    mobile_number: '2013790742',
+    preferences: {email: false, sms: true}
+)
+bogus.save!
+
 
 ```
 
@@ -154,3 +165,40 @@ The **users** table contains a `phone` field that is used by Uhura to send the u
 
 The `email` field is used to send the user an email via SendGrid.
 
+# Add Administrate Gem
+
+Add gems to Gemfile
+
+```
+gem 'highlands_auth', :git => 'git@github.com:highlands/highlands_auth.git', :branch => 'master'
+gem "haml-rails" #, "~> 2.0"
+```
+
+## Create custom uhura route
+
+###  config/routes.rb
+```
+mount HighlandsAuth::Engine => "/highlands_sso", :as => "auth"
+```
+
+## Install dashboards
+
+bundle install
+
+bundle exec rake highlands_auth:install:migrations
+
+Merge original users migration with new administrate one.
+
+## Export environment variables
+
+```
+export SSO_KEY='<YOUR_KEY>'
+export SSO_SECRET='<YOUR_SECRET>'
+export HIGHLANDS_AUTH_REDIRECT='http://localhost:3000'
+export HIGHLANDS_AUTH_SUPPORT_EMAIL='franzejr@dailydrip.com'
+export HIGHLANDS_SSO_EMAIL='franzejr+sso@gmail.com'
+export HIGHLANDS_SSO_PASSWORD='<YOUR_PASSWORD>'
+
+export HIGHLANDS_AUTH_DETAILS="true"
+export HIGHLANDS_AUTH_DATA="true"
+```

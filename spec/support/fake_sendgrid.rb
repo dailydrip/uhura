@@ -2,22 +2,22 @@
 
 require 'sinatra/base'
 
-class FakeSendgrid < FakeExternalServer
+ #FakeSendgrid < FakeExternalServer
 
   # Routes return stubbed json responses from fixtures
 
   # SgEmails
-  get '/api/v1/sg_emails' do
-    sendgrid_json_response 200, 'get_all_sg_emails'
-  end
+  # get '/api/v1/sg_emails' do
+    # sendgrid_json_response 200, 'get_all_sg_emails'
+  # end
 
   # get '/api/v1/messages/108047' do
   #   json_response 200, 'get_message'
   # end
 
-  post '/api/v1/sg_emails' do
-    sendgrid_json_response 200, 'post_sg_email'
-  end
+  # post '/api/v1/sg_emails' do
+    # sendgrid_json_response 200, 'post_sg_email'
+  # end
   #
   # delete '/api/v1/messages/108047' do
   #   json_response 403, 'delete_message'
@@ -47,4 +47,4 @@ class FakeSendgrid < FakeExternalServer
   # delete '/api/v1/lists/25056' do
   #   json_response 200, 'delete_list'
   # end
-end
+#end

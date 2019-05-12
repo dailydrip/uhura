@@ -4,13 +4,17 @@
 #
 # If you want to add pagination or other controller-level concerns,
 # you're free to overwrite the RESTful controller actions.
-module Admin
+module Uhura
   class ApplicationController < Administrate::ApplicationController
-    before_action :authenticate_admin
+    include HighlandsAuth::ApplicationHelper
+    before_action :authenticate_admin!
+    protect_from_forgery with: :exception
 
-    def authenticate_admin
-      # TODO Add authentication logic here.
+    def authenticate_admin!
+      redirect_to auth.new_session_path unless current_user
     end
+
+
 
     # Override this value to specify the number of elements to display at a time
     # on index pages. Defaults to 20.

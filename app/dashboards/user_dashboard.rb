@@ -12,6 +12,7 @@ class UserDashboard < Administrate::BaseDashboard
     email: Field::String,
     first_name: Field::String,
     last_name: Field::String,
+    mobile_number: Field::String,
     preferences: Field::String.with_options(searchable: false),
     created_at: Field::DateTime,
     updated_at: Field::DateTime,
@@ -27,6 +28,7 @@ class UserDashboard < Administrate::BaseDashboard
     :email,
     :first_name,
     :last_name,
+    :mobile_number
   ].freeze
 
   # SHOW_PAGE_ATTRIBUTES
@@ -36,6 +38,7 @@ class UserDashboard < Administrate::BaseDashboard
     :email,
     :first_name,
     :last_name,
+    :mobile_number,
     :preferences,
     :created_at,
     :updated_at,
@@ -48,6 +51,7 @@ class UserDashboard < Administrate::BaseDashboard
     :email,
     :first_name,
     :last_name,
+    :mobile_number,
     :preferences,
   ].freeze
 

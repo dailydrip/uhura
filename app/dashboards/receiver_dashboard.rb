@@ -1,6 +1,6 @@
 require "administrate/base_dashboard"
 
-class ClearstreamMsgDashboard < Administrate::BaseDashboard
+class ReceiverDashboard < Administrate::BaseDashboard
   # ATTRIBUTE_TYPES
   # a hash that describes the type of each of the model's fields.
   #
@@ -9,10 +9,11 @@ class ClearstreamMsgDashboard < Administrate::BaseDashboard
   # on pages throughout the dashboard.
   ATTRIBUTE_TYPES = {
     id: Field::Number,
-    sent_to_clearstream: Field::DateTime,
-    sms_json: Field::String.with_options(searchable: false),
-    got_response_at: Field::DateTime,
-    clearstream_response: Field::Text,
+    email: Field::String,
+    first_name: Field::String,
+    last_name: Field::String,
+    mobile_number: Field::String,
+    preferences: Field::String.with_options(searchable: false),
     created_at: Field::DateTime,
     updated_at: Field::DateTime,
   }.freeze
@@ -24,19 +25,21 @@ class ClearstreamMsgDashboard < Administrate::BaseDashboard
   # Feel free to add, remove, or rearrange items.
   COLLECTION_ATTRIBUTES = [
     :id,
-    :sent_to_clearstream,
-    :sms_json,
-    :got_response_at,
+    :email,
+    :first_name,
+    :last_name,
+    :mobile_number
   ].freeze
 
   # SHOW_PAGE_ATTRIBUTES
   # an array of attributes that will be displayed on the model's show page.
   SHOW_PAGE_ATTRIBUTES = [
     :id,
-    :sent_to_clearstream,
-    :sms_json,
-    :got_response_at,
-    :clearstream_response,
+    :email,
+    :first_name,
+    :last_name,
+    :mobile_number,
+    :preferences,
     :created_at,
     :updated_at,
   ].freeze
@@ -45,16 +48,17 @@ class ClearstreamMsgDashboard < Administrate::BaseDashboard
   # an array of attributes that will be displayed
   # on the model's form (`new` and `edit`) pages.
   FORM_ATTRIBUTES = [
-    :sent_to_clearstream,
-    :sms_json,
-    :got_response_at,
-    :clearstream_response,
+    :email,
+    :first_name,
+    :last_name,
+    :mobile_number,
+    :preferences,
   ].freeze
 
-  # Overwrite this method to customize how clearstream msgs are displayed
+  # Overwrite this method to customize how users are displayed
   # across all pages of the admin dashboard.
   #
-  # def display_resource(clearstream_msg)
-  #   "ClearstreamMsg ##{clearstream_msg.id}"
+  # def display_resource(user)
+  #   "User ##{user.id}"
   # end
 end

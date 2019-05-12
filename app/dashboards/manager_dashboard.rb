@@ -9,7 +9,6 @@ class ManagerDashboard < Administrate::BaseDashboard
   # on pages throughout the dashboard.
   ATTRIBUTE_TYPES = {
     api_keys: Field::HasMany,
-    # message_vos: Field::HasMany,
     id: Field::Number,
     name: Field::String,
     public_token: Field::String,
@@ -25,9 +24,9 @@ class ManagerDashboard < Administrate::BaseDashboard
   # Feel free to add, remove, or rearrange items.
   COLLECTION_ATTRIBUTES = [
     :api_keys,
-    # :message_vos,
     :id,
     :name,
+    :email,
     :public_token,
   ].freeze
 
@@ -35,7 +34,6 @@ class ManagerDashboard < Administrate::BaseDashboard
   # an array of attributes that will be displayed on the model's show page.
   SHOW_PAGE_ATTRIBUTES = [
     :api_keys,
-    # :message_vos,
     :id,
     :name,
     :public_token,
@@ -49,7 +47,6 @@ class ManagerDashboard < Administrate::BaseDashboard
   # on the model's form (`new` and `edit`) pages.
   FORM_ATTRIBUTES = [
     :api_keys,
-    # :message_vos,
     :name,
     :public_token,
     :email,
