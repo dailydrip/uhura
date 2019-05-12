@@ -83,25 +83,16 @@ template_c = Template.create!(name: 'Sample Template C', template_id: 'd-211d56c
 
 log "7. Seeding Users"
 alice = Receiver.create!(
-  first_name: 'Alice',
-  last_name: 'Red',
   email: 'alice@aol.com',
-  mobile_number: '4048844201',
-  preferences: {email: true, sms: false}
+  mobile_number: '4048844201'
 )
 bob = Receiver.create!(
-  first_name: 'Bob',
-  last_name: 'Brown',
   email: 'bob@hotmail.com',
-  mobile_number: '4048844202',
-  preferences: {email: false, sms: true}
+  mobile_number: '4048844202'
 )
 cindy = Receiver.create!(
-  first_name: 'Cindy',
-  last_name: 'Green',
   email: 'cindy@msn.com',
-  mobile_number: '4048844203',
-  preferences: {email: true, sms: false}
+  mobile_number: '4048844203'
 )
 
 log "8. Seeding Messages"

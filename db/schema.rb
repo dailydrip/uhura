@@ -76,23 +76,6 @@ ActiveRecord::Schema.define(version: 2019_05_12_215905) do
   create_table "receivers", force: :cascade do |t|
     t.string "email"
     t.string "mobile_number"
-    t.string "first_name"
-    t.string "last_name"
-    t.json "preferences"
-    t.string "username"
-    t.string "gender"
-    t.integer "household_id"
-    t.string "token"
-    t.string "secret"
-    t.string "url"
-    t.string "type"
-    t.json "data"
-    t.string "slug"
-    t.string "last_sign_in_ip"
-    t.datetime "last_sign_in_at"
-    t.boolean "admin", default: false
-    t.boolean "superadmin", default: false
-    t.boolean "editor", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["email"], name: "index_receivers_on_email", unique: true

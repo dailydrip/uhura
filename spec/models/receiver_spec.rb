@@ -1,5 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Receiver, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe 'attributes' do
+    it { is_expected.to respond_to(:email) }
+    it { is_expected.to respond_to(:mobile_number) }
+  end
 end
