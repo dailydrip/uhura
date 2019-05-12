@@ -2,7 +2,8 @@ HighlandsAuth::SessionsController.class_eval do
   private
 
   def redirect_user
-    redirect_to RedirectionManager.path_for(session[:from])
+    redirect_to '/uhura'
+    # redirect_to RedirectionManager.path_for(session[:from])
   end
 
   def after_update_user

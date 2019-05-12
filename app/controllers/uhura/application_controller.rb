@@ -6,10 +6,13 @@
 # you're free to overwrite the RESTful controller actions.
 module Uhura
   class ApplicationController < Administrate::ApplicationController
-    before_action :authenticate_admin
+    include HighlandsAuth::ApplicationHelper
+    before_action :authenticate_admin!
+    protect_from_forgery with: :exception
 
-    def authenticate_admin
-      redirect_to root_url unless current_user.try(:admin)
+    def authenticate_admin!
+      redirect_to auth.new_session_path unless current_user
+      # redirect_to root_url unless current_user && current_user.admin
     end
 
 
