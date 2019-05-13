@@ -1,4 +1,0 @@
-#!/bin/bash
-
-uhu-drop-tables
-uhu-gen-tables-and-seed
