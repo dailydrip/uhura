@@ -3,8 +3,8 @@ class ClearstreamSmsVo
   include ActiveModel::Model
   include ActiveModel::Validations
 
-  attr_accessor :receiver_email, :sms_message, :mobile_number, :message_header, :message_body, :lists, :schedule, :send_to_fb, :send_to_tw
-  validates :mobile_number, :message_header, :message_body, :lists, presence: true
+  attr_accessor :receiver_email, :sms_message, :mobile_number, :first_name, :last_name, :lists, :message_header, :message_body, :subscribers, :schedule, :send_to_fb, :send_to_tw, :message_id
+  validates :mobile_number, :message_header, :message_body, :subscribers, presence: true
   validates :schedule, :send_to_fb, :send_to_tw, inclusion: [true, false]
 
   def initialize(*args)
@@ -16,13 +16,22 @@ class ClearstreamSmsVo
     self.send_to_tw ||= false
   end
 
+  # Clearstream will store 10 digit number, but requires "+1" for subsequent calls
+  def normalize_phone_number(number)
+    return number if number[0..1].eql?('+1')
+    '+1' + number
+  end
+
   def receiver_email=(receiver_email)
     @receiver_email = receiver_email
     # Find mobile_number for this receiver
-    receiver = User.find_by(email: receiver_email)
+    receiver = Receiver.find_by(email: receiver_email)
     if receiver
       # Following required by https://api.getclearstream.com/v1/messages
-      @mobile_number = receiver.mobile_number
+      @mobile_number = normalize_phone_number(receiver.mobile_number)
+      @subscribers = @mobile_number
+      @first_name = receiver.first_name
+      @last_name = receiver.last_name
     end
   end
   def receiver_email
@@ -47,6 +56,6 @@ class ClearstreamSmsVo
     if !valid?
       raise Invalid, errors.full_messages
     end
-    {mobile_number: @mobile_number, message_header: @message_header, message_body: @message_body, lists: @lists, schedule: @schedule, send_to_fb: @send_to_fb, send_to_tw: @send_to_tw}
+    {mobile_number: @mobile_number, first_name: @first_name, last_name: @last_name, receiver_email: @receiver_email, lists: @lists, message_header: @message_header, message_body: @message_body, subscribers: @subscribers, schedule: @schedule, send_to_fb: @send_to_fb, send_to_tw: @send_to_tw, message_id: @message_id}
   end
 end

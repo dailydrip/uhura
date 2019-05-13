@@ -99,16 +99,15 @@ Create Support Ticket to Activiate Account
 https://stackoverflow.com/questions/42214048/sendgrid-returns-202-but-doesnt-send-email
 
 
-# Add email account for testing
+# Add receiver account for testing
 In Rails console:
 
 ```
-lex = User.create!(
+lex = Receiver.create!(
     first_name: 'Lex',
     last_name: 'test',
     email: 'lex@smoothterminal.com',
-    mobile_number: '4048844200',
-    preferences: {email: false, sms: true}
+    mobile_number: '4048844200'
 )
 lex.save!
 
@@ -116,23 +115,9 @@ m1 = Manager.first
 m1.email = 'lex@smoothterminal.com'
 m1.save!
 
-# Use new keys in curl commands:
-uhura> m1.public_token
-"69ff29903f2ea2f40d14"
-
-uhura> m1.api_key.auth_token
-"456003882429ee7da561"
-
-
-bogus = User.create!(
-    first_name: 'Bogus',
-    last_name: 'test',
-    email: 'bogus@smoothterminal.com',
-    mobile_number: '2013790742',
-    preferences: {email: false, sms: true}
-)
-bogus.save!
-
+# Use the following tokens in POST requests:
+m1.public_token
+m1.api_key.auth_token
 
 ```
 
@@ -147,12 +132,6 @@ The Manager.email value must be valid or you'll get a 404 error from SendGrid an
 ## To bootstrap a cloned project, that already has migrations (and code you don't want overridden in your models), run:
 ``` 
 bundle exec rake db:drop db:create db:migrate db:seed
-```
-
-## In the begining of this project we ran following script to create models and database migrations:
-
-```
-uhu-drop-tables-gen-and-seed
 ```
 
 # Things to do before running Uhura in production

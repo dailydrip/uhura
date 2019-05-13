@@ -7,27 +7,20 @@ class Clearstream
       return false
     end
     message = Message.find_by(id: message_id)
-    if clearstream_msg.nil?
+    if message.nil?
       log_error("Unable to find message (#{message_id}). Did not link clearstream_msg (#{clearstream_msg_id})")
       return false
     end
     message.clearstream_msg_id = clearstream_msg_id
+    message.save!
   end
 
-  def self.submit_sms(data, err, retry_cntr)
-
-    if retry_cntr > 1
-      return err
-    else
-      retry_cntr += 1
-    end
+  def self.send_msg(data)
 
     clearstream_msg = ClearstreamMsg.create!(sent_to_clearstream: Time.now,
                                              sms_json: data,
                                              clearstream_response: nil)
 
-    data[:lists] = nil
-    data[:subscribers]= '2013790742'
     cs_client = ClearstreamClient::MessageClient.new({data: data, resource: 'messages'})
     response = cs_client.create
 
@@ -35,7 +28,7 @@ class Clearstream
     clearstream_msg.got_response_at = Time.now
     clearstream_msg.clearstream_response = response['data']['status']
 
-    if clearstream_msg.save! && self.link_clearstream_msg_to_message(message_vo.message_id,  clearstream_msg.id)
+    if clearstream_msg.save! && self.link_clearstream_msg_to_message(data[:message_id], clearstream_msg.id)
       return ReturnVo.new({value: return_accepted(clearstream_msg), error: nil})
     else
       err = clearstream_msg.errors || "Error for clearstream_id (#{clearstream_id})"
@@ -44,39 +37,54 @@ class Clearstream
   end
 
 
+  def self.create_subscriber(data)
+    new_subscriber_data = {
+        'mobile_number': data[:mobile_number],
+        'first': data[:first_name],
+        'last': data[:last_name],
+        'email': data[:receiver_email],
+        'lists': data[:lists],
+        'autoresponse_header': 'Higlands SMS',
+        'autoresponse_body': 'Your SMS Opt-in setting has been updated.'
+    }
+    cs_client = ClearstreamClient::MessageClient.new({data: new_subscriber_data, resource: 'subscribers'})
+    response = cs_client.create
+    msg = "Requested Clearstream to create subscriber (#{new_subscriber_data.to_json}). Got response (#{response.to_json})"
+    log_info(msg)
+    #TODO: Verify that this status is correct when Clearstream.io support increases subscriber limit
+    if response['data']['status'] == 'QUEUED'
+      return ReturnVo.new({value: return_accepted(clearstream_msg), error: nil})
+    else
+      err = "Failed to create subscriber. Clearstream response: #{response.to_json}"
+      return ReturnVo.new({value: nil, error: error_json = return_error(err, :unprocessable_entity)})
+    end
+  end
+
   def self.send(message_vo)
     # Populate and sanitize data
     data = ClearstreamSmsVo.new(
         receiver_email: message_vo.receiver_email,
-        sms_message: message_vo.sms_message
+        sms_message: message_vo.sms_message,
+        message_id: message_vo.message_id
     ).get()
 
-
-    submit_sms(data, nil, 0)
-
+    send_msg(data)
 
   rescue StandardError => err
 
-    if JSON.parse(err.message)['error']['message'].include?('supplied subscribers is invalid')
-      data = {
-          "mobile_number": "2013790742",
-          "first": "Bogus",
-          "last": "Test",
-          "email": "bogus@smooothterminal.com",
-          "autoresponse_header": "Higlands SMS",
-          "autoresponse_body": "Your SMS Opt-in setting has been updated.",
-          "lists": "25057"
-      }
+    err_msg = JSON.parse(err.message)['error']['message']
+    log_error(err_msg)
+    if err_msg.include?('supplied subscribers is invalid')
+      # If the subscriber is invalid, let's assume that they've not been registered with Clearstream.io
+      # So, we'll create the subscriber and after the receiver opts-in we'll resend the message.
 
-      # Create subscriber
       # Wait for subscriber to opt in, then...  Q: Clearstream support: How do we know when a user opts in?
       # Ideally, get user-opted-in event hook and run submit_sms for that newly opted-in user
-      submit_sms(data, err, 1)
-
+      create_subscriber(data)
+      #TODO: Add resend message after user opts-in
     end
 
-
-    msg = "send_via_clearstream: #{err.message}, for #{message_vo.to_json}"
+    msg = "Clearstream.send error: #{err.message}, for #{message_vo.to_json}"
     log_error(msg)
     return ReturnVo.new({value: nil, error: error_json = return_error(msg, :unprocessable_entity)})
   end
