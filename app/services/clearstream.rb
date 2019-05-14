@@ -21,7 +21,7 @@ class Clearstream
                                              sms_json: data,
                                              clearstream_response: nil)
 
-    cs_client = ClearstreamClient::MessageClient.new({data: data, resource: 'messages'})
+    cs_client = ClearstreamClient::MessageClient.new({data: data[:clearstream_data], resource: 'messages'})
     response = cs_client.create
 
     clearstream_msg.sms_json = response.to_json
@@ -63,12 +63,13 @@ class Clearstream
   def self.send(message_vo)
     # Populate and sanitize data
     data = ClearstreamSmsVo.new(
-        receiver_email: message_vo.receiver_email,
+        receiver: message_vo.receiver,
+        team: message_vo.team,
         sms_message: message_vo.sms_message,
         message_id: message_vo.message_id
     ).get()
 
-    send_msg(data)
+    send_msg({clearstream_data: data, message_id: message_vo.message_id})
 
   rescue StandardError => err
 

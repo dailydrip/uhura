@@ -2,6 +2,7 @@ class Api::V1::ApiBaseController < ApplicationController
   protect_from_forgery with: :null_session
   before_action :verify_auth_token
   before_action :set_manager
+  before_action :set_team
 
   protected
 
@@ -13,6 +14,11 @@ class Api::V1::ApiBaseController < ApplicationController
       log_error(msg)
       render json: return_error(msg)
     end
+  end
+
+  def set_team
+    x_team_header = request.headers['X-Team-ID']
+    @team = x_team_header if Team.find_by(x_team_id: x_team_header)
   end
 
   def verify_auth_token

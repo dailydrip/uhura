@@ -7,8 +7,8 @@ class MessageVo
   attr_accessor :manager_id,
                 :manager_email,
                 :manager_name,
-                :team_name,
-                :receiver_email,
+                :team,  # X-TEAM-ID  HTTP header
+                :receiver,
                 :email_subject,
                 :email_message,
                 :template_id,

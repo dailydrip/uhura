@@ -1,9 +1,9 @@
 
 class HighlandsSSO
-  def self.preferred_channel(user)
+  def self.preferred_channel(receiver)
 
     #TODO Get preferred channel info from highlands sso
-    return :email if ENV['UHU_PREF_CHANNEL']&.upcase =='EMAIL'
+    return :email if receiver.preferences[:email]
     :sms
 
   end
