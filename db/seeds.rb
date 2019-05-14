@@ -58,8 +58,8 @@ ApiKey.create!(manager: app1)
 ApiKey.create!(manager: app2)
 
 log "5. Seeding Teams"
-team_sta = Team.create!(name: 'Sample Team A', name_prefix: 'STA', email: 'team.a@highlands.org')
-team_stb = Team.create!(name: 'Sample Team B', name_prefix: 'STB', email: 'team.b@highlands.org')
+team_sta = Team.create!(name: 'Sample Team A', x_team_id: 'STA', email: 'team.a@highlands.org')
+team_stb = Team.create!(name: 'Sample Team B', x_team_id: 'STB', email: 'team.b@highlands.org')
 
 log "6. Seeding Templates"
 template_a = Template.create!(name: 'Sample Template A', template_id: 'd-f986df533e514f978f4460bedca50db0', sample_template_data: '{
@@ -82,24 +82,30 @@ template_c = Template.create!(name: 'Sample Template C', template_id: 'd-211d56c
 }')
 
 log "7. Seeding Users"
+# Receivers is a temporary table.  When we get the data from Highlands SSO we'll remove the receivers table.
 alice = Receiver.create!(
+  receiver: '88543890',
   email: 'alice@aol.com',
   mobile_number: '4048844201',
   first_name: 'Alice',
-  last_name: 'Green'
+  last_name: 'Green',
+  preferences: {email: true, sms: false}
 )
 bob = Receiver.create!(
+  receiver: '88543891',
   email: 'bob@hotmail.com',
   mobile_number: '4048844202',
   first_name: 'Bob',
-  last_name: 'Blue'
-
+  last_name: 'Blue',
+  preferences: {email: false, sms: true}
 )
 cindy = Receiver.create!(
+  receiver: '88543892',
   email: 'cindy@msn.com',
   mobile_number: '4048844203',
   first_name: 'Cindy',
-  last_name: 'Red'
+  last_name: 'Red',
+  preferences: {email: true, sms: false}
 
 )
 

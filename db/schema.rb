@@ -74,13 +74,16 @@ ActiveRecord::Schema.define(version: 2019_05_12_215905) do
   end
 
   create_table "receivers", force: :cascade do |t|
+    t.string "receiver"
     t.string "email"
     t.string "mobile_number"
     t.string "first_name"
     t.string "last_name"
+    t.json "preferences"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["email"], name: "index_receivers_on_email", unique: true
+    t.index ["receiver"], name: "index_receivers_on_receiver", unique: true
   end
 
   create_table "sendgrid_msgs", force: :cascade do |t|
@@ -103,13 +106,13 @@ ActiveRecord::Schema.define(version: 2019_05_12_215905) do
 
   create_table "teams", force: :cascade do |t|
     t.string "name"
-    t.string "name_prefix"
+    t.string "x_team_id"
     t.string "email"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["email"], name: "index_teams_on_email"
     t.index ["name"], name: "index_teams_on_name", unique: true
-    t.index ["name_prefix"], name: "index_teams_on_name_prefix", unique: true
+    t.index ["x_team_id"], name: "index_teams_on_x_team_id", unique: true
   end
 
   create_table "templates", force: :cascade do |t|

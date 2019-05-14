@@ -22,6 +22,7 @@ module ClearstreamClient
     end
 
     def create
+      @data.delete(:resource)
       response = connection.post(@resource, @data)
       raise APIError, response.body unless response.success?
 

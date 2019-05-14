@@ -32,7 +32,7 @@ class MessageDirector
           msg = message.error[:error]
           log_error(msg)
         else
-          msg = "Sent SMS: subject (#{message_vo.email_subject}) from (#{message_vo.manager_name}) to (#{message_vo.receiver_email})"
+          msg = "Sent SMS: subject (#{message_vo.email_subject}) from (#{message_vo.manager_name}) to (#{message_vo.receiver})"
           log_info(msg)
         end
       else
@@ -55,12 +55,12 @@ class MessageDirector
   def self.create_message(message_vo)
     manager_id = message_vo.manager_id   # A manager is the sending app.
     manager_email = message_vo.manager_email
-    receiver = Receiver.find_by(email: message_vo.receiver_email)
-    team = Team.find_by(name: message_vo.team_name)
+    receiver = Receiver.find_by(receiver: message_vo.receiver)
+    team = Team.find_by(x_team_id: message_vo.team)
     template = Template.find_by(template_id: message_vo.template_id)
     errs = []
     errs << "manager_id is nil"                                       if manager_id.nil?
-    errs << "team_name (#{message_vo.team_name}) not found"           if team.nil?
+    errs << "team (#{message_vo.team}) not found"                     if team.nil?
     errs << "receiver_email (#{message_vo.receiver_email}) not found" if receiver.nil?
     errs << "template_id (#{message_vo.template_id}) not found"       if template.nil?
     if errs.size > 0

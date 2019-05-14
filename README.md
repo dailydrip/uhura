@@ -104,10 +104,12 @@ In Rails console:
 
 ```
 lex = Receiver.create!(
+	receiver: '88543898',
     first_name: 'Lex',
     last_name: 'test',
     email: 'lex@smoothterminal.com',
-    mobile_number: '4048844200'
+    mobile_number: '4049196695',
+    preferences: {email: false, sms: true}
 )
 lex.save!
 
@@ -120,6 +122,9 @@ m1.public_token
 m1.api_key.auth_token
 
 ```
+
+Use the public_token in in the POST request body to http://localhost:3000/api/v1/messages
+Use  the auth_token for the Authorization bearer token value.
 
 # SendGrid Errors
 

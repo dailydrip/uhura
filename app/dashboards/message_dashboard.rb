@@ -11,7 +11,7 @@ class MessageDashboard < Administrate::BaseDashboard
     sendgrid_msg: Field::BelongsTo,
     clearstream_msg: Field::BelongsTo,
     manager: Field::BelongsTo,
-    user: Field::BelongsTo,
+    receiver: Field::BelongsTo,
     team: Field::BelongsTo,
     template: Field::BelongsTo,
     id: Field::Number,
@@ -31,7 +31,7 @@ class MessageDashboard < Administrate::BaseDashboard
     :sendgrid_msg,
     :clearstream_msg,
     :manager,
-    :user,
+    :receiver,
   ].freeze
 
   # SHOW_PAGE_ATTRIBUTES
@@ -40,7 +40,7 @@ class MessageDashboard < Administrate::BaseDashboard
     :sendgrid_msg,
     :clearstream_msg,
     :manager,
-    :user,
+    :receiver,
     :team,
     :template,
     :id,
@@ -58,7 +58,7 @@ class MessageDashboard < Administrate::BaseDashboard
     :sendgrid_msg,
     :clearstream_msg,
     :manager,
-    :user,
+    :receiver,
     :team,
     :template,
     :email_subject,
