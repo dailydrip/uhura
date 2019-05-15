@@ -26,9 +26,9 @@ ActiveRecord::Schema.define(version: 2019_05_12_215905) do
 
   create_table "clearstream_msgs", force: :cascade do |t|
     t.datetime "sent_to_clearstream"
-    t.json "sms_json"
+    t.json "response"
     t.datetime "got_response_at"
-    t.text "clearstream_response"
+    t.text "status"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -98,7 +98,7 @@ ActiveRecord::Schema.define(version: 2019_05_12_215905) do
 
   create_table "sendgrid_msgs", force: :cascade do |t|
     t.datetime "sent_to_sendgrid"
-    t.json "mail_json"
+    t.json "mail_and_response"
     t.datetime "got_response_at"
     t.text "sendgrid_response"
     t.datetime "read_by_user_at"

@@ -17,16 +17,15 @@ class Clearstream
 
   def self.send_msg(data)
 
-    clearstream_msg = ClearstreamMsg.create!(sent_to_clearstream: Time.now,
-                                             sms_json: data,
-                                             clearstream_response: nil)
 
     cs_client = ClearstreamClient::MessageClient.new({data: data[:clearstream_data], resource: 'messages'})
     response = cs_client.create
 
-    clearstream_msg.sms_json = response.to_json
+    clearstream_msg = ClearstreamMsg.create!(sent_to_clearstream: Time.now,
+                                             response: {response: response['data']})
+
     clearstream_msg.got_response_at = Time.now
-    clearstream_msg.clearstream_response = response['data']['status']
+    clearstream_msg.status = response['data']['status']
 
     if clearstream_msg.save! && self.link_clearstream_msg_to_message(data[:message_id], clearstream_msg.id)
       return ReturnVo.new({value: return_accepted({"clearstream_msg": clearstream_msg.to_json}), error: nil})

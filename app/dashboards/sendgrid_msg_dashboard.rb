@@ -10,7 +10,7 @@ class SendgridMsgDashboard < Administrate::BaseDashboard
   ATTRIBUTE_TYPES = {
     id: Field::Number,
     sent_to_sendgrid: Field::DateTime,
-    mail_json: Field::String.with_options(searchable: false),
+    mail_and_response: Field::String.with_options(searchable: false),
     got_response_at: Field::DateTime,
     sendgrid_response: Field::Text,
     read_by_user_at: Field::DateTime,
@@ -26,7 +26,7 @@ class SendgridMsgDashboard < Administrate::BaseDashboard
   COLLECTION_ATTRIBUTES = [
     :id,
     :sent_to_sendgrid,
-    :mail_json,
+    :mail_and_response,
     :got_response_at,
   ].freeze
 
@@ -35,7 +35,7 @@ class SendgridMsgDashboard < Administrate::BaseDashboard
   SHOW_PAGE_ATTRIBUTES = [
     :id,
     :sent_to_sendgrid,
-    :mail_json,
+    :mail_and_response,
     :got_response_at,
     :sendgrid_response,
     :read_by_user_at,
@@ -48,7 +48,7 @@ class SendgridMsgDashboard < Administrate::BaseDashboard
   # on the model's form (`new` and `edit`) pages.
   FORM_ATTRIBUTES = [
     :sent_to_sendgrid,
-    :mail_json,
+    :mail_and_response,
     :got_response_at,
     :sendgrid_response,
     :read_by_user_at,

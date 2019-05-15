@@ -204,36 +204,30 @@ msg6 = Message.create!(msg_target_id: MsgTarget.find_by(name: 'Clearstream').id,
 
 log "10. Seeding SendgridMsg and ClearstreamMsg"
 sg1 = SendgridMsg.create!(sent_to_sendgrid: Time.now,
-                          sendgrid_response: '',
                           read_by_user_at: 1.day.from_now)
 msg1.sendgrid_msg = sg1
 msg1.save!
 
 sg2 = SendgridMsg.create!(sent_to_sendgrid: 1.minute.from_now,
-                          sendgrid_response: '',
                           read_by_user_at: 2.days.from_now)
 msg2.sendgrid_msg = sg2
 msg2.save!
 
-cs1 = ClearstreamMsg.create!(sent_to_clearstream: 2.minutes.from_now,
-                             clearstream_response: '')
+cs1 = ClearstreamMsg.create!(sent_to_clearstream: 2.minutes.from_now)
 msg3.clearstream_msg = cs1
 msg3.save!
 
 
-cs2 = ClearstreamMsg.create!(sent_to_clearstream: 4.minutes.from_now,
-                             clearstream_response: '')
+cs2 = ClearstreamMsg.create!(sent_to_clearstream: 4.minutes.from_now)
 msg4.clearstream_msg = cs2
 msg4.save!
 
 sg3 = SendgridMsg.create!(sent_to_sendgrid: 5.minutes.from_now,
-                          sendgrid_response: '',
                           read_by_user_at: 3.days.from_now)
 msg5.sendgrid_msg = sg3
 msg5.save!
 
-cs3 = ClearstreamMsg.create!(sent_to_clearstream: 7.minutes.from_now,
-                             clearstream_response: '')
+cs3 = ClearstreamMsg.create!(sent_to_clearstream: 7.minutes.from_now)
 msg6.clearstream_msg = cs3
 msg6.save!
 

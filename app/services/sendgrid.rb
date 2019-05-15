@@ -30,15 +30,18 @@ class Sendgrid
         dynamic_template_data: template_data
     ).get()
 
+    response = sg.client.mail._("send").post(request_body: mail.to_json)
+
+    trimmed_response = {
+        date: response.headers && response.headers['date'] ? response.headers['date'][0] : '',
+        x_message_id: response.headers && response.headers['x-message-id'] ? response.headers['x-message-id'][0] : ''
+    }
+
     sendgrid_msg = SendgridMsg.create!(sent_to_sendgrid: Time.now,
-                                       mail_json: mail.to_json,
+                                       mail_and_response: {mail: mail.to_json, response: trimmed_response},
                                        got_response_at: nil,
                                        sendgrid_response: nil,
                                        read_by_user_at: nil)
-
-
-    response = sg.client.mail._("send").post(request_body: mail.to_json)
-
     rsc = response.status_code
     sendgrid_msg.got_response_at = Time.now
     sendgrid_msg.sendgrid_response = rsc
