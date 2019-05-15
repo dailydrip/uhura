@@ -44,7 +44,7 @@ class MessageDirector
 
   # This is where we verify that the data passed matches with data in the database and set the message target.
   def self.create_message(message_vo)
-    errs = []
+    errors = []
     manager_id = message_vo.manager_id   # A manager is the sending app.
     manager_email = message_vo.manager_email
     receiver = Receiver.find_by(receiver_sso_id: message_vo.receiver_sso_id)
@@ -55,21 +55,21 @@ class MessageDirector
       if msg_target
         msg_target_id = msg_target.id
       else
-        errs <<  "Invalid receiver.preferences (#{receiver.preferences}). Unable to determine message target (Email/SMS)."
+        errors <<  "Invalid receiver.preferences (#{receiver.preferences}). Unable to determine message target (Email/SMS)."
       end
     else
-      errs << "Null receiver.preferences. Unable to determine message target (Email/SMS)."
+      errors << "Null receiver.preferences. Unable to determine message target (Email/SMS)."
     end
 
     team = Team.find_by(name: message_vo.team_name)
     template = Template.find_by(template_id: message_vo.template_id)
 
-    errs << "manager_id is nil"                                         if manager_id.nil?
-    errs << "team (#{message_vo.team_name}) not found"                  if team.nil?
-    errs << "receiver_sso_id (#{message_vo.receiver_sso_id}) not found" if receiver.nil?
-    errs << "template_id (#{message_vo.template_id}) not found"         if template.nil?
-    if errs.size > 0
-      ReturnVo.new({value: nil, error: return_error(errs, :unprocessable_entity)})
+    errors << "manager_id is nil"                                         if manager_id.nil?
+    errors << "team (#{message_vo.team_name}) not found"                  if team.nil?
+    errors << "receiver_sso_id (#{message_vo.receiver_sso_id}) not found" if receiver.nil?
+    errors << "template_id (#{message_vo.template_id}) not found"         if template.nil?
+    if errors.size > 0
+      ReturnVo.new({value: nil, error: return_error(errors, :unprocessable_entity)})
     else
       ActiveRecord::Base.transaction do
         message = Message.create!(msg_target_id: msg_target_id,
