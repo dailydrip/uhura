@@ -8,18 +8,18 @@ class MessageDashboard < Administrate::BaseDashboard
   # which determines how the attribute is displayed
   # on pages throughout the dashboard.
   ATTRIBUTE_TYPES = {
-    sendgrid_msg: Field::BelongsTo,
-    clearstream_msg: Field::BelongsTo,
-    manager: Field::BelongsTo,
-    receiver: Field::BelongsTo,
-    team: Field::BelongsTo,
-    template: Field::BelongsTo,
-    id: Field::Number,
-    email_subject: Field::String,
-    email_message: Field::Text,
-    sms_message: Field::Text,
-    created_at: Field::DateTime,
-    updated_at: Field::DateTime,
+      sendgrid_msg: Field::BelongsTo,
+      clearstream_msg: Field::BelongsTo,
+      manager: Field::BelongsTo,
+      receiver_sso_id: Field::BelongsTo,
+      team_name: Field::BelongsTo,
+      template: Field::BelongsTo,
+      id: Field::Number,
+      email_subject: Field::String,
+      email_message: Field::Text,
+      sms_message: Field::Text,
+      created_at: Field::DateTime,
+      updated_at: Field::DateTime,
   }.freeze
 
   # COLLECTION_ATTRIBUTES
@@ -31,7 +31,7 @@ class MessageDashboard < Administrate::BaseDashboard
     :sendgrid_msg,
     :clearstream_msg,
     :manager,
-    :receiver,
+    :receiver_sso_id,
   ].freeze
 
   # SHOW_PAGE_ATTRIBUTES
@@ -40,8 +40,8 @@ class MessageDashboard < Administrate::BaseDashboard
     :sendgrid_msg,
     :clearstream_msg,
     :manager,
-    :receiver,
-    :team,
+    :receiver_sso_id,
+    :team_name,
     :template,
     :id,
     :email_subject,
@@ -58,8 +58,8 @@ class MessageDashboard < Administrate::BaseDashboard
     :sendgrid_msg,
     :clearstream_msg,
     :manager,
-    :receiver,
-    :team,
+    :receiver_sso_id,
+    :team_name,
     :template,
     :email_subject,
     :email_message,

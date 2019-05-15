@@ -1,0 +1,2 @@
+class MsgTarget < ApplicationRecord
+end

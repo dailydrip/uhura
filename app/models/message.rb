@@ -1,4 +1,5 @@
 class Message < ApplicationRecord
+  belongs_to :msg_target
   belongs_to :sendgrid_msg, optional: true
   belongs_to :clearstream_msg, optional: true
   belongs_to :manager

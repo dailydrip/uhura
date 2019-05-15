@@ -45,6 +45,7 @@ gem 'administrate', github: 'l3x/administrate'
 
 
 group :development, :test do
+  gem 'faker'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'rspec'
@@ -66,7 +67,6 @@ group :test do
   gem 'database_cleaner'
   gem 'factory_bot'
   gem 'factory_bot_rails'
-  gem 'faker'
   #gem 'launchy'
   gem 'rspec-rails'
   gem 'shoulda-matchers'

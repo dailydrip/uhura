@@ -3,78 +3,90 @@
 class MessageDirector
 
   def self.send(message_vo)
-    ActiveRecord::Base.transaction do
-
-      message = create_message(message_vo)
-      if message.error.nil?
-        # Set message_id. Used to link SendgridMsg to Message later.
-        message_vo.message_id = message.value.id
-      else
-        # return error
-        return message
-      end
-
-      receiver = message.value.receiver
-      preferred_channel = HighlandsSSO.preferred_channel(receiver)
-      case preferred_channel
-      when :email
-        message = Sendgrid.send(message_vo)
-        if message.error
-          msg = message.error[:error]
-          log_error(msg)
-        else
-          msg = "Sent Email: subject (#{message_vo.email_subject}) from (#{message_vo.manager_name}) to (#{message_vo.receiver_email})"
-          log_info(msg)
-        end
-      when :sms
-        message = Clearstream.send(message_vo)
-        if message.error
-          msg = message.error[:error]
-          log_error(msg)
-        else
-          msg = "Sent SMS: subject (#{message_vo.email_subject}) from (#{message_vo.manager_name}) to (#{message_vo.receiver})"
-          log_info(msg)
-        end
-      else
-        msg = "Sent message: subject (#{message_vo.sms_message}) to (#{message_vo.receiver_email}), but receiver prefers neither Email nor SMS!"
-        log_error(msg)
-        message = ReturnVo.new({value: nil, error: return_error(msg, :precondition_failed)})
-      end
-
-      message
-
-    rescue => e
-      msg = "Exception (#{e.message}) occurred in create_message for #{message_vo.to_json}"
-      log_error(msg)
-      ReturnVo.new({value: nil, error: error_json = return_error(msg, :unprocessable_entity)})
+    ret = create_message(message_vo)
+    if ret.error.nil?
+      # Set message_id. Used to link SendgridMsg to Message later.
+      message_vo.message_id = ret.value.id
+    else
+      # return error
+      return ret
     end
+
+    case ret.value.msg_target.name
+    when 'Sendgrid'
+      message = Sendgrid.send(message_vo)
+      if message.error
+        msg = message.error[:error]
+        log_error(msg)
+      else
+        msg = "Sent Email: subject (#{message_vo.email_subject}) from (#{message_vo.manager_name}) to (#{message_vo.receiver_email})"
+        log_info(msg)
+      end
+    when 'Clearstream'
+      message = Clearstream.send(message_vo)
+      if message.error
+        msg = message.error[:error]
+        log_error(msg)
+      else
+        msg = "Sent SMS: subject (#{message_vo.email_subject}) from (#{message_vo.manager_name}) to (#{message_vo.receiver_email})"
+        log_info(msg)
+      end
+    else
+      msg = "Sent message: subject (#{message_vo.sms_message}) to (#{message_vo.receiver_email}), but receiver prefers neither Email nor SMS!"
+      log_error(msg)
+      message = ReturnVo.new({value: nil, error: return_error(msg, :precondition_failed)})
+    end
+    # Return message in a ReturnVo
+    message
   end
 
   private
 
+  # This is where we verify that the data passed matches with data in the database and set the message target.
   def self.create_message(message_vo)
+    errs = []
     manager_id = message_vo.manager_id   # A manager is the sending app.
     manager_email = message_vo.manager_email
-    receiver = Receiver.find_by(receiver: message_vo.receiver)
-    team = Team.find_by(x_team_id: message_vo.team)
-    template = Template.find_by(template_id: message_vo.template_id)
-    errs = []
-    errs << "manager_id is nil"                                       if manager_id.nil?
-    errs << "team (#{message_vo.team}) not found"                     if team.nil?
-    errs << "receiver_email (#{message_vo.receiver_email}) not found" if receiver.nil?
-    errs << "template_id (#{message_vo.template_id}) not found"       if template.nil?
-    if errs.size > 0
-      ReturnVo.new({value: nil, error: error_json = return_error(errs, :unprocessable_entity)})
+    receiver = Receiver.find_by(receiver_sso_id: message_vo.receiver_sso_id)
+    # Currently, we only support Sendgrid (for emails) and Clearstream (for sms)
+    if receiver && receiver.preferences
+      delivery_target = receiver.preferences['email'] ? 'Sendgrid' : 'Clearstream'
+      msg_target = MsgTarget.find_by(name: delivery_target)
+      if msg_target
+        msg_target_id = msg_target.id
+      else
+        errs <<  "Invalid receiver.preferences (#{receiver.preferences}). Unable to determine message target (Email/SMS)."
+      end
     else
-      message = Message.create!(manager_id: manager_id, # <= source of message (an application)
-                                receiver_id: receiver.id,
-                                team_id: team.id, # <= message coming from this team
-                                email_subject: message_vo.email_subject,
-                                email_message: message_vo.email_message,
-                                template_id: template.id,
-                                sms_message: message_vo.sms_message)
+      errs << "Null receiver.preferences. Unable to determine message target (Email/SMS)."
+    end
 
-      ReturnVo.new({value: message, error: nil})
+    team = Team.find_by(name: message_vo.team_name)
+    template = Template.find_by(template_id: message_vo.template_id)
+
+    errs << "manager_id is nil"                                         if manager_id.nil?
+    errs << "team (#{message_vo.team_name}) not found"                  if team.nil?
+    errs << "receiver_sso_id (#{message_vo.receiver_sso_id}) not found" if receiver.nil?
+    errs << "template_id (#{message_vo.template_id}) not found"         if template.nil?
+    if errs.size > 0
+      ReturnVo.new({value: nil, error: return_error(errs, :unprocessable_entity)})
+    else
+      ActiveRecord::Base.transaction do
+        message = Message.create!(msg_target_id: msg_target_id,
+                                  manager_id: manager_id, # <= source of message (an application)
+                                  receiver_id: receiver.id,
+                                  team_id: team.id, # <= message coming from this team
+                                  email_subject: message_vo.email_subject,
+                                  email_message: message_vo.email_message,
+                                  template_id: template.id,
+                                  sms_message: message_vo.sms_message)
+
+        ReturnVo.new({value: message, error: nil})
+      rescue => e
+        msg = "Exception (#{e.message}) occurred in create_message for #{message_vo.to_json}"
+        log_error(msg)
+        ReturnVo.new({value: nil, error: return_error(msg, :unprocessable_entity)})
+      end
     end
   end
 end

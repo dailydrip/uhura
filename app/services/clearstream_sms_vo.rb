@@ -3,9 +3,30 @@ class ClearstreamSmsVo
   include ActiveModel::Model
   include ActiveModel::Validations
 
-  attr_accessor :receiver_email, :sms_message, :mobile_number, :first_name, :last_name, :lists, :message_header, :message_body, :team, :subscribers, :schedule, :send_to_fb, :send_to_tw, :message_id
-  validates :mobile_number, :message_header, :message_body, :team, :subscribers, presence: true
-  validates :schedule, :send_to_fb, :send_to_tw, inclusion: [true, false]
+  attr_accessor :receiver_email,
+                :sms_message,
+                :mobile_number,
+                :first_name,
+                :last_name,
+                :lists,
+                :message_header,
+                :message_body,
+                :team_name,
+                :subscribers,
+                :schedule,
+                :send_to_fb,
+                :send_to_tw,
+                :message_id
+
+  validates :mobile_number,
+            :message_header,
+            :message_body,
+            :team_name,
+            :subscribers, presence: true
+
+  validates :schedule,
+            :send_to_fb,
+            :send_to_tw, inclusion: [true, false]
 
   def initialize(*args)
     super
@@ -23,9 +44,9 @@ class ClearstreamSmsVo
   end
 
   # The receiver is the Highlands SSO ID
-  def receiver=(receiver)
+  def receiver_sso_id=(receiver_sso_id)
     # Find mobile_number for this receiver
-    receiver = Receiver.find_by(receiver: receiver)
+    receiver = Receiver.find_by(receiver_sso_id: receiver_sso_id)
     if receiver
       @receiver_email = receiver.email
       # Following required by https://api.getclearstream.com/v1/messages
@@ -35,8 +56,8 @@ class ClearstreamSmsVo
       @last_name = receiver.last_name
     end
   end
-  def receiver
-    @receiver
+  def receiver_sso_id
+    @receiver_sso_id
   end
 
   # "sms_message": {
@@ -46,7 +67,7 @@ class ClearstreamSmsVo
   def sms_message=(sms_message)
     @sms_message = sms_message
     # Following required by https://api.getclearstream.com/v1/messages
-    @message_header = @team
+    @message_header = @team_name
     @message_body = sms_message
   end
   def sms_message

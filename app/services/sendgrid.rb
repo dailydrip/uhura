@@ -22,47 +22,36 @@ class Sendgrid
     template_data = message_vo.email_message
     template_data['email_subject'] = message_vo.email_subject
 
-    data = SendgridMailVo.new(
+    mail = SendgridMail.new(
         from: message_vo.manager_email,
-        to:  message_vo.receiver_email,
+        subject: message_vo.email_subject,
+        receiver_sso_id:  message_vo.receiver_sso_id,
         template_id: message_vo.template_id,
         dynamic_template_data: template_data
-    )
+    ).get()
+
     sendgrid_msg = SendgridMsg.create!(sent_to_sendgrid: Time.now,
-                                       mail_json: data,
+                                       mail_json: mail.to_json,
                                        got_response_at: nil,
                                        sendgrid_response: nil,
                                        read_by_user_at: nil)
 
-    response = sg.client.mail._("send").post(request_body: JSON.parse(data.get.to_json))
+
+    response = sg.client.mail._("send").post(request_body: mail.to_json)
 
     rsc = response.status_code
     sendgrid_msg.got_response_at = Time.now
     sendgrid_msg.sendgrid_response = rsc
 
     if sendgrid_msg.save! && self.link_sendgrid_msg_to_message(message_vo.message_id,  sendgrid_msg.id)
-      return ReturnVo.new({value: return_success(sendgrid_msg), error: nil})
+      return ReturnVo.new({value: return_accepted({"sendgrid_msg": sendgrid_msg.to_json}), error: nil})
     else
       err = sendgrid_msg.errors || "Error for sendgrid_id (#{sendgrid_id})"
-      return ReturnVo.new({value: nil, error: error_json = return_error(err, :unprocessable_entity)})
+      return ReturnVo.new({value: nil, error: return_error(err, :unprocessable_entity)})
     end
   rescue StandardError => err
     msg = "send_via_sendgrid: #{err.message}"
     log_error(msg)
-    return ReturnVo.new({value: nil, error: error_json = return_error(msg, :unprocessable_entity)})
-  end
-
-  private
-
-  def mail(message_vo)
-    # Got valid input
-    from = SendGrid::Email.new(email: message_vo.app.email)
-    to = SendGrid::Email.new(email: message_vo.receiver)
-    subject = message_vo.email_subject
-    content = SendGrid::Content.new(
-        type: 'text/plain',
-        value: message_vo.email_content
-    )
-    SendGrid::Mail.new(from, subject, to, content)
+    return ReturnVo.new({value: nil, error: return_error(msg, :unprocessable_entity)})
   end
 end

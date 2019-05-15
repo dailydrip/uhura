@@ -2,7 +2,7 @@ class Api::V1::ApiBaseController < ApplicationController
   protect_from_forgery with: :null_session
   before_action :verify_auth_token
   before_action :set_manager
-  before_action :set_team
+  before_action :set_team_name
 
   protected
 
@@ -16,9 +16,16 @@ class Api::V1::ApiBaseController < ApplicationController
     end
   end
 
-  def set_team
-    x_team_header = request.headers['X-Team-ID']
-    @team = x_team_header if Team.find_by(x_team_id: x_team_header)
+  def set_team_name
+    team_name = request.headers['X-Team-ID']
+    team = Team.find_by(name: team_name)
+    if team.nil?
+      msg = "Team name (X-Team-ID HTTP header) #{team_name} NOT found!"
+      log_error(msg)
+      render json: return_error(msg)
+    else
+      @team_name = team.name
+    end
   end
 
   def verify_auth_token
