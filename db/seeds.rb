@@ -6,7 +6,7 @@ def log(msg)
   Rails.logger.info msg
   puts msg
   # Source and Event tables must be populated before creating an Ulog entry.
-  if !!defined? CLI_SOURCE_TYPE_ID
+  if !!defined? CLI_SOURCE_TYPE_ID && !msg.include?('Authorization Bearer token')
     Ulog.create!(source_id: CLI_SOURCE_TYPE_ID, event_type_id: INFO_EVENT_TYPE_ID, details: msg)
   end
 end
@@ -231,6 +231,6 @@ cs3 = ClearstreamMsg.create!(sent_to_clearstream: 7.minutes.from_now)
 msg6.clearstream_msg = cs3
 msg6.save!
 
-log "Seeding Done!\n"
+log 'Seeding Done!'
 log "public_token: #{Manager.first.public_token}"
 log "Authorization Bearer token: #{Manager.first.api_key.auth_token}"
