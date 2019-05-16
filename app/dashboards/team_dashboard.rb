@@ -10,7 +10,6 @@ class TeamDashboard < Administrate::BaseDashboard
   ATTRIBUTE_TYPES = {
     id: Field::Number,
     name: Field::String,
-    x_team_id: Field::String,
     email: Field::String,
     created_at: Field::DateTime,
     updated_at: Field::DateTime,
@@ -24,7 +23,6 @@ class TeamDashboard < Administrate::BaseDashboard
   COLLECTION_ATTRIBUTES = [
     :id,
     :name,
-    :x_team_id,
     :email,
   ].freeze
 
@@ -33,7 +31,6 @@ class TeamDashboard < Administrate::BaseDashboard
   SHOW_PAGE_ATTRIBUTES = [
     :id,
     :name,
-    :x_team_id,
     :email,
     :created_at,
     :updated_at,
@@ -44,7 +41,6 @@ class TeamDashboard < Administrate::BaseDashboard
   # on the model's form (`new` and `edit`) pages.
   FORM_ATTRIBUTES = [
     :name,
-    :x_team_id,
     :email,
   ].freeze
 

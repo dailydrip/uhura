@@ -10,9 +10,9 @@ class ClearstreamMsgDashboard < Administrate::BaseDashboard
   ATTRIBUTE_TYPES = {
     id: Field::Number,
     sent_to_clearstream: Field::DateTime,
-    sms_json: Field::String.with_options(searchable: false),
+    response: Field::String.with_options(searchable: false),
     got_response_at: Field::DateTime,
-    clearstream_response: Field::Text,
+    status: Field::Text,
     created_at: Field::DateTime,
     updated_at: Field::DateTime,
   }.freeze
@@ -25,7 +25,7 @@ class ClearstreamMsgDashboard < Administrate::BaseDashboard
   COLLECTION_ATTRIBUTES = [
     :id,
     :sent_to_clearstream,
-    :sms_json,
+    :response,
     :got_response_at,
   ].freeze
 
@@ -34,9 +34,9 @@ class ClearstreamMsgDashboard < Administrate::BaseDashboard
   SHOW_PAGE_ATTRIBUTES = [
     :id,
     :sent_to_clearstream,
-    :sms_json,
+    :response,
     :got_response_at,
-    :clearstream_response,
+    :status,
     :created_at,
     :updated_at,
   ].freeze
@@ -46,9 +46,9 @@ class ClearstreamMsgDashboard < Administrate::BaseDashboard
   # on the model's form (`new` and `edit`) pages.
   FORM_ATTRIBUTES = [
     :sent_to_clearstream,
-    :sms_json,
+    :response,
     :got_response_at,
-    :clearstream_response,
+    :status,
   ].freeze
 
   # Overwrite this method to customize how clearstream msgs are displayed

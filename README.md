@@ -186,3 +186,99 @@ export HIGHLANDS_SSO_PASSWORD='<YOUR_PASSWORD>'
 export HIGHLANDS_AUTH_DETAILS="true"
 export HIGHLANDS_AUTH_DATA="true"
 ```
+
+
+# Explanation of MessageVo, ReturnVo, MessageDirector and Message
+
+## MessageVo
+The message value object (MessageVo) is created in the MessagesController.
+It includes ActiveModel::Validations that allow it to validate proper input from the request parameters (params hash).
+
+
+## MessageDirector
+The MessageDirector is a service object that is called in the MessagesController after the request parameters have been validated.
+
+The MessageDirector.send method takes a messsage value object and returns a return value object (ret).
+
+```
+    ret = MessageDirector.send(message_vo)
+    if !ret.error.nil?
+      # Failed to deliver message
+      render json: ret.error
+    else
+      render json: ret.value
+    end
+```
+
+The MessageDirector's create_message method looks up the receiver's delivery preference (Email/SMS) and sets the target (Sendgrid/Clearstream) accordingly.
+
+## ReturnVo
+A return value object has two attributes: value and error.
+Both value and error return a hash; This allows for a consistent response object.
+
+### Error
+Here's an example of an error:
+```
+{
+    "status": 422,
+    "data": null,
+    "error": "Team name (X-Team-ID HTTP header) STA NOT found!"
+}
+```
+
+### Success
+Here's a success.  Note the consistency in the format of the response (both error and success responses have same hash keys).
+
+#### Clearstream Success Response
+```
+{
+    "status": 202,
+    "data": {
+        "clearstream_msg": "{\"id\":10,\"sent_to_clearstream\":\"2019-05-15T13:49:14.326Z\",\"sms_json\":\"{\\\"data\\\":{\\\"id\\\":118487,\\\"status\\\":\\\"QUEUED\\\",\\\"sent_at\\\":\\\"2019-05-15T13:49:55+00:00\\\",\\\"completed_at\\\":null,\\\"text\\\":{\\\"full\\\":\\\"Leadership Team: Come in now for 50% off all rolls!\\\",\\\"header\\\":\\\"Leadership Team\\\",\\\"body\\\":\\\"Come in now for 50% off all rolls!\\\"},\\\"lists\\\":[],\\\"subscribers\\\":[\\\"+17707651573\\\"],\\\"stats\\\":{\\\"recipients\\\":1,\\\"failures\\\":0,\\\"throughput\\\":0,\\\"replies\\\":0,\\\"opt_outs\\\":0},\\\"social\\\":{\\\"twitter\\\":{\\\"enabled\\\":false,\\\"id\\\":null,\\\"url\\\":null},\\\"facebook\\\":{\\\"enabled\\\":false,\\\"id\\\":null,\\\"url\\\":null}}}}\",\"got_response_at\":\"2019-05-15T13:49:14.571Z\",\"clearstream_response\":\"QUEUED\",\"created_at\":\"2019-05-15T13:49:14.335Z\",\"updated_at\":\"2019-05-15T13:49:14.571Z\"}"
+    },
+    "error": null
+}
+```
+
+#### Sendgrid Success Response
+```
+{
+    "status": 202,
+    "data": {
+        "sendgrid_msg": "{\"id\":6,\"sent_to_sendgrid\":\"2019-05-15T19:35:09.555Z\",\"mail_json\":{\"from\":{\"email\":\"app1@highlands.org\"},\"subject\":\"Picnic Saturday Week\",\"personalizations\":[{\"to\":[{\"email\":\"bob.p.k.brown@gmail.com\",\"name\":\"Bob Brown\"}],\"dynamic_template_data\":{\"header\":\"Karate Chop\",\"section1\":\"Try to imagine all life as you know it stopping instantaneously and every molecule in your body exploding at the speed of light.\",\"section2\":\"Maybe now you'll never slime a guy with a positron collider, huh?\",\"section3\":\"You will perish in flame, you and all your kind! Gatekeeper!\",\"button\":\"Reply\",\"email_subject\":\"Picnic Saturday Week\"}}],\"template_id\":\"d-f986df533e514f978f4460bedca50db0\"},\"got_response_at\":\"2019-05-15T19:35:09.639Z\",\"sendgrid_response\":\"202\",\"read_by_user_at\":null,\"created_at\":\"2019-05-15T19:35:09.555Z\",\"updated_at\":\"2019-05-15T19:35:09.639Z\"}"
+    },
+    "error": null
+}
+```
+
+ret is created in MessageDirector.create_message(message_vo):
+
+```
+    if errs.size > 0
+      ReturnVo.new({value: nil, error: error_json = return_error(errs, :unprocessable_entity)})
+    else
+      message = Message.create!(msg_target_id: msg_target_id,
+                                manager_id: manager_id, # <= source of message (an application)
+                                receiver_id: receiver.id,
+                                team_id: team.id, # <= message coming from this team
+                                email_subject: message_vo.email_subject,
+                                email_message: message_vo.email_message,
+                                template_id: template.id,
+                                sms_message: message_vo.sms_message)
+
+      ReturnVo.new({value: message, error: nil})
+    end
+```
+
+
+## Message Table
+The messages table has a msg_target_id to indicate 1=sendgrid or 2=clearstream
+Once the message has been sent to Sendgrid, the sendgrid_msg_id field will be populated/linked to the SendgridMsg table entry
+Ditto for Clearstream.
+```
++----+---------------+-----------------+-------------------+------------+-------------+---------+--------------- 
+| id | msg_target_id | sendgrid_msg_id | clearstream_msg_id | manager_id | receiver_id | team_id | email_subject  ...
++----+---------------+-----------------+--------------------+------------+-------------+---------+--------------- 
+| 1  | 1             | 1               |                    | 1          | 2           | 1       | So maybe the r ...
++----+---------------+-----------------+--------------------+------------+-------------+---------+--------------- 
+```

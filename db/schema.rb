@@ -26,9 +26,9 @@ ActiveRecord::Schema.define(version: 2019_05_12_215905) do
 
   create_table "clearstream_msgs", force: :cascade do |t|
     t.datetime "sent_to_clearstream"
-    t.json "sms_json"
+    t.json "response"
     t.datetime "got_response_at"
-    t.text "clearstream_response"
+    t.text "status"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -54,6 +54,7 @@ ActiveRecord::Schema.define(version: 2019_05_12_215905) do
   end
 
   create_table "messages", force: :cascade do |t|
+    t.bigint "msg_target_id"
     t.bigint "sendgrid_msg_id"
     t.bigint "clearstream_msg_id"
     t.bigint "manager_id", null: false
@@ -67,14 +68,23 @@ ActiveRecord::Schema.define(version: 2019_05_12_215905) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["clearstream_msg_id"], name: "index_messages_on_clearstream_msg_id"
     t.index ["manager_id"], name: "index_messages_on_manager_id"
+    t.index ["msg_target_id"], name: "index_messages_on_msg_target_id"
     t.index ["receiver_id"], name: "index_messages_on_receiver_id"
     t.index ["sendgrid_msg_id"], name: "index_messages_on_sendgrid_msg_id"
     t.index ["team_id"], name: "index_messages_on_team_id"
     t.index ["template_id"], name: "index_messages_on_template_id"
   end
 
+  create_table "msg_targets", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["name"], name: "index_msg_targets_on_name", unique: true
+  end
+
   create_table "receivers", force: :cascade do |t|
-    t.string "receiver"
+    t.string "receiver_sso_id"
     t.string "email"
     t.string "mobile_number"
     t.string "first_name"
@@ -83,12 +93,12 @@ ActiveRecord::Schema.define(version: 2019_05_12_215905) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["email"], name: "index_receivers_on_email", unique: true
-    t.index ["receiver"], name: "index_receivers_on_receiver", unique: true
+    t.index ["receiver_sso_id"], name: "index_receivers_on_receiver_sso_id", unique: true
   end
 
   create_table "sendgrid_msgs", force: :cascade do |t|
     t.datetime "sent_to_sendgrid"
-    t.json "mail_json"
+    t.json "mail_and_response"
     t.datetime "got_response_at"
     t.text "sendgrid_response"
     t.datetime "read_by_user_at"
@@ -106,13 +116,9 @@ ActiveRecord::Schema.define(version: 2019_05_12_215905) do
 
   create_table "teams", force: :cascade do |t|
     t.string "name"
-    t.string "x_team_id"
-    t.string "email"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["email"], name: "index_teams_on_email"
     t.index ["name"], name: "index_teams_on_name", unique: true
-    t.index ["x_team_id"], name: "index_teams_on_x_team_id", unique: true
   end
 
   create_table "templates", force: :cascade do |t|
@@ -159,6 +165,7 @@ ActiveRecord::Schema.define(version: 2019_05_12_215905) do
   add_foreign_key "api_keys", "managers"
   add_foreign_key "messages", "clearstream_msgs"
   add_foreign_key "messages", "managers"
+  add_foreign_key "messages", "msg_targets"
   add_foreign_key "messages", "receivers"
   add_foreign_key "messages", "sendgrid_msgs"
   add_foreign_key "messages", "teams"

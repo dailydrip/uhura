@@ -1,5 +1,7 @@
 # rubocop:disable Rails/Output
 
+require 'faker'
+
 def log(msg)
   Rails.logger.info msg
   puts msg
@@ -58,8 +60,9 @@ ApiKey.create!(manager: app1)
 ApiKey.create!(manager: app2)
 
 log "5. Seeding Teams"
-team_sta = Team.create!(name: 'Sample Team A', x_team_id: 'STA', email: 'team.a@highlands.org')
-team_stb = Team.create!(name: 'Sample Team B', x_team_id: 'STB', email: 'team.b@highlands.org')
+leadership_team = Team.create!(name: 'Leadership Team')
+campus_pastor_team = Team.create!(name: 'Campus Pastor Team')
+accounting_team = Team.create!(name: 'Accounting Team')
 
 log "6. Seeding Templates"
 template_a = Template.create!(name: 'Sample Template A', template_id: 'd-f986df533e514f978f4460bedca50db0', sample_template_data: '{
@@ -84,115 +87,150 @@ template_c = Template.create!(name: 'Sample Template C', template_id: 'd-211d56c
 log "7. Seeding Users"
 # Receivers is a temporary table.  When we get the data from Highlands SSO we'll remove the receivers table.
 alice = Receiver.create!(
-  receiver: '88543890',
+  receiver_sso_id: '88543890',
   email: 'alice@aol.com',
-  mobile_number: '4048844201',
+  mobile_number: '7707651573',
   first_name: 'Alice',
   last_name: 'Green',
-  preferences: {email: true, sms: false}
-)
-bob = Receiver.create!(
-  receiver: '88543891',
-  email: 'bob@hotmail.com',
-  mobile_number: '4048844202',
-  first_name: 'Bob',
-  last_name: 'Blue',
   preferences: {email: false, sms: true}
 )
+bob = Receiver.create!(
+  receiver_sso_id: '88543891',
+  email: 'bob.p.k.brown@gmail.com',
+  mobile_number: '4048844202',
+  first_name: 'Bob',
+  last_name: 'Brown',
+  preferences: {email: true, sms: false}
+)
 cindy = Receiver.create!(
-  receiver: '88543892',
+  receiver_sso_id: '88543892',
   email: 'cindy@msn.com',
   mobile_number: '4048844203',
   first_name: 'Cindy',
   last_name: 'Red',
-  preferences: {email: true, sms: false}
-
+  preferences: {email: false, sms: true}
 )
 
-log "8. Seeding Messages"
-msg1 = Message.create!(manager_id: app1.id, # <= source (an application)
-                       team_id: team_sta.id, # <= message coming from this team
+
+log "8. Seeding MsgTarget"
+MsgTarget.create!(name: 'Sendgrid',
+                  description: 'External Email Service')
+
+MsgTarget.create!(name: 'Clearstream',
+                  description: 'External SMS Texting Service')
+
+
+log "9. Seeding Messages"
+msg1 = Message.create!(msg_target_id: MsgTarget.find_by(name: 'Sendgrid').id,
+                       manager_id: app1.id, # <= source (an application)
+                       team_id: leadership_team.id, # <= message coming from this team
                        receiver_id: bob.id, # <= receiver (a user)
-                       email_subject: 'Sample - Picnic this Saturday',
-                       email_message: {headers: {key1: 'val1', key2: 'val2'}, sections: {name: 'val1', body: 'val2'}},
+                       email_subject: Faker::TvShows::SiliconValley.motto,
+                       email_message:  {
+                           "header": Faker::Games::Pokemon.move.titleize,
+                           "section1": Faker::Quote.matz,
+                           "button": Faker::Verb.base.capitalize
+                       },
                        template_id: template_a.id,
-                       sms_message:  'Sample - Picnic this Saturday. Bring drinks.')
+                       sms_message:  Faker::Movie.quote)
 
-msg2 = Message.create!(manager_id: app1.id,
-                       team_id: team_stb.id,
+msg2 = Message.create!(msg_target_id: MsgTarget.find_by(name: 'Sendgrid').id,
+                       manager_id: app1.id,
+                       team_id: campus_pastor_team.id,
                        receiver_id: bob.id,
-                       email_subject: 'Sample - Fund Raiser',
-                       email_message: {headers: {key1: 'val1', key2: 'val2'}, sections: {key1: 'val1', key2: 'val2'}},
+                       email_subject: Faker::TvShows::SiliconValley.motto,
+                       email_message:  {
+                           "header": Faker::Games::Pokemon.move.titleize,
+                           "section1": Faker::Quote.matz,
+                           "section2": Faker::Quote.matz,
+                           "button": Faker::Verb.base.capitalize
+                       },
                        template_id: template_b.id,
-                       sms_message:  'Sample - Fund raiser this week. Be generous.')
+                       sms_message:  Faker::Movie.quote)
 
-msg3 = Message.create!(manager_id: app1.id,
-                       team_id: team_sta.id,
+msg3 = Message.create!(msg_target_id: MsgTarget.find_by(name: 'Clearstream').id,
+                       manager_id: app1.id,
+                       team_id: leadership_team.id,
                        receiver_id: cindy.id,
-                       email_subject: 'Sample - Picnic this Saturday',
-                       email_message: {headers: {key1: 'val1', key2: 'val2'}, sections: {key1: 'val1', key2: 'val2'}},
+                       email_subject: Faker::TvShows::SiliconValley.motto,
+                       email_message:  {
+                           "header": Faker::Games::Pokemon.move.titleize,
+                           "section1": Faker::Quote.matz,
+                           "button": Faker::Verb.base.capitalize
+                       },
                        template_id: template_a.id,
-                       sms_message:  'Sample - Picnic this Saturday. Bring drinks.')
+                       sms_message:  Faker::Movie.quote)
 
-msg4 = Message.create!(manager_id: app2.id,
-                       team_id: team_sta.id,
+msg4 = Message.create!(msg_target_id: MsgTarget.find_by(name: 'Clearstream').id,
+                       manager_id: app2.id,
+                       team_id: leadership_team.id,
                        receiver_id: alice.id, # <= receiver (a user)
-                       email_subject: 'Sample - Picnic this Saturday',
-                       email_message: {headers: {key1: 'val1', key2: 'val2'}, sections: {key1: 'val1', key2: 'val2'}},
+                       email_subject: Faker::TvShows::SiliconValley.motto,
+                       email_message:  {
+                           "header": Faker::Games::Pokemon.move.titleize,
+                           "section1": Faker::Quote.matz,
+                           "button": Faker::Verb.base.capitalize
+                       },
                        template_id: template_a.id,
-                       sms_message:  'Sample - Picnic this Saturday. Bring drinks.')
+                       sms_message:  Faker::Movie.quote)
 
-msg5 = Message.create!(manager_id: app2.id,
-                       team_id: team_stb.id,
-                       receiver_id: alice.id, # <= receiver (a user)
-                       email_subject: 'Sample - W2 Available',
-                       email_message: {headers: {key1: 'val1', key2: 'val2'}, sections: {key1: 'val1', key2: 'val2'}},
+msg5 = Message.create!(msg_target_id: MsgTarget.find_by(name: 'Sendgrid').id,
+                       manager_id: app2.id,
+                       team_id: campus_pastor_team.id,
+                       receiver_id: bob.id, # <= receiver (a user)
+                       email_subject: Faker::TvShows::SiliconValley.motto,
+                       email_message:  {
+                           "header": Faker::Games::Pokemon.move.titleize,
+                           "section1": Faker::Quote.matz,
+                           "section2": Faker::Quote.matz,
+                           "section3": Faker::Quote.matz,
+                           "button": Faker::Verb.base.capitalize
+                       },
                        template_id: template_c.id,
-                       sms_message:  'Sample - Get your W2 from https://benefits.example.com')
+                       sms_message:  Faker::Movie.quote)
 
-msg6 = Message.create!(manager_id: app2.id,
-                       team_id: team_sta.id,
+msg6 = Message.create!(msg_target_id: MsgTarget.find_by(name: 'Clearstream').id,
+                       manager_id: app2.id,
+                       team_id: leadership_team.id,
                        receiver_id: cindy.id, # <= receiver (a user)
-                       email_subject: 'Sample - Choir Practice Tonight!',
-                       email_message: {headers: {key1: 'val1', key2: 'val2'}, sections: {key1: 'val1', key2: 'val2'}},
+                       email_subject: Faker::TvShows::SiliconValley.motto,
+                       email_message:  {
+                           "header": Faker::Games::Pokemon.move.titleize,
+                           "section1": Faker::Quote.matz,
+                           "button": Faker::Verb.base.capitalize
+                       },
                        template_id: template_a.id,
-                       sms_message:  'Sample - Choir practice tonight at 7:00 p.m.')
+                       sms_message:  Faker::Movie.quote)
 
-log "9. Seeding SendgridMsg and ClearstreamMsg"
+log "10. Seeding SendgridMsg and ClearstreamMsg"
 sg1 = SendgridMsg.create!(sent_to_sendgrid: Time.now,
-                          sendgrid_response: '',
                           read_by_user_at: 1.day.from_now)
 msg1.sendgrid_msg = sg1
+msg1.save!
 
 sg2 = SendgridMsg.create!(sent_to_sendgrid: 1.minute.from_now,
-                          sendgrid_response: '',
                           read_by_user_at: 2.days.from_now)
 msg2.sendgrid_msg = sg2
+msg2.save!
 
-cs1 = ClearstreamMsg.create!(sent_to_clearstream: 2.minutes.from_now,
-                             clearstream_response: '')
+cs1 = ClearstreamMsg.create!(sent_to_clearstream: 2.minutes.from_now)
 msg3.clearstream_msg = cs1
+msg3.save!
 
-sg3 = SendgridMsg.create!(sent_to_sendgrid: 3.minutes.from_now,
-                          sendgrid_response: '',
-                          read_by_user_at: nil)
-msg4.sendgrid_msg = sg3
 
-cs2 = ClearstreamMsg.create!(sent_to_clearstream: 4.minutes.from_now,
-                             clearstream_response: '')
+cs2 = ClearstreamMsg.create!(sent_to_clearstream: 4.minutes.from_now)
 msg4.clearstream_msg = cs2
+msg4.save!
 
-sg4 = SendgridMsg.create!(sent_to_sendgrid: 5.minutes.from_now,
-                          sendgrid_response: '',
+sg3 = SendgridMsg.create!(sent_to_sendgrid: 5.minutes.from_now,
                           read_by_user_at: 3.days.from_now)
-msg5.sendgrid_msg = sg4
+msg5.sendgrid_msg = sg3
+msg5.save!
 
-cs3 = ClearstreamMsg.create!(sent_to_clearstream: 6.minutes.from_now,
-                             clearstream_response: '')
-msg5.clearstream_msg = cs3
+cs3 = ClearstreamMsg.create!(sent_to_clearstream: 7.minutes.from_now)
+msg6.clearstream_msg = cs3
+msg6.save!
 
-cs4 = ClearstreamMsg.create!(sent_to_clearstream: 7.minutes.from_now,
-                             clearstream_response: '')
-msg6.clearstream_msg = cs4
-
-log 'Seeding Done!'
+log "Seeding Done!\n"
+log "public_token: #{Manager.first.public_token}"
+log "Authorization Bearer token: #{Manager.first.api_key.auth_token}"

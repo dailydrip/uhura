@@ -17,22 +17,21 @@ class Clearstream
 
   def self.send_msg(data)
 
-    clearstream_msg = ClearstreamMsg.create!(sent_to_clearstream: Time.now,
-                                             sms_json: data,
-                                             clearstream_response: nil)
 
     cs_client = ClearstreamClient::MessageClient.new({data: data[:clearstream_data], resource: 'messages'})
     response = cs_client.create
 
-    clearstream_msg.sms_json = response.to_json
+    clearstream_msg = ClearstreamMsg.create!(sent_to_clearstream: Time.now,
+                                             response: {response: response['data']})
+
     clearstream_msg.got_response_at = Time.now
-    clearstream_msg.clearstream_response = response['data']['status']
+    clearstream_msg.status = response['data']['status']
 
     if clearstream_msg.save! && self.link_clearstream_msg_to_message(data[:message_id], clearstream_msg.id)
-      return ReturnVo.new({value: return_accepted(clearstream_msg), error: nil})
+      return ReturnVo.new({value: return_accepted({"clearstream_msg": clearstream_msg.to_json}), error: nil})
     else
       err = clearstream_msg.errors || "Error for clearstream_id (#{clearstream_id})"
-      return ReturnVo.new({value: nil, error: error_json = return_error(err, :unprocessable_entity)})
+      return ReturnVo.new({value: nil, error: return_error(err, :unprocessable_entity)})
     end
   end
 
@@ -53,18 +52,18 @@ class Clearstream
     log_info(msg)
     #TODO: Verify that this status is correct when Clearstream.io support increases subscriber limit
     if response['data']['status'] == 'QUEUED'
-      return ReturnVo.new({value: return_accepted(clearstream_msg), error: nil})
+      return ReturnVo.new({value: return_accepted({"clearstream_msg": clearstream_msg.to_json}), error: nil})
     else
       err = "Failed to create subscriber. Clearstream response: #{response.to_json}"
-      return ReturnVo.new({value: nil, error: error_json = return_error(err, :unprocessable_entity)})
+      return ReturnVo.new({value: nil, error: return_error(err, :unprocessable_entity)})
     end
   end
 
   def self.send(message_vo)
     # Populate and sanitize data
     data = ClearstreamSmsVo.new(
-        receiver: message_vo.receiver,
-        team: message_vo.team,
+        receiver_sso_id: message_vo.receiver_sso_id,
+        team_name: message_vo.team_name,
         sms_message: message_vo.sms_message,
         message_id: message_vo.message_id
     ).get()
