@@ -53,7 +53,7 @@ class Sendgrid
       return ReturnVo.new({value: nil, error: return_error(err, :unprocessable_entity)})
     end
   rescue StandardError => err
-    msg = "send_via_sendgrid: #{err.message}"
+    msg = "Sendgrid.send Error: #{err.message}"
     log_error(msg)
     return ReturnVo.new({value: nil, error: return_error(msg, :unprocessable_entity)})
   end

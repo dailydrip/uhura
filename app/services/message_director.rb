@@ -28,7 +28,7 @@ class MessageDirector
         msg = message.error[:error]
         log_error(msg)
       else
-        msg = "Sent SMS: subject (#{message_vo.email_subject}) from (#{message_vo.manager_name}) to (#{message_vo.receiver_email})"
+        msg = "Sent SMS: (#{message_vo.team_name}:#{message_vo.email_subject}) from (#{message_vo.manager_name}) to (#{message_vo.mobile_number})"
         log_info(msg)
       end
     else
@@ -49,16 +49,24 @@ class MessageDirector
     manager_email = message_vo.manager_email
     receiver = Receiver.find_by(receiver_sso_id: message_vo.receiver_sso_id)
     # Currently, we only support Sendgrid (for emails) and Clearstream (for sms)
-    if receiver && receiver.preferences
-      delivery_target = receiver.preferences['email'] ? 'Sendgrid' : 'Clearstream'
-      msg_target = MsgTarget.find_by(name: delivery_target)
-      if msg_target
-        msg_target_id = msg_target.id
+    if receiver
+      # Following message_vo attributes required by ClearstreamClient::MessageClient.create_subscriber
+      message_vo.mobile_number = receiver.mobile_number
+      message_vo.first = receiver.first_name
+      message_vo.last = receiver.last_name
+      message_vo.email = receiver.email
+      message_vo.lists = AppCfg['CLEARSTREAM_DEFAULT_LIST_ID']
+      if receiver.preferences
+        delivery_target = receiver.preferences['email'] ? 'Sendgrid' : 'Clearstream'
+        msg_target = MsgTarget.find_by(name: delivery_target)
+        if msg_target
+          msg_target_id = msg_target.id
+        else
+          errors <<  "Invalid receiver.preferences (#{receiver.preferences}). Unable to determine message target (Email/SMS)."
+        end
       else
-        errors <<  "Invalid receiver.preferences (#{receiver.preferences}). Unable to determine message target (Email/SMS)."
+        errors << "Null receiver.preferences. Unable to determine message target (Email/SMS)."
       end
-    else
-      errors << "Null receiver.preferences. Unable to determine message target (Email/SMS)."
     end
 
     team = Team.find_by(name: message_vo.team_name)

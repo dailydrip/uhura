@@ -73,3 +73,26 @@ class Object
     end
   end
 end
+
+# Use ulog in irb or rails console as follows:
+#
+# uhura> ulog 23
+# {
+#     "error_from_clearstrem" => "You must send your message to at least one subscriber.",
+#     "assumed_meaning" => "A Clearstream subscription request has been sent to this mobile_phone (4048844203)",
+#     "action" => "None."
+# }
+def ulog(id)
+  begin
+    ulog = Ulog.find(id)
+    # Try to parse details
+    begin
+      msg_hash = JSON.parse(ulog.details)
+      ap msg_hash
+    rescue Exception => e
+      puts ulog.details
+    end
+  rescue Exception => e
+    puts "Ulog record (#{id}) not found!"
+  end
+end
