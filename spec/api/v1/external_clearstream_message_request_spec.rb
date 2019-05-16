@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
-require '/home/lex/Clients/Concur/Projects/stub_api/spec/helpers.rb'
 
 RSpec.configure do |c|
   c.include Helpers
