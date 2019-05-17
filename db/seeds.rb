@@ -67,7 +67,7 @@ log "7. Seeding Users"
 # Receivers is a temporary table.  When we get the data from Highlands SSO we'll remove the receivers table.
 alice = Receiver.create!(
   receiver_sso_id: Faker::Number.number(digits = 8),
-  email: Faker::Internet.email,
+  email: 'alice@aol.com',
   mobile_number: Faker::PhoneNumber.cell_phone,
   first_name: 'Alice',
   last_name: 'Green',
@@ -75,7 +75,7 @@ alice = Receiver.create!(
 )
 bob = Receiver.create!(
   receiver_sso_id: Faker::Number.number(digits = 8),
-  email: Faker::Internet.email,
+  email: 'bob@gmail.com',
   mobile_number: Faker::PhoneNumber.cell_phone,
   first_name: 'Bob',
   last_name: 'Brown',
@@ -83,7 +83,7 @@ bob = Receiver.create!(
 )
 cindy = Receiver.create!(
   receiver_sso_id: Faker::Number.number(digits = 8),
-  email: Faker::Internet.email,
+  email: 'cindy@yahoo.com',
   mobile_number: Faker::PhoneNumber.cell_phone,
   first_name: 'Cindy',
   last_name: 'Red',

@@ -81,8 +81,13 @@ RSpec.describe 'Messages API', type: :request do
           "sms_message": 'Come in now for 50% off all rolls!'
         }
       end
-      it 'calls sendgrid returning the data' do
-          #FIXME: Make the stub_request to sendgrid and test it here
+      it 'returns status code 200' do
+        stub_request(:any, /api.getclearstream.com/).to_return(body: get_clearstream_response_data('post_message'),
+                                                               status: 200,
+                                                               headers: { 'Content-Length' => 3 })
+        post '/api/v1/messages', headers: valid_headers, params: valid_attributes.to_json
+        expect(response.status).to eq 200
+        expect(response.parsed_body['status']).to eq(202)
       end
     end
 

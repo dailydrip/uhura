@@ -27,7 +27,7 @@ class Clearstream
     clearstream_msg.status = response['data']['status']
 
     if clearstream_msg.save! && link_clearstream_msg_to_message(data[:message_id], clearstream_msg.id)
-      return ReturnVo.new(value: return_accepted("clearstream_msg": clearstream_msg.to_json), error: nil)
+      return ReturnVo.new(value: return_accepted("clearstream_msg": clearstream_msg), error: nil)
     else
       err = clearstream_msg.errors || "Error for clearstream_id (#{clearstream_id})"
       return ReturnVo.new(value: nil, error: return_error(err, :unprocessable_entity))

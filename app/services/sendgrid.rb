@@ -47,7 +47,7 @@ class Sendgrid
     sendgrid_msg.sendgrid_response = rsc
 
     if sendgrid_msg.save! && link_sendgrid_msg_to_message(message_vo.message_id, sendgrid_msg.id)
-      return ReturnVo.new(value: return_accepted("sendgrid_msg": sendgrid_msg.to_json), error: nil)
+      return ReturnVo.new(value: return_accepted("sendgrid_msg": sendgrid_msg), error: nil)
     else
       err = sendgrid_msg.errors || "Error for sendgrid_id (#{sendgrid_id})"
       return ReturnVo.new(value: nil, error: return_error(err, :unprocessable_entity))

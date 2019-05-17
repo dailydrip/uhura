@@ -9,7 +9,7 @@ class Api::V1::MessagesController < Api::V1::ApiBaseController
       team_name: @team_name,
       receiver_sso_id: params[:receiver_sso_id],
       email_subject: params[:email_subject],
-      email_message: params[:email_message]&.to_json,
+      email_message: params[:email_message],
       template_id: params[:template_id],
       sms_message: params[:sms_message]
     )
