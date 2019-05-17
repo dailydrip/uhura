@@ -24,7 +24,7 @@ class Api::V1::ApiBaseController < ApplicationController
     if team.nil?
       msg = "Team name (X-Team-ID HTTP header) #{team_name} NOT found!"
       log_error(msg)
-      render json: return_error(msg)
+      render json: return_error(msg), status: 422
     else
       @team_name = team.name
     end
