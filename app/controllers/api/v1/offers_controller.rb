@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Api::V1::OffersController < Api::V1::ApiBaseController
   def show
     @offer = Offer.find(params[:id])

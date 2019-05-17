@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Uhura
   class UlogsController < Uhura::ApplicationController
     # Overwrite any of the RESTful controller actions to implement custom behavior

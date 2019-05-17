@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ClearstreamSmsVo
   Invalid = Class.new(StandardError)
   include ActiveModel::Model
@@ -40,6 +42,7 @@ class ClearstreamSmsVo
   # Clearstream will store 10 digit number, but requires "+1" for subsequent calls
   def normalize_phone_number(number)
     return number if number[0..1].eql?('+1')
+
     '+1' + number
   end
 
@@ -56,9 +59,8 @@ class ClearstreamSmsVo
       @last_name = receiver.last_name
     end
   end
-  def receiver_sso_id
-    @receiver_sso_id
-  end
+
+  attr_reader :receiver_sso_id
 
   # "sms_message": {
   #     "header": "Blue Sushi 2",
@@ -70,21 +72,21 @@ class ClearstreamSmsVo
     @message_header = @team_name
     @message_body = sms_message
   end
+
   def sms_message
     sms_message
   end
 
   def get
-    if !valid?
-      raise Invalid, errors.full_messages
-    end
-    {resource: 'messages',
-     mobile_number: @mobile_number,
-     message_header: @message_header,
-     message_body: @message_body,
-     subscribers: @subscribers,
-     schedule: @schedule,
-     send_to_fb: @send_to_fb,
-     send_to_tw: @send_to_tw}
+    raise Invalid, errors.full_messages unless valid?
+
+    { resource: 'messages',
+      mobile_number: @mobile_number,
+      message_header: @message_header,
+      message_body: @message_body,
+      subscribers: @subscribers,
+      schedule: @schedule,
+      send_to_fb: @send_to_fb,
+      send_to_tw: @send_to_tw }
   end
 end

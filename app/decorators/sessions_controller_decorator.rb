@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 HighlandsAuth::SessionsController.class_eval do
   private
 

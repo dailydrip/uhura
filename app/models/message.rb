@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Message < ApplicationRecord
   belongs_to :msg_target
   belongs_to :sendgrid_msg, optional: true

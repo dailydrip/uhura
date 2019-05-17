@@ -1,6 +1,7 @@
+# frozen_string_literal: true
+
 class Api::V1::ClearstreamController < Api::V1::ApiController
   def create
-
     puts ">> http://#{request.host}:#{request.port}:#{request.fullpath}"
 
     @message = Message.new
@@ -9,7 +10,7 @@ class Api::V1::ClearstreamController < Api::V1::ApiController
     @message.message_body   = params[:message_body]
     # Fields NOT required below:
     @message.lists          = params[:lists]
-    if !params[:subscribers].nil?
+    unless params[:subscribers].nil?
       subscribers = []
       params[:subscribers].split(',').each do |i|
         subscribers << Subscriber.find(i.to_i)
@@ -36,46 +37,39 @@ class Api::V1::ClearstreamController < Api::V1::ApiController
 
   def index
     @offers = Clearstream::MessageClient.new(
-        api_key: @api_key,
-        public_token: @manager_public_token).all
+      api_key: @api_key,
+      public_token: @manager_public_token
+    ).all
   end
 
   def index
-
-
-
-
     @sg_emails = Message.all
-
-
-
   end
 
   private
 
   def sg_email_params
     params
-        .require(:sg_email)
-        .permit(
-            :template_id,
-            :message_body,
-            :from_label,
-            :to_label,
-            :lists,
-            :response_status_code,
-            :response_body,
-            # :response_parsed_body,
-            :response_headers,
-            :subscribers
-        )
+      .require(:sg_email)
+      .permit(
+        :template_id,
+        :message_body,
+        :from_label,
+        :to_label,
+        :lists,
+        :response_status_code,
+        :response_body,
+        # :response_parsed_body,
+        :response_headers,
+        :subscribers
+      )
   end
 
   def send_sms
-
     body = {
-        "template_id=": "Blue Sushi",
-        "message_body": "Come in now for 50% off all rolls!",
-        "lists": "1,2"
+      "template_id=": 'Blue Sushi',
+      "message_body": 'Come in now for 50% off all rolls!',
+      "lists": '1,2'
     }
 
     token = ENV['CLEARSTREAM_KEY']
@@ -91,8 +85,8 @@ class Api::V1::ClearstreamController < Api::V1::ApiController
     else
       render json: return_error(@message.errors, rsc), status: rsc
     end
-  rescue StandardError => err
-    error_json = return_error("send_sms: #{err.message}")
+  rescue StandardError => e
+    error_json = return_error("send_sms: #{e.message}")
     render json: error_json, status: rsc
   end
 
@@ -102,8 +96,8 @@ class Api::V1::ClearstreamController < Api::V1::ApiController
     to      = SendGrid::Email.new(email: @message.message_body)
     lists = @message.lists
     subscribers = SendGrid::Content.new(
-        type: 'text/plain',
-        value: @message.subscribers
+      type: 'text/plain',
+      value: @message.subscribers
     )
     @mail ||= SendGrid::Mail.new(from, lists, to, subscribers)
   end

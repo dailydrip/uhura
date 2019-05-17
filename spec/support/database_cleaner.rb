@@ -38,16 +38,16 @@ RSpec.configure do |config|
       "button": Faker::Verb.base.capitalize
     }')
     rspec = Source.create!(
-        name: 'Rspec',
-        details: {home_page_url: 'http://www.betterspecs.org/'}
+      name: 'Rspec',
+      details: { home_page_url: 'http://www.betterspecs.org/' }
     )
     alice = Receiver.create!(
-        receiver_sso_id: Faker::Number.number(digits = 8),
-        email: Faker::Internet.email,
-        mobile_number: Faker::PhoneNumber.cell_phone,
-        first_name: 'Alice',
-        last_name: 'Green',
-        preferences: {email: false, sms: true}
+      receiver_sso_id: Faker::Number.number(digits = 8),
+      email: Faker::Internet.email,
+      mobile_number: Faker::PhoneNumber.cell_phone,
+      first_name: 'Alice',
+      last_name: 'Green',
+      preferences: { email: false, sms: true }
     )
   end
 

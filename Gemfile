@@ -51,6 +51,8 @@ group :development, :test do
   gem 'rspec'
   gem 'webmock'
   gem 'awesome_print'
+  gem 'rubocop', require: false
+  gem 'rubocop-performance'
   gem 'hirb'
 end
 

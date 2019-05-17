@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 module ControllerSpecHelper
-
-  # return valid headers
   def valid_headers
     {
       'Authorization' => 'Bearer ' + ApiKey.first.auth_token,
@@ -11,7 +9,6 @@ module ControllerSpecHelper
     }
   end
 
-  # return invalid headers
   def invalid_headers
     {
       'Authorization' => nil,

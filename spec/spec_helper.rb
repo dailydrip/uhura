@@ -11,9 +11,9 @@ RSpec.configure do |config|
   # Capture requests bound for external API's and redirect to fake servers:
   config.before(:each) do
     # An HTTP client
-    #stub_request(:any, /api.getclearstream.com/).to_rack(FakeClearstream)
+    # stub_request(:any, /api.getclearstream.com/).to_rack(FakeClearstream)
     # A Ruby (HTTP adapter) client
-    #stub_request(:any, /#{ENV['API_ENDPOINT']}/).to_rack(FakeSendgrid)
+    # stub_request(:any, /#{ENV['API_ENDPOINT']}/).to_rack(FakeSendgrid)
   end
 
   config.expect_with :rspec do |expectations|
