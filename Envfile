@@ -107,3 +107,10 @@ variable :HIGHLANDS_AUTH_REDIRECT, :String
 variable :HIGHLANDS_AUTH_SUPPORT_EMAIL, :String
 variable :HIGHLANDS_SSO_EMAIL, :String
 variable :HIGHLANDS_SSO_PASSWORD, :String
+
+#-----------------------------------------------
+#     Custom Configuration Used for Testing
+#-----------------------------------------------
+
+variable :BOBS_EMAIL, :String
+variable :ALICES_MOBILE_NUMBER, :String

@@ -14,19 +14,27 @@ class Api::V1::ApiBaseController < ApplicationController
     if @manager.nil?
       msg = "Manager with public_token (#{params[:public_token]}) NOT found!"
       log_error(msg)
-      render json: return_error(msg)
+      render json: return_error(msg), status: :unprocessable_entity
     end
   end
 
   def set_team_name
     team_name = request.headers['X-Team-ID']
-    team = Team.find_by(name: team_name)
-    if team.nil?
-      msg = "Team name (X-Team-ID HTTP header) #{team_name} NOT found!"
-      log_error(msg)
-      render json: return_error(msg), status: 422
+    err_msg = nil
+    if team_name.nil? || team_name.strip.size.eql?(0)
+      err_msg = 'Required HTTP header (X-Team-ID) is missing.'
     else
-      @team_name = team.name
+      team = Team.find_by(name: team_name)
+      if team.nil?
+        err_msg = "Team name (#{team_name}) from the X-Team-ID HTTP header NOT found! "
+        err_msg += "Consider adding Team name (#{team_name}) using the Admin app on the Teams page."
+      else
+        @team_name = team.name
+      end
+    end
+    if err_msg
+      log_error(err_msg)
+      render json: return_error(err_msg), status: :unprocessable_entity
     end
   end
 
@@ -39,6 +47,8 @@ class Api::V1::ApiBaseController < ApplicationController
   end
 
   def unauthenticated_request
-    render json: { error: 'This Api Key does not exist.' }, status: :unauthorized
+    msg = 'This API Key does not exist.'
+    log_error(msg)
+    render json: return_error(msg), status: :unauthorized
   end
 end

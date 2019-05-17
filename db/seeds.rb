@@ -68,14 +68,14 @@ log "7. Seeding Users"
 alice = Receiver.create!(
   receiver_sso_id: Faker::Number.number(digits = 8),
   email: 'alice@aol.com',
-  mobile_number: Faker::PhoneNumber.cell_phone,
+  mobile_number: ENV['ALICES_MOBILE_NUMBER'],
   first_name: 'Alice',
   last_name: 'Green',
   preferences: {email: false, sms: true}
 )
 bob = Receiver.create!(
   receiver_sso_id: Faker::Number.number(digits = 8),
-  email: 'bob@gmail.com',
+  email: ENV['BOBS_EMAIL'],
   mobile_number: Faker::PhoneNumber.cell_phone,
   first_name: 'Bob',
   last_name: 'Brown',

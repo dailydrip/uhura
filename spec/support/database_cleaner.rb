@@ -41,13 +41,23 @@ RSpec.configure do |config|
       name: 'Rspec',
       details: { home_page_url: 'http://www.betterspecs.org/' }
     )
+    # Alice prefers SMS
     alice = Receiver.create!(
-      receiver_sso_id: Faker::Number.number(digits = 8),
-      email: Faker::Internet.email,
-      mobile_number: Faker::PhoneNumber.cell_phone,
-      first_name: 'Alice',
-      last_name: 'Green',
-      preferences: { email: false, sms: true }
+        receiver_sso_id: Faker::Number.number(digits = 8),
+        email: 'alice@aol.com',
+        mobile_number: ENV['ALICES_MOBILE_NUMBER'],
+        first_name: 'Alice',
+        last_name: 'Green',
+        preferences: { email: false, sms: true }
+    )
+    # Bob prefers Email
+    bob = Receiver.create!(
+        receiver_sso_id: Faker::Number.number(digits = 8),
+        email: ENV['BOBS_EMAIL'],
+        mobile_number: Faker::PhoneNumber.cell_phone,
+        first_name: 'Bob',
+        last_name: 'Brown',
+        preferences: { email: true, sms: false }
     )
   end
 
