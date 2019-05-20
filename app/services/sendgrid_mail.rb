@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'sendgrid-ruby'
 include SendGrid
 
@@ -21,7 +23,6 @@ class SendgridMail
             :dynamic_template_data,
             presence: true
 
-
   def initialize(*args)
     super
     @dynamic_template_data = JSON.parse(@dynamic_template_data.to_json)
@@ -36,14 +37,12 @@ class SendgridMail
       @to_name = receiver.to_name
     end
   end
-  def receiver_sso_id
-    @receiver_sso_id
-  end
+
+  attr_reader :receiver_sso_id
 
   def get
-    if !valid?
-      raise Invalid, errors.full_messages
-    end
+    raise Invalid, errors.full_messages unless valid?
+
     mail = SendGrid::Mail.new
     mail.template_id = @template_id
     mail.from = Email.new(email: @from)

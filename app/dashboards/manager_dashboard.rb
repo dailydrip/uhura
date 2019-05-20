@@ -1,4 +1,6 @@
-require "administrate/base_dashboard"
+# frozen_string_literal: true
+
+require 'administrate/base_dashboard'
 
 class ManagerDashboard < Administrate::BaseDashboard
   # ATTRIBUTE_TYPES
@@ -14,7 +16,7 @@ class ManagerDashboard < Administrate::BaseDashboard
     public_token: Field::String,
     email: Field::String,
     created_at: Field::DateTime,
-    updated_at: Field::DateTime,
+    updated_at: Field::DateTime
   }.freeze
 
   # COLLECTION_ATTRIBUTES
@@ -22,34 +24,34 @@ class ManagerDashboard < Administrate::BaseDashboard
   #
   # By default, it's limited to four items to reduce clutter on index pages.
   # Feel free to add, remove, or rearrange items.
-  COLLECTION_ATTRIBUTES = [
-    :api_keys,
-    :id,
-    :name,
-    :email,
-    :public_token,
+  COLLECTION_ATTRIBUTES = %i[
+    api_keys
+    id
+    name
+    email
+    public_token
   ].freeze
 
   # SHOW_PAGE_ATTRIBUTES
   # an array of attributes that will be displayed on the model's show page.
-  SHOW_PAGE_ATTRIBUTES = [
-    :api_keys,
-    :id,
-    :name,
-    :public_token,
-    :email,
-    :created_at,
-    :updated_at,
+  SHOW_PAGE_ATTRIBUTES = %i[
+    api_keys
+    id
+    name
+    public_token
+    email
+    created_at
+    updated_at
   ].freeze
 
   # FORM_ATTRIBUTES
   # an array of attributes that will be displayed
   # on the model's form (`new` and `edit`) pages.
-  FORM_ATTRIBUTES = [
-    :api_keys,
-    :name,
-    :public_token,
-    :email,
+  FORM_ATTRIBUTES = %i[
+    api_keys
+    name
+    public_token
+    email
   ].freeze
 
   # Overwrite this method to customize how managers are displayed

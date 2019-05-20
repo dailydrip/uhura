@@ -1,0 +1,12 @@
+{
+  "status": 422,
+  "data": null,
+  "error": {
+    "msg": "At least one of the supplied subscribers is invalid.",
+    "action_required:": {
+      "error_from_clearstream": "At least one of the supplied subscribers is invalid.",
+      "assumed_meaning": "This receiver with mobile_number (?+!42) has not been registered in Clearstream",
+      "action": "An entity outside Uhura should verify that the user data for receiver_sso_id (88543890) is valid."
+    }
+  }
+}

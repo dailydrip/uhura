@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # All Administrate controllers inherit from this `Admin::ApplicationController`,
 # making it the ideal place to put authentication logic or other
 # before_actions.
@@ -13,8 +15,6 @@ module Uhura
     def authenticate_admin!
       redirect_to auth.new_session_path unless current_user
     end
-
-
 
     # Override this value to specify the number of elements to display at a time
     # on index pages. Defaults to 20.

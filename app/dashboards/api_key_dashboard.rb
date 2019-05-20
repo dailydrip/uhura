@@ -1,4 +1,6 @@
-require "administrate/base_dashboard"
+# frozen_string_literal: true
+
+require 'administrate/base_dashboard'
 
 class ApiKeyDashboard < Administrate::BaseDashboard
   # ATTRIBUTE_TYPES
@@ -12,7 +14,7 @@ class ApiKeyDashboard < Administrate::BaseDashboard
     id: Field::Number,
     auth_token: Field::String,
     created_at: Field::DateTime,
-    updated_at: Field::DateTime,
+    updated_at: Field::DateTime
   }.freeze
 
   # COLLECTION_ATTRIBUTES
@@ -20,29 +22,29 @@ class ApiKeyDashboard < Administrate::BaseDashboard
   #
   # By default, it's limited to four items to reduce clutter on index pages.
   # Feel free to add, remove, or rearrange items.
-  COLLECTION_ATTRIBUTES = [
-    :manager,
-    :id,
-    :auth_token,
-    :created_at,
+  COLLECTION_ATTRIBUTES = %i[
+    manager
+    id
+    auth_token
+    created_at
   ].freeze
 
   # SHOW_PAGE_ATTRIBUTES
   # an array of attributes that will be displayed on the model's show page.
-  SHOW_PAGE_ATTRIBUTES = [
-    :manager,
-    :id,
-    :auth_token,
-    :created_at,
-    :updated_at,
+  SHOW_PAGE_ATTRIBUTES = %i[
+    manager
+    id
+    auth_token
+    created_at
+    updated_at
   ].freeze
 
   # FORM_ATTRIBUTES
   # an array of attributes that will be displayed
   # on the model's form (`new` and `edit`) pages.
-  FORM_ATTRIBUTES = [
-    :manager,
-    :auth_token,
+  FORM_ATTRIBUTES = %i[
+    manager
+    auth_token
   ].freeze
 
   # Overwrite this method to customize how api keys are displayed

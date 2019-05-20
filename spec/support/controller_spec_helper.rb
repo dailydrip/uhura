@@ -1,15 +1,14 @@
 # frozen_string_literal: true
 
 module ControllerSpecHelper
-  # return valid headers
   def valid_headers
     {
-      'Authorization' => 'Token token=' + Base64.encode64("#{AppCfg['TOKEN_AUTH_USER']}:#{AppCfg['TOKEN_AUTH_PASSWORD']}").strip,
-      'Content-Type' => 'application/json'
+      'Authorization' => 'Bearer ' + ApiKey.first.auth_token,
+      'Content-Type' => 'application/json',
+      'X-Team-ID' => Team.first.id.to_s
     }
   end
 
-  # return invalid headers
   def invalid_headers
     {
       'Authorization' => nil,

@@ -12,34 +12,13 @@ def log(msg)
 end
 
 log '1. Seeding Sources'
-uhura_server = Source.create!(
-    name: 'Uhura Server',
-    details: {home_page_url: 'https://www.dailydrip.com/', api_reference_url: 'https://github.com/dailydrip/uhura'}
-)
-
-uhura_client = Source.create!(
-    name: 'Uhura Client',
-    details: {home_page_url: 'https://www.dailydrip.com/', api_reference_url: 'https://github.com/dailydrip/uhura'}
-)
-
-uhura_admin_app = Source.create!(
-    name: 'Uhura SuperAdmin App',
-    details: {home_page_url: 'https://www.dailydrip.com/', api_reference_url: 'https://github.com/dailydrip/uhura'}
-)
-
-uhura_cli = Source.create!(
-    name: 'Uhura CLI',
-    details: {home_page_url: 'https://www.dailydrip.com/', api_reference_url: 'https://github.com/dailydrip/uhura'}
-)
-
-sendgrid = Source.create!(
-    name: 'SendGrid',
-    details: {home_page_url: 'https://sendgrid.com/', api_reference_url: 'https://sendgrid.com/docs/api-reference/'}
-)
-clearstram = Source.create!(
-    name: 'Clearstream',
-    details: {home_page_url: 'https://clearstream.io/', api_reference_url: 'https://sendgrid.com/docs/api-reference/'}
-)
+uhura_server = Source.create!( name: 'Uhura Server', details: {home_page_url: 'https://www.dailydrip.com/', api_reference_url: 'https://github.com/dailydrip/uhura'})
+uhura_client = Source.create!(name: 'Uhura Client', details: {home_page_url: 'https://www.dailydrip.com/', api_reference_url: 'https://github.com/dailydrip/uhura'})
+uhura_admin_app = Source.create!(name: 'Uhura SuperAdmin App', details: {home_page_url: 'https://www.dailydrip.com/', api_reference_url: 'https://github.com/dailydrip/uhura'})
+uhura_cli = Source.create!(name: 'Uhura CLI', details: {home_page_url: 'https://www.dailydrip.com/', api_reference_url: 'https://github.com/dailydrip/uhura'})
+sendgrid = Source.create!(name: 'SendGrid', details: {home_page_url: 'https://sendgrid.com/', api_reference_url: 'https://sendgrid.com/docs/api-reference/'})
+clearstram = Source.create!(name: 'Clearstream', details: {home_page_url: 'https://clearstream.io/', api_reference_url: 'https://sendgrid.com/docs/api-reference/'})
+rspec = Source.create!(name: 'Rspec', details: {home_page_url: 'http://www.betterspecs.org/'})
 
 log '2. Seeding EventTypes'
 evt_info = EventType.create!(name: 'Log Info', label: 'INF', description: 'Information about normal events')
@@ -87,38 +66,33 @@ template_c = Template.create!(name: 'Sample Template C', template_id: 'd-211d56c
 log "7. Seeding Users"
 # Receivers is a temporary table.  When we get the data from Highlands SSO we'll remove the receivers table.
 alice = Receiver.create!(
-  receiver_sso_id: '88543890',
+  receiver_sso_id: Faker::Number.number(digits = 8),
   email: 'alice@aol.com',
-  mobile_number: '7707651573',
+  mobile_number: ENV['ALICES_MOBILE_NUMBER'],
   first_name: 'Alice',
   last_name: 'Green',
   preferences: {email: false, sms: true}
 )
 bob = Receiver.create!(
-  receiver_sso_id: '88543891',
-  email: 'bob.p.k.brown@gmail.com',
-  mobile_number: '4048844202',
+  receiver_sso_id: Faker::Number.number(digits = 8),
+  email: ENV['BOBS_EMAIL'],
+  mobile_number: Faker::PhoneNumber.cell_phone,
   first_name: 'Bob',
   last_name: 'Brown',
   preferences: {email: true, sms: false}
 )
 cindy = Receiver.create!(
-  receiver_sso_id: '88543892',
-  email: 'cindy@msn.com',
-  mobile_number: '4048844203',
+  receiver_sso_id: Faker::Number.number(digits = 8),
+  email: 'cindy@yahoo.com',
+  mobile_number: Faker::PhoneNumber.cell_phone,
   first_name: 'Cindy',
   last_name: 'Red',
   preferences: {email: false, sms: true}
 )
 
-
 log "8. Seeding MsgTarget"
-MsgTarget.create!(name: 'Sendgrid',
-                  description: 'External Email Service')
-
-MsgTarget.create!(name: 'Clearstream',
-                  description: 'External SMS Texting Service')
-
+MsgTarget.create!(name: 'Sendgrid', description: 'External Email Service')
+MsgTarget.create!(name: 'Clearstream', description: 'External SMS Texting Service')
 
 log "9. Seeding Messages"
 msg1 = Message.create!(msg_target_id: MsgTarget.find_by(name: 'Sendgrid').id,
@@ -203,13 +177,11 @@ msg6 = Message.create!(msg_target_id: MsgTarget.find_by(name: 'Clearstream').id,
                        sms_message:  Faker::Movie.quote)
 
 log "10. Seeding SendgridMsg and ClearstreamMsg"
-sg1 = SendgridMsg.create!(sent_to_sendgrid: Time.now,
-                          read_by_user_at: 1.day.from_now)
+sg1 = SendgridMsg.create!(sent_to_sendgrid: Time.now, read_by_user_at: 1.day.from_now)
 msg1.sendgrid_msg = sg1
 msg1.save!
 
-sg2 = SendgridMsg.create!(sent_to_sendgrid: 1.minute.from_now,
-                          read_by_user_at: 2.days.from_now)
+sg2 = SendgridMsg.create!(sent_to_sendgrid: 1.minute.from_now, read_by_user_at: 2.days.from_now)
 msg2.sendgrid_msg = sg2
 msg2.save!
 
@@ -217,13 +189,11 @@ cs1 = ClearstreamMsg.create!(sent_to_clearstream: 2.minutes.from_now)
 msg3.clearstream_msg = cs1
 msg3.save!
 
-
 cs2 = ClearstreamMsg.create!(sent_to_clearstream: 4.minutes.from_now)
 msg4.clearstream_msg = cs2
 msg4.save!
 
-sg3 = SendgridMsg.create!(sent_to_sendgrid: 5.minutes.from_now,
-                          read_by_user_at: 3.days.from_now)
+sg3 = SendgridMsg.create!(sent_to_sendgrid: 5.minutes.from_now, read_by_user_at: 3.days.from_now)
 msg5.sendgrid_msg = sg3
 msg5.save!
 

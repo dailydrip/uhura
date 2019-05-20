@@ -1,4 +1,6 @@
-require "administrate/base_dashboard"
+# frozen_string_literal: true
+
+require 'administrate/base_dashboard'
 
 class SendgridMsgDashboard < Administrate::BaseDashboard
   # ATTRIBUTE_TYPES
@@ -15,7 +17,7 @@ class SendgridMsgDashboard < Administrate::BaseDashboard
     sendgrid_response: Field::Text,
     read_by_user_at: Field::DateTime,
     created_at: Field::DateTime,
-    updated_at: Field::DateTime,
+    updated_at: Field::DateTime
   }.freeze
 
   # COLLECTION_ATTRIBUTES
@@ -23,35 +25,35 @@ class SendgridMsgDashboard < Administrate::BaseDashboard
   #
   # By default, it's limited to four items to reduce clutter on index pages.
   # Feel free to add, remove, or rearrange items.
-  COLLECTION_ATTRIBUTES = [
-    :id,
-    :sent_to_sendgrid,
-    :mail_and_response,
-    :got_response_at,
+  COLLECTION_ATTRIBUTES = %i[
+    id
+    sent_to_sendgrid
+    mail_and_response
+    got_response_at
   ].freeze
 
   # SHOW_PAGE_ATTRIBUTES
   # an array of attributes that will be displayed on the model's show page.
-  SHOW_PAGE_ATTRIBUTES = [
-    :id,
-    :sent_to_sendgrid,
-    :mail_and_response,
-    :got_response_at,
-    :sendgrid_response,
-    :read_by_user_at,
-    :created_at,
-    :updated_at,
+  SHOW_PAGE_ATTRIBUTES = %i[
+    id
+    sent_to_sendgrid
+    mail_and_response
+    got_response_at
+    sendgrid_response
+    read_by_user_at
+    created_at
+    updated_at
   ].freeze
 
   # FORM_ATTRIBUTES
   # an array of attributes that will be displayed
   # on the model's form (`new` and `edit`) pages.
-  FORM_ATTRIBUTES = [
-    :sent_to_sendgrid,
-    :mail_and_response,
-    :got_response_at,
-    :sendgrid_response,
-    :read_by_user_at,
+  FORM_ATTRIBUTES = %i[
+    sent_to_sendgrid
+    mail_and_response
+    got_response_at
+    sendgrid_response
+    read_by_user_at
   ].freeze
 
   # Overwrite this method to customize how sendgrid msgs are displayed

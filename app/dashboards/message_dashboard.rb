@@ -1,4 +1,6 @@
-require "administrate/base_dashboard"
+# frozen_string_literal: true
+
+require 'administrate/base_dashboard'
 
 class MessageDashboard < Administrate::BaseDashboard
   # ATTRIBUTE_TYPES
@@ -8,18 +10,18 @@ class MessageDashboard < Administrate::BaseDashboard
   # which determines how the attribute is displayed
   # on pages throughout the dashboard.
   ATTRIBUTE_TYPES = {
-      sendgrid_msg: Field::BelongsTo,
-      clearstream_msg: Field::BelongsTo,
-      manager: Field::BelongsTo,
-      receiver: Field::BelongsTo,
-      team: Field::BelongsTo,
-      template: Field::BelongsTo,
-      id: Field::Number,
-      email_subject: Field::String,
-      email_message: Field::Text,
-      sms_message: Field::Text,
-      created_at: Field::DateTime,
-      updated_at: Field::DateTime,
+    sendgrid_msg: Field::BelongsTo,
+    clearstream_msg: Field::BelongsTo,
+    manager: Field::BelongsTo,
+    receiver: Field::BelongsTo,
+    team: Field::BelongsTo,
+    template: Field::BelongsTo,
+    id: Field::Number,
+    email_subject: Field::String,
+    email_message: Field::Text,
+    sms_message: Field::Text,
+    created_at: Field::DateTime,
+    updated_at: Field::DateTime
   }.freeze
 
   # COLLECTION_ATTRIBUTES
@@ -27,43 +29,43 @@ class MessageDashboard < Administrate::BaseDashboard
   #
   # By default, it's limited to four items to reduce clutter on index pages.
   # Feel free to add, remove, or rearrange items.
-  COLLECTION_ATTRIBUTES = [
-    :sendgrid_msg,
-    :clearstream_msg,
-    :manager,
-    :receiver,
+  COLLECTION_ATTRIBUTES = %i[
+    sendgrid_msg
+    clearstream_msg
+    manager
+    receiver
   ].freeze
 
   # SHOW_PAGE_ATTRIBUTES
   # an array of attributes that will be displayed on the model's show page.
-  SHOW_PAGE_ATTRIBUTES = [
-    :sendgrid_msg,
-    :clearstream_msg,
-    :manager,
-    :receiver,
-    :team,
-    :template,
-    :id,
-    :email_subject,
-    :email_message,
-    :sms_message,
-    :created_at,
-    :updated_at,
+  SHOW_PAGE_ATTRIBUTES = %i[
+    sendgrid_msg
+    clearstream_msg
+    manager
+    receiver
+    team
+    template
+    id
+    email_subject
+    email_message
+    sms_message
+    created_at
+    updated_at
   ].freeze
 
   # FORM_ATTRIBUTES
   # an array of attributes that will be displayed
   # on the model's form (`new` and `edit`) pages.
-  FORM_ATTRIBUTES = [
-    :sendgrid_msg,
-    :clearstream_msg,
-    :manager,
-    :receiver,
-    :team,
-    :template,
-    :email_subject,
-    :email_message,
-    :sms_message,
+  FORM_ATTRIBUTES = %i[
+    sendgrid_msg
+    clearstream_msg
+    manager
+    receiver
+    team
+    template
+    email_subject
+    email_message
+    sms_message
   ].freeze
 
   # Overwrite this method to customize how messages are displayed

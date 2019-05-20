@@ -1,0 +1,5 @@
+{
+  "status": 422,
+  "data": null,
+  "error": "Required HTTP header (X-Team-ID) is missing."
+}

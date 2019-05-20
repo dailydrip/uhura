@@ -1,0 +1,7 @@
+{
+  "status": 422,
+  "data": null,
+  "error": [
+    "Value email_message missing sections (first section should be named \"section1\")"
+  ]
+}
