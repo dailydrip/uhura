@@ -11,8 +11,6 @@ class Api::V1::MessagesController < Api::V1::ApiBaseController
       sms_message: params[:sms_message]
     )
 
-
-
     if !message_params_vo.valid?
       msg =  message_params_vo.errors.full_messages
       ret = ReturnVo.new(value: nil, error: return_error(msg, :unprocessable_entity))
@@ -23,12 +21,13 @@ class Api::V1::MessagesController < Api::V1::ApiBaseController
       }
       log_error(err_msg)
     else
-      message_vo = MessageVo.new(message_params_vo)
-      # Now that params have been validated, assign attributes gathered in base_api controller
-      message_vo.manager_id = @manager.id # A manager is the sending app.
-      message_vo.manager_email = @manager.email
-      message_vo.manager_name = @manager.name
-      message_vo.team_name = @team_name
+      manager_team_vo = ManagerTeamVo.new(
+          manager_id: @manager.id, # A manager is the sending app.
+          manager_name: @manager.name,
+          manager_email: @manager.email,
+          team_name: @team_name
+      )
+      message_vo = MessageVo.new(message_params_vo, manager_team_vo)
       # Send message
       ret = MessageDirector.send(message_vo)
     end

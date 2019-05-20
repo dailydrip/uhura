@@ -12,4 +12,13 @@ class BaseClass
   def attributes
     self.class.attributes
   end
+
+  def my_attrs
+    self.my_attributes = {} if self.my_attributes.nil?
+    self.attributes.select { |attr| attr != :validation_context }.each do |i|
+      self.my_attributes[i] = self.send(i.to_s)
+    end
+    self.my_attributes.delete(:my_attributes)
+    self.my_attributes
+  end
 end

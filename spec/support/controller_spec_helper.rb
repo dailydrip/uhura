@@ -5,7 +5,7 @@ module ControllerSpecHelper
     {
       'Authorization' => 'Bearer ' + ApiKey.first.auth_token,
       'Content-Type' => 'application/json',
-      'X-Team-ID' => Team.first.name
+      'X-Team-ID' => Team.first.id.to_s
     }
   end
 

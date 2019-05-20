@@ -7,6 +7,7 @@ class Manager < ApplicationRecord
 
   validates :name, presence: true
   validates :public_token, presence: true
+  validates :email, presence: true
 
   has_many :api_keys, dependent: :destroy
   has_many :message_vos

@@ -19,15 +19,15 @@ class Api::V1::ApiBaseController < ApplicationController
   end
 
   def set_team_name
-    team_name = request.headers['X-Team-ID']
+    x_team_id = request.headers['X-Team-ID']
     err_msg = nil
-    if team_name.nil? || team_name.strip.size.eql?(0)
+    if x_team_id.nil? || x_team_id.strip.size.eql?(0)
       err_msg = 'Required HTTP header (X-Team-ID) is missing.'
     else
-      team = Team.find_by(name: team_name)
+      team = Team.find_by(id: x_team_id)
       if team.nil?
-        err_msg = "Team name (#{team_name}) from the X-Team-ID HTTP header NOT found! "
-        err_msg += "Consider adding Team name (#{team_name}) using the Admin app on the Teams page."
+        err_msg = "Team ID (#{x_team_id}) from the X-Team-ID HTTP header NOT found! "
+        err_msg += "Consider adding Team for ID (#{x_team_id}) using the Admin app on the Teams page."
       else
         @team_name = team.name
       end

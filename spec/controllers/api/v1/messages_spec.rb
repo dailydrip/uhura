@@ -185,7 +185,7 @@ RSpec.describe 'Messages API', type: :request do
                                                          headers: { 'Content-Length' => 3 })
         post '/api/v1/messages', headers: valid_headers, params: valid_attributes.to_json
         expect(response.status).to eq 422
-        expect(response.parsed_body['error'][0]).to eq('template_id (4d10bf26b57247deba602127dab1ba60) not found')
+        expect(response.parsed_body['error']).to include('Validation failed: Template must exist')
       end
     end
 
@@ -216,7 +216,7 @@ RSpec.describe 'Messages API', type: :request do
       end
     end
 
-    describe 'when and email with 2 sections is sent' do
+    describe 'when an email with 2 sections is sent' do
       let(:valid_attributes) do
         receiver = Receiver.find_by(first_name: 'Bob')
         manager = Manager.first
@@ -244,7 +244,7 @@ RSpec.describe 'Messages API', type: :request do
       end
     end
 
-    describe 'when and email with no sections sent' do
+    describe 'when an email with no sections sent' do
       let(:valid_attributes) do
         receiver = Receiver.find_by(first_name: 'Bob')
         manager = Manager.first
@@ -265,7 +265,6 @@ RSpec.describe 'Messages API', type: :request do
                                                          status: 422,
                                                          headers: { 'Content-Length' => 3 })
         post '/api/v1/messages', headers: valid_headers, params: valid_attributes.to_json
-        byebug
         expect(response.status).to eq 422
         expect(response.parsed_body['error'][0]).to eq("Value email_message missing sections. First section should be named \"section1\".")
       end
