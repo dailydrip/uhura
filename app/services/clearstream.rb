@@ -46,28 +46,36 @@ class Clearstream
     send_msg(clearstream_data: data, message_id: message_vo.message_id)
   rescue StandardError => e
     err_msg = JSON.parse(e.message)['error']['message']
+    if err_msg.nil?
+      err_msg = JSON.parse(e.message)['error']['msg']
+    end
     if err_msg.include?('supplied subscribers is invalid') # "At least one of the supplied subscribers is invalid."
       # If the subscriber is invalid, let's assume that they've not been registered with Clearstream.io
-      # So, we'll create the subscriber and after the receiver opts-in we'll resend the message.
-
-      # Wait for subscriber to opt in, then...  Q: Clearstream support: How do we know when a user opts in?
-      # Ideally, get user-opted-in event hook and run submit_sms for that newly opted-in user
-      msg_json = {
-        "error_from_clearstrem": err_msg,
-        "assumed_meaning": 'This receiver has not been registered in Clearstream',
-        "action": "Sending request to Clearsream to create a new subscriber for mobile_number (#{message_vo.mobile_number})"
-      }.to_json
-      log_warning(msg_json)
-      ClearstreamClient::MessageClient.create_subscriber(message_vo)
-      # TODO: Add resend message after user opts-in
-      #
+      # So, an entity outside of Uhura should create the subscriber see that they opt in before returning to Uhura.
+      action_msg = {
+        "error_from_clearstream": err_msg,
+        "assumed_meaning": "This receiver with mobile_number (#{message_vo.mobile_number}) has not been registered in Clearstream",
+        "action": "An entity outside Uhura should verify that the user data for receiver_sso_id (#{message_vo.receiver_sso_id}) is valid."
+      }
+      log_warning(action_msg)
+      err_msg = {
+          "msg": err_msg,
+          "action_required:": action_msg
+      }
+      # Uhura does not submit create_subscriber requests.
+      #ClearstreamClient::MessageClient.create_subscriber(message_vo)
     elsif err_msg.include?('You must send your message to at least one subscriber')
-      msg_json = {
-        "error_from_clearstrem": err_msg,
+      # Since Uhura does not submit subscription requests, this block should never be executed
+      action_msg = {
+        "error_from_clearstream": err_msg,
         "assumed_meaning": "A Clearstream subscription request has been sent to this mobile_phone (#{message_vo.mobile_number})",
-        "action": 'None.'
-      }.to_json
-      log_warning(msg_json)
+        "action": "An entity outside Uhura should request Clearsream to create a new subscriber for receiver_sso_id (#{message_vo.receiver_sso_id})"
+      }
+      log_warning(action_msg)
+      err_msg = {
+          "msg": err_msg,
+          "action_required:": action_msg
+      }
     end
     # Handle error in caller
     ReturnVo.new(value: nil, error: return_error(err_msg, :unprocessable_entity))

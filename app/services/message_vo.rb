@@ -13,14 +13,14 @@ class MessageVo
   validates :email_subject, presence: true
   validates :email_message, presence: true
   validates :template_id, presence: true
-  validates :teamsms_message_name, presence: true
   validates :mobile_number, presence: true # This and following needed by ClearstreamClient::MessageClient.create_subscriber
   validates :first, presence: true
   validates :last, presence: true
   validates :email, presence: true
   validates :lists, presence: true
 
-  attr_accessor :manager_id,
+  attr_accessor :public_token,
+                :manager_id,
                 :manager_email,
                 :manager_name,
                 :team_name, # X-TEAM-ID  HTTP header
@@ -37,8 +37,7 @@ class MessageVo
                 :email,
                 :lists
 
-  def ActiveModel.initialize(*args)
-    super
-    validate!
+  def initialize(message_params_vo)
+    self.assign_attributes(message_params_vo.my_attrs)
   end
 end

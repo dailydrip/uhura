@@ -1,0 +1,45 @@
+{
+  "status": 202,
+  "data": {
+    "sendgrid_msg": {
+      "id": 9,
+      "sent_to_sendgrid": "2019-05-17T15:21:03.690Z",
+      "mail_and_response": {
+        "mail": {
+          "from": {
+            "email": "app1@highlands.org"
+          },
+          "subject": "Picnic Next Saturday",
+          "personalizations": [
+            {
+              "to": [
+                {
+                  "email": "bob.p.k.brown@gmail.com",
+                  "name": "Bob Brown"
+                }
+              ],
+              "dynamic_template_data": {
+                "header": "Bind",
+                "section1": "You're more like a game show host.",
+                "section2": "I think we can get her a guest shot on 'Wild Kingdom.' I just whacked her up with about 300 cc's of Thorazaine... she's gonna take a little nap now.",
+                "button": "Action!",
+                "email_subject": "Picnic Next Saturday"
+              }
+            }
+          ],
+          "template_id": "d-4d10bf26b57247deba602127dab1ba60"
+        },
+        "response": {
+          "date": "Fri, 17 May 2019 15:21:44 GMT",
+          "x_message_id": "4mngr6lTQnyNG-ULBKwBkg"
+        }
+      },
+      "got_response_at": "2019-05-17T15:21:03.701Z",
+      "sendgrid_response": "202",
+      "read_by_user_at": null,
+      "created_at": "2019-05-17T15:21:03.691Z",
+      "updated_at": "2019-05-17T15:21:03.702Z"
+    }
+  },
+  "error": null
+}
