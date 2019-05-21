@@ -10,12 +10,12 @@ class MessageDashboard < Administrate::BaseDashboard
   # which determines how the attribute is displayed
   # on pages throughout the dashboard.
   ATTRIBUTE_TYPES = {
-    sendgrid_msg: Field::BelongsTo,
-    clearstream_msg: Field::BelongsTo,
-    manager: Field::BelongsTo,
-    receiver: Field::BelongsTo,
-    team: Field::BelongsTo,
-    template: Field::BelongsTo,
+    sendgrid_msg: BelongsToLabelField,
+    clearstream_msg: BelongsToLabelField,
+    manager: BelongsToLabelField,
+    receiver: BelongsToLabelField,
+    team: BelongsToLabelField,
+    template: BelongsToLabelField,
     id: Field::Number,
     email_subject: Field::String,
     email_message: Field::Text,
