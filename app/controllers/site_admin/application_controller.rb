@@ -6,7 +6,7 @@
 #
 # If you want to add pagination or other controller-level concerns,
 # you're free to overwrite the RESTful controller actions.
-module Uhura
+module SiteAdmin
   class ApplicationController < Administrate::ApplicationController
     include HighlandsAuth::ApplicationHelper
     before_action :authenticate_admin!

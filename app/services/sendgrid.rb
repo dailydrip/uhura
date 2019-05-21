@@ -13,6 +13,7 @@ class Sendgrid
       return false
     end
     message.sendgrid_msg_id = sendgrid_msg_id
+    message.save!
   end
 
   def self.send(message_vo)
@@ -33,8 +34,7 @@ class Sendgrid
     response = sg.client.mail._('send').post(request_body: mail.to_json)
 
     trimmed_response = {
-      date: response.headers && response.headers['date'] ? response.headers['date'][0] : '',
-      x_message_id: response.headers && response.headers['x-message-id'] ? response.headers['x-message-id'][0] : ''
+      date: response.headers && response.headers['date'] ? response.headers['date'][0] : ''
     }
 
     sendgrid_msg = SendgridMsg.create!(sent_to_sendgrid: Time.now,
