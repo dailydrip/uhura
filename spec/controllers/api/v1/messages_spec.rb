@@ -79,7 +79,7 @@ RSpec.describe 'Messages API', type: :request do
       end
     end
 
-    describe 'when the prefered channel is sms' do
+    describe 'when the preferred channel is sms' do
       let(:valid_attributes) do
         receiver = Receiver.find_by(first_name: 'Alice')
         manager = Manager.first
@@ -134,7 +134,7 @@ RSpec.describe 'Messages API', type: :request do
       end
     end
 
-    describe 'when the prefered channel is email' do
+    describe 'when the preferred channel is email' do
       let(:valid_attributes) do
         receiver = Receiver.find_by(first_name: 'Bob')
         manager = Manager.first
