@@ -10,8 +10,8 @@ class UlogDashboard < Administrate::BaseDashboard
   # which determines how the attribute is displayed
   # on pages throughout the dashboard.
   ATTRIBUTE_TYPES = {
-    source: Field::BelongsTo,
-    event_type: Field::BelongsTo,
+    source: BelongsToLabelField,
+    event_type: BelongsToLabelField,
     id: Field::Number,
     details: Field::Text,
     created_at: Field::DateTime,

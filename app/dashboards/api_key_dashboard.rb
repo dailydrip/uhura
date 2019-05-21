@@ -10,7 +10,7 @@ class ApiKeyDashboard < Administrate::BaseDashboard
   # which determines how the attribute is displayed
   # on pages throughout the dashboard.
   ATTRIBUTE_TYPES = {
-    manager: Field::BelongsTo,
+    manager: BelongsToLabelField,
     id: Field::Number,
     auth_token: Field::String,
     created_at: Field::DateTime,
