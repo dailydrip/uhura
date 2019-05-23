@@ -5,14 +5,14 @@
 class MessageDirector
   def self.send(message_vo)
     ret = create_message(message_vo)
-    if ret.error.nil?
-      # Set message_id. Used to link SendgridMsg to Message later.
-      message_vo.message_id = ret.value.id
-    else
-      # return error
+    if !ret.error.nil?
+      # Handle error
       return ret
+    else
+      # Message request has been fully validated and populated.
+      message_vo.message_id = ret.value.id # Set message_id. Used to link SendgridMsg to Message later.
     end
-
+    # Send message using receiver's delivery preference:
     case ret.value.msg_target.name
     when 'Sendgrid'
       message = Sendgrid.send(message_vo)
@@ -37,8 +37,7 @@ class MessageDirector
       log_error(msg)
       message = ReturnVo.new(value: nil, error: return_error(msg, :precondition_failed))
     end
-    # Return message in a ReturnVo
-    message
+    message # Return message in a ReturnVo
   end
 
   private

@@ -3,5 +3,10 @@
 require 'rails_helper'
 
 RSpec.describe ClearstreamMsg, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe 'fields' do
+    it { is_expected.to respond_to(:sent_to_clearstream) }
+    it { is_expected.to respond_to(:response) }
+    it { is_expected.to respond_to(:got_response_at) }
+    it { is_expected.to respond_to(:status) }
+  end
 end

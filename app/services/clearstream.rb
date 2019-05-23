@@ -57,7 +57,7 @@ class Clearstream
         "assumed_meaning": "This receiver with mobile_number (#{message_vo.mobile_number}) has not been registered in Clearstream",
         "action": "An entity outside Uhura should verify that the user data for receiver_sso_id (#{message_vo.receiver_sso_id}) is valid."
       }
-      log_warning(action_msg)
+      log_warn(action_msg)
       err_msg = {
           "msg": err_msg,
           "action_required:": action_msg
@@ -71,7 +71,7 @@ class Clearstream
         "assumed_meaning": "A Clearstream subscription request has been sent to this mobile_phone (#{message_vo.mobile_number})",
         "action": "An entity outside Uhura should request Clearsream to create a new subscriber for receiver_sso_id (#{message_vo.receiver_sso_id})"
       }
-      log_warning(action_msg)
+      log_warn(action_msg)
       err_msg = {
           "msg": err_msg,
           "action_required:": action_msg

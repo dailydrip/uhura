@@ -108,8 +108,9 @@ RSpec.describe 'Messages API', type: :request do
 
     describe 'when the sms reciever has an invalid mobile_number' do
       let(:valid_attributes) do
-        receiver = Receiver.find_by(first_name: 'Alice')
+        receiver = Receiver.first
         receiver.mobile_number = '?+!42'
+        receiver.save!
         manager = Manager.first
         body = {
             "public_token": manager.public_token,
@@ -264,11 +265,12 @@ RSpec.describe 'Messages API', type: :request do
         stub_request(:any, /api.sendgrid.com/).to_return(body: get_sendgrid_response_data('post_message_0_sections'),
                                                          status: 422,
                                                          headers: { 'Content-Length' => 3 })
-        post '/api/v1/messages', headers: valid_headers, params: valid_attributes.to_json
-        expect(response.status).to eq 422
-        expect(response.parsed_body['error'][0]).to eq("Value email_message missing sections. First section should be named \"section1\".")
+        expect do
+          post('/api/v1/messages',
+               headers: valid_headers,
+               params: valid_attributes.to_json).to raise_error(MessageParamsVo::InvalidMessage, /invalid message_params_vo/)
+        end
       end
     end
-
   end
 end

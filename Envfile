@@ -16,6 +16,7 @@ variable :APP_DOMAIN, :String, default: "localhost:3000"
 variable :APP_PROTOCOL, :String, default: "http://"
 variable :BASE_URI, :String, default: "http://localhost:3000"
 variable :API_ENDPOINT, :String, default: "http://localhost:3000/api/v1/"
+variable :ADMIN_PATH, :String, default: "/admin"
 
 # Service Timeout
 #variable :RACK_TIMEOUT_SERVICE_TIMEOUT, :Integer, default: 15
@@ -33,48 +34,6 @@ variable :PGPASSWORD, :String
 
 # Testing
 variable :NUMBER_OF_SLOW_TESTS_TO_DISPLAY, :Integer, default: 3
-
-#-----------------------------------------------
-#             Lookup Values from DB
-#-----------------------------------------------
-
-# Source
-variable :SOURCE_SERVER_ID, :Integer, default: proc { |envied|
-  Source.find_by(name: 'Uhura Server').id
-}
-
-variable :SOURCE_CLIENT_ID, :Integer, default: proc { |envied|
-  Source.find_by(name: 'Uhura Client').id
-}
-
-variable :SOURCE_ADMIN_APP_ID, :Integer, default: proc { |envied|
-  Source.find_by(name: 'Uhura Admin App').id
-}
-
-variable :SOURCE_CLI_ID, :Integer, default: proc { |envied|
-  Source.find_by(name: 'Uhura CLI').id
-}
-
-variable :SOURCE_SENDGRID_ID, :Integer, default: proc { |envied|
-  Source.find_by(name: 'Sendgrid').id
-}
-
-variable :SOURCE_CLEARSTREAM_ID, :Integer, default: proc { |envied|
-  Source.find_by(name: 'Clearstream').id
-}
-
-# EventType
-variable :LOG_INFO_ID, :Integer, default: proc { |envied|
-  EventType.find_by(name: 'Log Info').id
-}
-
-variable :LOG_ERROR_ID, :Integer, default: proc { |envied|
-  EventType.find_by(name: 'Log Error').id
-}
-
-variable :LOG_WARNING_ID, :Integer, default: proc { |envied|
-  EventType.find_by(name: 'Log Warning').id
-}
 
 #-----------------------------------------------
 #               3rd Party Services
@@ -107,10 +66,3 @@ variable :HIGHLANDS_AUTH_REDIRECT, :String
 variable :HIGHLANDS_AUTH_SUPPORT_EMAIL, :String
 variable :HIGHLANDS_SSO_EMAIL, :String
 variable :HIGHLANDS_SSO_PASSWORD, :String
-
-#-----------------------------------------------
-#     Custom Configuration Used for Testing
-#-----------------------------------------------
-
-variable :BOBS_EMAIL, :String
-variable :ALICES_MOBILE_NUMBER, :String

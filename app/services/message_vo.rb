@@ -2,6 +2,9 @@
 
 # This is a value object that also performs data presence validation
 class MessageVo
+  InvalidMessage = Class.new(StandardError)
+  InvalidManagerTeam = Class.new(StandardError)
+
   include ActiveModel::Model
   include ActiveModel::Validations
 
@@ -42,6 +45,10 @@ class MessageVo
                 :lists
 
   def initialize(message_params_vo, manager_team_vo)
+    raise InvalidMessage, 'invalid message_params_vo' unless message_params_vo.valid?
+    raise InvalidManagerTeam, 'invalid manager_team_vo' unless manager_team_vo.valid?
+
+    # Valid input. Now, perform lookups to fill in missing data prior to processing request.
     self.assign_attributes(message_params_vo.my_attrs.merge(manager_team_vo.my_attrs))
     receiver = Receiver.find_by(receiver_sso_id: self.receiver_sso_id)
     if receiver
@@ -65,7 +72,9 @@ class MessageVo
 
   def receiver_preferences
     if self.msg_target_id.nil?
-      errors << "Invalid receiver.preferences (#{@receiver_preferences}). Unable to determine message target (Email/SMS)."
+      msg = "Invalid receiver.preferences (#{@receiver_preferences}). Unable to determine message target (Email/SMS)."
+      log_error(msg)
+      errors.add(:value, "Invalid receiver.preferences (#{@receiver_preferences}). Unable to determine message target (Email/SMS).")
     end
   end
 end

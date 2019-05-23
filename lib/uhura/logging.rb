@@ -1,28 +1,58 @@
 # frozen_string_literal: true
 
-def log(msg, event_type_id = K::LOG_INFO_ID, source_id = K::SOURCE_SERVER_ID)
-  Ulog.create!(source_id: source_id, event_type_id: event_type_id, details: msg)
+# Convenience functions:
+def log(msg)
+  log_info(msg)
 end
 
-# log_info(...) is same as calling log(msg) without source_id or event_type_id params
 def log_info(msg)
-  log(msg, K::LOG_INFO_ID)
+  Rails.logger.info msg
 end
 
 def log_error(msg)
-  log(msg, K::LOG_ERROR_ID)
+  Rails.logger.error msg
 end
 
-def log_warning(msg)
-  log(msg, K::LOG_WARNING_ID)
+def log_warn(msg)
+  Rails.logger.warn msg
 end
 
-def log_puts(msg)
-  log(msg)
+def log_debug(msg)
+  Rails.logger.debug msg
+end
+
+# Example: log_secure! "Authorization Bearer token: #{Manager.first.api_key.auth_token}"
+# $ grep-files-for 'Authorization Bearer token'
+# ./log/development.log:123350:Authorization Bearer token: ********************
+def log_secure(msg)
+  if msg.include?(':')
+    txt_ary = msg.split(':')
+    plain_text = txt_ary[0]
+    secure_text = '*' * txt_ary[1].strip.size
+    msg = "#{plain_text}: #{secure_text}"
+  else
+    msg = '*' * msg.strip.size
+  end
+  Rails.logger.debug msg
+end
+
+# Send msg to Rails logger and console:
+def log!(msg)
+  log_info(msg)
   puts(msg)
 end
 
-def log_err_puts(msg)
+def log_err!(msg)
   log_error(msg)
+  puts(msg)
+end
+
+def log_debug!(msg)
+  log_secure(msg)
+  puts(msg)
+end
+
+def log_secure!(msg)
+  log_secure(msg)
   puts(msg)
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -45,6 +47,8 @@ Rails.application.configure do
   # Highlight code that triggered database queries in logs.
   config.active_record.verbose_query_logs = true
 
+  config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+
   # Debug mode disables concatenation and preprocessing of assets.
   # This option may cause significant delays in view rendering with a large
   # number of complex assets.
@@ -71,28 +75,5 @@ class Object
     else
       self.public_methods.sort - Object.new.public_methods
     end
-  end
-end
-
-# Use ulog in irb or rails console as follows:
-#
-# uhura> ulog 23
-# {
-#     "error_from_clearstrem" => "You must send your message to at least one subscriber.",
-#     "assumed_meaning" => "A Clearstream subscription request has been sent to this mobile_phone (4048844203)",
-#     "action" => "None."
-# }
-def ulog(id)
-  begin
-    ulog = Ulog.find(id)
-    # Try to parse details
-    begin
-      msg_hash = JSON.parse(ulog.details)
-      ap msg_hash
-    rescue Exception => e
-      puts ulog.details
-    end
-  rescue Exception => e
-    puts "Ulog record (#{id}) not found!"
   end
 end

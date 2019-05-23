@@ -2,6 +2,6 @@
 
 FactoryBot.define do
   factory :team do
-    name { Faker::Name.last_name }
+    name { Faker::Team.name }
   end
 end

@@ -10,13 +10,14 @@ RSpec.configure do |config|
     DatabaseCleaner.clean_with(:truncation)
     # Seed tables
     app1 = Manager.create!(name: 'Sample - App 1', email: 'app1@highlands.org')
-    ApiKey.create!(manager: app1)
+    app1.public_token = '42c50c442ee3ca01378e'       # Set to specific value to match tests
+    app1.save!
+    api_key1 = ApiKey.create!(manager: app1)
+    api_key1.auth_token = 'b1dcc4b8287a82fe8889' # Set to specific value to match tests
+    api_key1.save!
     leadership_team = Team.create!(name: 'Leadership Team')
     campus_pastor_team = Team.create!(name: 'Campus Pastor Team')
     accounting_team = Team.create!(name: 'Accounting Team')
-    evt_info = EventType.create!(name: 'Log Info', label: 'INF', description: 'Information about normal events')
-    evt_err = EventType.create!(name: 'Log Error', label: 'ERR', description: 'Information about errors')
-    evt_wrn = EventType.create!(name: 'Log Warning', label: 'WRN', description: 'Information about abnormal/unexpected events that are not errors')
     MsgTarget.create!(name: 'Sendgrid', description: 'External Email Service')
     MsgTarget.create!(name: 'Clearstream', description: 'External SMS Texting Service')
     template_a = Template.create!(name: 'Sample Template A', template_id: 'd-f986df533e514f978f4460bedca50db0', sample_template_data: '{
@@ -37,24 +38,20 @@ RSpec.configure do |config|
       "section3": Faker::Quote.matz,
       "button": Faker::Verb.base.capitalize
     }')
-    rspec = Source.create!(
-      name: 'Rspec',
-      details: { home_page_url: 'http://www.betterspecs.org/' }
-    )
     # Alice prefers SMS
     alice = Receiver.create!(
-        receiver_sso_id: Faker::Number.number(digits = 8),
+        receiver_sso_id: '34430309',
         email: 'alice@aol.com',
-        mobile_number: ENV['ALICES_MOBILE_NUMBER'],
+        mobile_number: '9999999999',
         first_name: 'Alice',
         last_name: 'Green',
         preferences: { email: false, sms: true }
     )
     # Bob prefers Email
     bob = Receiver.create!(
-        receiver_sso_id: Faker::Number.number(digits = 8),
-        email: ENV['BOBS_EMAIL'],
-        mobile_number: Faker::PhoneNumber.cell_phone,
+        receiver_sso_id: '55357499',
+        email: 'bob@gmail.com',
+        mobile_number: '5555555555',
         first_name: 'Bob',
         last_name: 'Brown',
         preferences: { email: true, sms: false }

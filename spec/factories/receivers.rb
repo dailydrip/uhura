@@ -7,6 +7,6 @@ FactoryBot.define do
     mobile_number { Faker::PhoneNumber.cell_phone }
     first_name { Faker::Name.first_name }
     last_name { Faker::Name.last_name }
-    preferences { { "email": false, "sms": true } }
+    preferences { { 'email': false, 'sms': true } }
   end
 end
