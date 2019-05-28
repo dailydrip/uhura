@@ -1,4 +1,6 @@
-require "administrate/field/base"
+# frozen_string_literal: true
+
+require 'administrate/field/base'
 
 class BelongsToLabelField < Administrate::Field::Associative
   def self.permitted_attribute(attr, _options = nil)
@@ -16,7 +18,7 @@ class BelongsToLabelField < Administrate::Field::Associative
   end
 
   def selected_option
-    data && data.send(primary_key)
+    data&.send(primary_key)
   end
 
   private

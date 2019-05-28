@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class BaseClass
   def self.attr_accessor(*vars)
     @attributes ||= []
@@ -5,8 +7,8 @@ class BaseClass
     super(*vars)
   end
 
-  def self.attributes
-    @attributes
+  class << self
+    attr_reader :attributes
   end
 
   def attributes
@@ -14,11 +16,11 @@ class BaseClass
   end
 
   def my_attrs
-    self.my_attributes = {} if self.my_attributes.nil?
-    self.attributes.select { |attr| attr != :validation_context }.each do |i|
-      self.my_attributes[i] = self.send(i.to_s)
+    self.my_attributes = {} if my_attributes.nil?
+    attributes.reject { |attr| attr == :validation_context }.each do |i|
+      my_attributes[i] = send(i.to_s)
     end
-    self.my_attributes.delete(:my_attributes)
-    self.my_attributes
+    my_attributes.delete(:my_attributes)
+    my_attributes
   end
 end

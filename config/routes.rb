@@ -3,7 +3,7 @@ Rails.application.routes.draw do
 
   mount HighlandsAuth::Engine => "/highlands_sso", :as => "auth"
 
-  namespace :site_admin, path: AppCfg['ADMIN_PATH'] do
+  namespace :site_admin, path: '/admin' do
       resources :api_keys
       resources :clearstream_msgs
       resources :managers

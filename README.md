@@ -312,9 +312,9 @@ All examples were filtered out
 Finished in 0.00074 seconds (files took 3.8 seconds to load)
 0 examples, 0 failures, 1 error occurred outside of examples
 
-lex@k2 ~/Clients/Concur/Projects/uhura (feature/customize-admin-views) $ . .env
+$ . .env
 
-lex@k2 ~/Clients/Concur/Projects/uhura (feature/customize-admin-views) $ be rspec spec/controllers/api/v1/messages_spec.rb:130
+$ be rspec spec/controllers/api/v1/messages_spec.rb:130
 Run options: include {:locations=>{"./spec/controllers/api/v1/messages_spec.rb"=>[130]}}
 . . .
 ```

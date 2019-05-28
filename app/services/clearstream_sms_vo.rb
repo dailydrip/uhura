@@ -6,7 +6,7 @@ class ClearstreamSmsVo
   include ActiveModel::Validations
 
   attr_accessor :receiver_email,
-                :sms_message,
+                # :sms_message,  # <= defined below
                 :mobile_number,
                 :first_name,
                 :last_name,

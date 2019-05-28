@@ -3,6 +3,6 @@
 FactoryBot.define do
   factory :manager do
     name { Faker::Company.name }
-    email { Faker::Internet::email }
+    email { Faker::Internet.email }
   end
 end

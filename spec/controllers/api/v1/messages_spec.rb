@@ -7,8 +7,7 @@ RSpec.describe 'Messages API', type: :request do
     let(:valid_attributes) do
       receiver = Receiver.first
       manager = Manager.first
-
-      body = {
+      {
         "public_token": manager.public_token,
         "receiver_sso_id": receiver.receiver_sso_id,
         "email_subject": 'Picnic Saturday',
@@ -47,8 +46,8 @@ RSpec.describe 'Messages API', type: :request do
     context 'when it is missing the X-Team-ID HTTP header' do
       let(:header_without_team_id) do
         {
-            'Authorization' => 'Bearer ' + ApiKey.first.auth_token,
-            'Content-Type' => 'application/json'
+          'Authorization' => 'Bearer ' + ApiKey.first.auth_token,
+          'Content-Type' => 'application/json'
         }
       end
       it 'returns an error saying the Team ID is not found' do
@@ -64,9 +63,9 @@ RSpec.describe 'Messages API', type: :request do
     context 'when it has an invalid X-Team-ID HTTP header' do
       let(:header_without_team_id) do
         {
-            'Authorization' => 'Bearer ' + ApiKey.first.auth_token,
-            'Content-Type' => 'application/json',
-            'X-Team-ID' => 'BOGUS_DATA'
+          'Authorization' => 'Bearer ' + ApiKey.first.auth_token,
+          'Content-Type' => 'application/json',
+          'X-Team-ID' => 'BOGUS_DATA'
         }
       end
       it 'returns an error saying the X-Team-ID HTTP header was NOT found' do
@@ -83,17 +82,17 @@ RSpec.describe 'Messages API', type: :request do
       let(:valid_attributes) do
         receiver = Receiver.find_by(first_name: 'Alice')
         manager = Manager.first
-        body = {
-            "public_token": manager.public_token,
-            "receiver_sso_id": receiver.receiver_sso_id,
-            "email_subject": 'Picnic Saturday',
-            "email_message": {
-                "header": 'Dragon Rage',
-                "section1": 'imagine you are writing an email.',
-                "button": 'Count me in!'
-            },
-            "template_id": 'd-f986df533e514f978f4460bedca50db0',
-            "sms_message": 'Come in now for 50% off all rolls!'
+        {
+          "public_token": manager.public_token,
+          "receiver_sso_id": receiver.receiver_sso_id,
+          "email_subject": 'Picnic Saturday',
+          "email_message": {
+            "header": 'Dragon Rage',
+            "section1": 'imagine you are writing an email.',
+            "button": 'Count me in!'
+          },
+          "template_id": 'd-f986df533e514f978f4460bedca50db0',
+          "sms_message": 'Come in now for 50% off all rolls!'
         }
       end
       it 'calls clearstream returning a status of QUEUED' do
@@ -112,17 +111,17 @@ RSpec.describe 'Messages API', type: :request do
         receiver.mobile_number = '?+!42'
         receiver.save!
         manager = Manager.first
-        body = {
-            "public_token": manager.public_token,
-            "receiver_sso_id": receiver.receiver_sso_id,
-            "email_subject": 'Picnic Saturday',
-            "email_message": {
-                "header": 'Dragon Rage',
-                "section1": 'imagine you are writing an email.',
-                "button": 'Count me in!'
-            },
-            "template_id": 'd-f986df533e514f978f4460bedca50db0',
-            "sms_message": 'Come in now for 50% off all rolls!'
+        {
+          "public_token": manager.public_token,
+          "receiver_sso_id": receiver.receiver_sso_id,
+          "email_subject": 'Picnic Saturday',
+          "email_message": {
+            "header": 'Dragon Rage',
+            "section1": 'imagine you are writing an email.',
+            "button": 'Count me in!'
+          },
+          "template_id": 'd-f986df533e514f978f4460bedca50db0',
+          "sms_message": 'Come in now for 50% off all rolls!'
         }
       end
       it 'Clearstream does not process it' do
@@ -139,17 +138,17 @@ RSpec.describe 'Messages API', type: :request do
       let(:valid_attributes) do
         receiver = Receiver.find_by(first_name: 'Bob')
         manager = Manager.first
-        body = {
-            "public_token": manager.public_token,
-            "receiver_sso_id": receiver.receiver_sso_id,
-            "email_subject": 'Picnic Saturday',
-            "email_message": {
-                "header": 'Dragon Rage',
-                "section1": 'imagine you are writing an email.',
-                "button": 'Count me in!'
-            },
-            "template_id": 'd-f986df533e514f978f4460bedca50db0',
-            "sms_message": 'Come in now for 50% off all rolls!'
+        {
+          "public_token": manager.public_token,
+          "receiver_sso_id": receiver.receiver_sso_id,
+          "email_subject": 'Picnic Saturday',
+          "email_message": {
+            "header": 'Dragon Rage',
+            "section1": 'imagine you are writing an email.',
+            "button": 'Count me in!'
+          },
+          "template_id": 'd-f986df533e514f978f4460bedca50db0',
+          "sms_message": 'Come in now for 50% off all rolls!'
         }
       end
       it 'calls Sendgrid and returns a successful sendgrid_response' do
@@ -166,18 +165,18 @@ RSpec.describe 'Messages API', type: :request do
       let(:valid_attributes) do
         receiver = Receiver.find_by(first_name: 'Bob')
         manager = Manager.first
-        body = {
-            "public_token": manager.public_token,
-            "receiver_sso_id": receiver.receiver_sso_id,
-            "email_subject": 'Picnic Next Saturday',
-            "email_message": {
-                "header": 'Bind',
-                "section1": "You're more like a game show host.",
-                "section2": "I think we can get her a guest shot on 'Wild Kingdom.' I just whacked her up with about 300 cc's of Thorazaine... she's gonna take a little nap now.",
-                "button": 'Action!'
-            },
-            "template_id": '4d10bf26b57247deba602127dab1ba60',
-            "sms_message": 'Bring Dessert to the Picnic Next Saturday'
+        {
+          "public_token": manager.public_token,
+          "receiver_sso_id": receiver.receiver_sso_id,
+          "email_subject": 'Picnic Next Saturday',
+          "email_message": {
+            "header": 'Bind',
+            "section1": "You're more like a game show host.",
+            "section2": "I think we can get her a guest shot on 'Wild Kingdom.' I just whacked her up with about 300 cc's of Thorazaine... she's gonna take a little nap now.",
+            "button": 'Action!'
+          },
+          "template_id": '4d10bf26b57247deba602127dab1ba60',
+          "sms_message": 'Bring Dessert to the Picnic Next Saturday'
         }
       end
       it 'returns status code 422' do
@@ -194,17 +193,17 @@ RSpec.describe 'Messages API', type: :request do
       let(:valid_attributes) do
         receiver = Receiver.find_by(first_name: 'Bob')
         manager = Manager.first
-        body = {
-            "public_token": manager.public_token,
-            "receiver_sso_id": receiver.receiver_sso_id,
-            "email_subject": 'Picnic Saturday',
-            "email_message": {
-                "header": 'Dragon Rage',
-                "section1": 'imagine you are writing an email.',
-                "button": 'Count me in!'
-            },
-            "template_id": 'd-f986df533e514f978f4460bedca50db0',
-            "sms_message": 'Come in now for 50% off all rolls!'
+        {
+          "public_token": manager.public_token,
+          "receiver_sso_id": receiver.receiver_sso_id,
+          "email_subject": 'Picnic Saturday',
+          "email_message": {
+            "header": 'Dragon Rage',
+            "section1": 'imagine you are writing an email.',
+            "button": 'Count me in!'
+          },
+          "template_id": 'd-f986df533e514f978f4460bedca50db0',
+          "sms_message": 'Come in now for 50% off all rolls!'
         }
       end
       it 'returns status code 200' do
@@ -221,18 +220,18 @@ RSpec.describe 'Messages API', type: :request do
       let(:valid_attributes) do
         receiver = Receiver.find_by(first_name: 'Bob')
         manager = Manager.first
-        body = {
-            "public_token": manager.public_token,
-            "receiver_sso_id": receiver.receiver_sso_id,
-            "email_subject": "Picnic Next Saturday",
-            "email_message": {
-                "header": "Bind",
-                "section1": "You're more like a game show host.",
-                "section2": "I think we can get her a guest shot on 'Wild Kingdom.' I just whacked her up with about 300 cc's of Thorazaine... she's gonna take a little nap now.",
-                "button": "Action!"
-            },
-            "template_id": "d-4d10bf26b57247deba602127dab1ba60",
-            "sms_message": "Bring Dessert to the Picnic Next Saturday"
+        {
+          "public_token": manager.public_token,
+          "receiver_sso_id": receiver.receiver_sso_id,
+          "email_subject": 'Picnic Next Saturday',
+          "email_message": {
+            "header": 'Bind',
+            "section1": "You're more like a game show host.",
+            "section2": "I think we can get her a guest shot on 'Wild Kingdom.' I just whacked her up with about 300 cc's of Thorazaine... she's gonna take a little nap now.",
+            "button": 'Action!'
+          },
+          "template_id": 'd-4d10bf26b57247deba602127dab1ba60',
+          "sms_message": 'Bring Dessert to the Picnic Next Saturday'
         }
       end
       it 'returns status code 200' do
@@ -249,16 +248,16 @@ RSpec.describe 'Messages API', type: :request do
       let(:valid_attributes) do
         receiver = Receiver.find_by(first_name: 'Bob')
         manager = Manager.first
-        body = {
-            "public_token": manager.public_token,
-            "receiver_sso_id": receiver.receiver_sso_id,
-            "email_subject": "Picnic Saturday",
-            "email_message": {
-                "header": "Dragon Rage",
-                "button": "Count me in!"
-            },
-            "template_id": "d-f986df533e514f978f4460bedca50db0",
-            "sms_message": "Bring Drinks to the Picnic this Saturday"
+        {
+          "public_token": manager.public_token,
+          "receiver_sso_id": receiver.receiver_sso_id,
+          "email_subject": 'Picnic Saturday',
+          "email_message": {
+            "header": 'Dragon Rage',
+            "button": 'Count me in!'
+          },
+          "template_id": 'd-f986df533e514f978f4460bedca50db0',
+          "sms_message": 'Bring Drinks to the Picnic this Saturday'
         }
       end
       it 'returns status code 422' do
@@ -268,7 +267,7 @@ RSpec.describe 'Messages API', type: :request do
         expect do
           post('/api/v1/messages',
                headers: valid_headers,
-               params: valid_attributes.to_json).to raise_error(MessageParamsVo::InvalidMessage, /invalid message_params_vo/)
+               params: valid_attributes.to_json).to raise_error(MessageParamsVo::InvalidMessageError, /invalid message_params_vo/)
         end
       end
     end

@@ -20,8 +20,6 @@ class ManagerTeamVo < BaseClass
 
   def initialize(*args)
     super(args[0])
-    raise InvalidManagerTeam, 'invalid manager_team_vo' unless self.valid?
+    raise InvalidManagerTeam, 'invalid manager_team_vo' unless valid?
   end
-
-
 end
