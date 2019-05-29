@@ -20,7 +20,7 @@ class Sendgrid
   # rubocop:disable all
   def self.send(message_vo)
     # Execute Sendgrid request
-    response_and_mail = SendgridMailer.new.send_email(message_vo) # .deliver_later
+    response_and_mail = SendgridMailer.new.send_email(message_vo)
     response = response_and_mail[:response]
     mail = response_and_mail[:mail]
     # Record date Sendgrid server said they got the message. body attribute will be populated if there's an error.
