@@ -105,7 +105,7 @@ RSpec.describe 'Messages API', type: :request do
       end
     end
 
-    describe 'when the sms reciever has an invalid mobile_number' do
+    describe 'when the sms receiver has an invalid mobile_number' do
       let(:valid_attributes) do
         receiver = Receiver.first
         receiver.mobile_number = '?+!42'

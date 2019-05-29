@@ -9,9 +9,9 @@ The envied gem ensures that the environment variables you specify in Envfile exi
 If they don't you'll get initialization errors like the following:
 
 ```
-[lex@k2 uhura]$ unset SOURCE_CLI_ID
-[lex@k2 uhura]$ irb
-Loading Rails...Error : 'load /home/lex/.irbrc' : uninitialized constant Source
+$ unset SOURCE_CLI_ID
+$ irb
+Loading Rails...Error : 'load $HOME/.irbrc' : uninitialized constant Source
 irb: warn: can't alias context from irb_context.
 2.6.1 :001 >
 ```
@@ -19,8 +19,8 @@ irb: warn: can't alias context from irb_context.
 Export the missing environment variable:
 
 ```
-[lex@k2 uhura]$ export SOURCE_CLI_ID=4
-[lex@k2 uhura]$ irb
+$ export SOURCE_CLI_ID=4
+$ irb
 Loading Rails...SUCCESS!  Loaded ENV['IRB_LOGGER']: development, ENV['IRB_LOGGER']:
 ActiveRecord::Base.connection.instance_values['config'][:adapter]: postgresql
 @db = ActiveRecord::Base.connection
@@ -288,15 +288,15 @@ Ditto for Clearstream.
 If you get this error, then you probably just need to source your .env file.
 
 ```
-lex@k2 ~/Clients/Concur/Projects/uhura (feature/customize-admin-views) $ be rspec spec/controllers/api/v1/messages_spec.rb:130
+$ be rspec spec/controllers/api/v1/messages_spec.rb:130
 
 An error occurred while loading ./spec/controllers/api/v1/messages_spec.rb.
 Failure/Error: require File.expand_path('../config/environment', __dir__)
 
 RuntimeError:
   The following environment variables should be set: TOKEN_AUTH_USER, TOKEN_AUTH_PASSWORD, PGUSER, PGPASSWORD, GITHUB_KEY, GITHUB_SECRET, GITHUB_TOKEN, SENDGRID_API_KEY, CLEARSTREAM_KEY, CLEARSTREAM_URL, CLEARSTREAM_DEFAULT_LIST_ID, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_TOKEN_SECRET, TWITTER_KEY, TWITTER_SECRET, SSO_KEY, SSO_SECRET, HIGHLANDS_AUTH_REDIRECT, HIGHLANDS_AUTH_SUPPORT_EMAIL, HIGHLANDS_SSO_EMAIL, HIGHLANDS_SSO_PASSWORD.
-# /home/lex/.rvm/gems/ruby-2.6.1/gems/envied-0.9.1/lib/envied.rb:38:in `error_on_missing_variables!'
-# /home/lex/.rvm/gems/ruby-2.6.1/gems/envied-0.9.1/lib/envied.rb:19:in `require'
+# $HOME/.rvm/gems/ruby-2.6.1/gems/envied-0.9.1/lib/envied.rb:38:in `error_on_missing_variables!'
+# $HOME/.rvm/gems/ruby-2.6.1/gems/envied-0.9.1/lib/envied.rb:19:in `require'
 # ./config/application.rb:8:in `<top (required)>'
 # ./config/environment.rb:2:in `require_relative'
 # ./config/environment.rb:2:in `<top (required)>'

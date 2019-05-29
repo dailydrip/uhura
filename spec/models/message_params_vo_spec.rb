@@ -4,24 +4,19 @@ require 'rails_helper'
 
 RSpec.describe MessageParamsVo, type: :model do
   describe 'validations' do
-    before(:each) do
-      @params = {
+    def message_params(new_params = {})
+      {
         public_token: '82a1782d202d49efef87',
         receiver_sso_id: '88543890',
         email_subject: 'Picnic Saturday',
         email_message: {
-          header: 'Rock Slide',
-          section1: 'Plant a memory, plant a tree, do it today for tomorrow.',
-          button: 'Brush'
+            header: 'Rock Slide',
+            section1: 'Plant a memory, plant a tree, do it today for tomorrow.',
+            button: 'Brush'
         },
         template_id: 'd-f986df533e514f978f4460bedca50db0',
         sms_message: 'Come in now for 50% off all rolls!'
-      }
-    end
-
-    def message_params(new_params = {})
-      params = @params.merge(new_params)
-      params
+      }.merge(new_params)
     end
 
     context 'initialization' do
