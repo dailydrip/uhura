@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Clearstream
+  # rubocop:disable all
   def self.link_clearstream_msg_to_message(message_id, clearstream_msg_id)
     clearstream_msg = ClearstreamMsg.find_by(id: clearstream_msg_id)
     if clearstream_msg.nil?
@@ -46,38 +47,35 @@ class Clearstream
     send_msg(clearstream_data: data, message_id: message_vo.message_id)
   rescue StandardError => e
     err_msg = JSON.parse(e.message)['error']['message']
-    if err_msg.nil?
-      err_msg = JSON.parse(e.message)['error']['msg']
-    end
+    err_msg = JSON.parse(e.message)['error']['msg'] if err_msg.nil?
+    # Log Clearstream subscription warnings if necessary. Note Uhura does not submit create_subscriber requests.
     if err_msg.include?('supplied subscribers is invalid') # "At least one of the supplied subscribers is invalid."
       # If the subscriber is invalid, let's assume that they've not been registered with Clearstream.io
       # So, an entity outside of Uhura should create the subscriber see that they opt in before returning to Uhura.
       action_msg = {
         "error_from_clearstream": err_msg,
-        "assumed_meaning": "This receiver with mobile_number (#{message_vo.mobile_number}) has not been registered in Clearstream",
-        "action": "An entity outside Uhura should verify that the user data for receiver_sso_id (#{message_vo.receiver_sso_id}) is valid."
+        "assumed_meaning": "This receiver w/ mobile_number (#{message_vo.mobile_number}) not registered in Clearstream",
+        "action": "Research whether receiver_sso_id (#{message_vo.receiver_sso_id}) is valid."
       }
-      log_warning(action_msg)
+      log_warn(action_msg)
       err_msg = {
-          "msg": err_msg,
-          "action_required:": action_msg
+        "msg": err_msg,
+        "action_required:": action_msg
       }
-      # Uhura does not submit create_subscriber requests.
-      #ClearstreamClient::MessageClient.create_subscriber(message_vo)
     elsif err_msg.include?('You must send your message to at least one subscriber')
       # Since Uhura does not submit subscription requests, this block should never be executed
       action_msg = {
         "error_from_clearstream": err_msg,
-        "assumed_meaning": "A Clearstream subscription request has been sent to this mobile_phone (#{message_vo.mobile_number})",
-        "action": "An entity outside Uhura should request Clearsream to create a new subscriber for receiver_sso_id (#{message_vo.receiver_sso_id})"
+        "action": "Research status of Clearstream subscription for receiver_sso_id (#{message_vo.receiver_sso_id})"
       }
-      log_warning(action_msg)
+      log_warn(action_msg)
       err_msg = {
-          "msg": err_msg,
-          "action_required:": action_msg
+        "msg": err_msg,
+        "action_required:": action_msg
       }
     end
     # Handle error in caller
     ReturnVo.new(value: nil, error: return_error(err_msg, :unprocessable_entity))
   end
+  # rubocop:enable all
 end

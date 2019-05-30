@@ -3,16 +3,17 @@
 # MessageDirector acts as a service, sending and email and/or an sms message
 
 class MessageDirector
+  # rubocop:disable all
   def self.send(message_vo)
     ret = create_message(message_vo)
-    if ret.error.nil?
-      # Set message_id. Used to link SendgridMsg to Message later.
-      message_vo.message_id = ret.value.id
-    else
-      # return error
+    if !ret.error.nil?
       return ret
+    else
+      # Message request has been fully validated and populated.
+      message_vo.message_id = ret.value.id # Set message_id. Used to link SendgridMsg to Message later.
     end
 
+    # Send message using receiver's delivery preference:
     case ret.value.msg_target.name
     when 'Sendgrid'
       message = Sendgrid.send(message_vo)
@@ -20,7 +21,8 @@ class MessageDirector
         msg = message.error[:error]
         log_error(msg)
       else
-        msg = "Sent Email: subject (#{message_vo.email_subject}) from (#{message_vo.manager_name}) to (#{message_vo.receiver_email})"
+        msg = "Sent Email: subject (#{message_vo.email_subject}) "
+        msg += "from (#{message_vo.manager_name}) to (#{message_vo.receiver_email})"
         log_info(msg)
       end
     when 'Clearstream'
@@ -29,22 +31,21 @@ class MessageDirector
         msg = message.error[:error]
         log_error(msg)
       else
-        msg = "Sent SMS: (#{message_vo.team_name}:#{message_vo.email_subject}) from (#{message_vo.manager_name}) to (#{message_vo.mobile_number})"
+        msg = "Sent SMS: (#{message_vo.team_name}:#{message_vo.email_subject}) "
+        msg += "from (#{message_vo.manager_name}) to (#{message_vo.mobile_number})"
         log_info(msg)
       end
     else
-      msg = "Sent message: subject (#{message_vo.sms_message}) to (#{message_vo.receiver_email}), but receiver prefers neither Email nor SMS!"
+      msg = "Sent message: subject (#{message_vo.sms_message}) to (#{message_vo.receiver_email}), "
+      msg += 'but receiver prefers neither Email nor SMS!'
       log_error(msg)
       message = ReturnVo.new(value: nil, error: return_error(msg, :precondition_failed))
     end
-    # Return message in a ReturnVo
-    message
+    message # Return message in a ReturnVo
   end
 
-  private
-
   # This is where we verify that the data passed matches with data in the database and set the message target.
-  def self.create_message(message_vo)
+  private_class_method def self.create_message(message_vo)
     if !message_vo.valid?
       ReturnVo.new(value: nil, error: return_error(message_vo.errors, :unprocessable_entity))
     else
@@ -66,4 +67,5 @@ class MessageDirector
       end
     end
   end
+  # rubocop:enable all
 end

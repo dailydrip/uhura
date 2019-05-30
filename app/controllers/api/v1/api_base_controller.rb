@@ -8,6 +8,7 @@ class Api::V1::ApiBaseController < ApplicationController
 
   protected
 
+  # rubocop:disable all
   def set_manager
     session[:public_token] = params[:public_token] if params[:public_token]
     @manager = Manager.find_by(public_token: session[:public_token]) if session[:public_token]
@@ -51,4 +52,5 @@ class Api::V1::ApiBaseController < ApplicationController
     log_error(msg)
     render json: return_error(msg), status: :unauthorized
   end
+  # rubocop:enable all
 end

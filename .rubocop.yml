@@ -66,6 +66,7 @@ AllCops:
     - 'db/**/*'
     - 'config/**/*'
     - 'Gemfile'
+    - 'personal/**/*'
   # Default formatter will be used if no `-f/--format` option is given.
   DefaultFormatter: progress
   # Cop names are displayed in offense messages by default. Change behavior
@@ -138,6 +139,7 @@ AllCops:
   # application. If neither of those files exist, RuboCop will use Rails 5.0
   # as the default.
   TargetRailsVersion: ~
+
 
 #################### Bundler ###############################
 
@@ -1649,10 +1651,8 @@ Metrics/BlockLength:
   VersionChanged: '0.58'
   CountComments: false  # count full line comments?
   Max: 25
-  ExcludedMethods:
-    # By default, exclude the `#refine` method, as it tends to have larger
-    # associated blocks.
-    - refine
+  Exclude:
+    - "spec/**/*"
 
 Metrics/BlockNesting:
   Description: 'Avoid excessive block nesting'
@@ -1680,12 +1680,12 @@ Metrics/CyclomaticComplexity:
   Max: 6
 
 Metrics/LineLength:
-  Description: 'Limit lines to 80 characters.'
-  StyleGuide: '#80-character-limits'
+  Description: 'Limit lines to 120 characters.'
+  StyleGuide: '#120-character-limits'
   Enabled: true
   VersionAdded: '0.25'
   VersionChanged: '0.46'
-  Max: 90
+  Max: 120
   # To make it possible to copy or click on URIs in the code, we allow lines
   # containing a URI to be longer than Max.
   AllowHeredoc: true
@@ -1701,8 +1701,7 @@ Metrics/LineLength:
   # any regular expression listed in this option will be ignored by LineLength.
   IgnoredPatterns: []
   Exclude:
-    - 'spec/**/*'
-    - 'test/**/*'
+    - "spec/**/*"
 
 Metrics/MethodLength:
   Description: 'Avoid methods longer than 10 lines of code.'
@@ -2075,11 +2074,6 @@ Performance/InefficientHashSearch:
   Enabled: true
   VersionAdded: '0.56'
   Safe: false
-
-Performance/LstripRstrip:
-  Description: 'Use `strip` instead of `lstrip.rstrip`.'
-  Enabled: true
-  VersionAdded: '0.36'
 
 Performance/OpenStruct:
   Description: 'Use `Struct` instead of `OpenStruct`.'

@@ -4,7 +4,7 @@ HighlandsAuth::SessionsController.class_eval do
   private
 
   def redirect_user
-    redirect_to '/uhura'
+    redirect_to AppCfg['ADMIN_PATH']
   end
 
   def after_update_user

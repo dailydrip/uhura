@@ -6,7 +6,7 @@ ruby '2.6.1'
 gem 'rails', '~> 6.0.0.rc1'   # You can bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'pg', '>= 0.18', '< 2.0'  # Use postgresql as the database for Active Record
 gem 'puma', '~> 3.11'         # Use Puma as the app server
-gem 'sass-rails', '~> 5'      # Use SCSS for stylesheets
+# gem 'sass-rails', '~> 5'      # Use SCSS for stylesheets
 gem 'webpacker', '~> 4.0'     # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
 gem 'turbolinks', '~> 5'      # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
 gem 'jbuilder', '~> 2.5'      # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
@@ -33,16 +33,7 @@ gem "haml-rails" #, "~> 2.0"
 gem 'font-awesome-sass', '~> 5.6', '>= 5.6.1'
 #gem 'administrate', github: 'thoughtbot/administrate'
 gem 'administrate', github: 'l3x/administrate'
-# gem 'devise', '~> 4.6', '>= 4.6.1'
-# gem 'devise-bootstrapped', github: 'l3x/devise-bootstrapped'
-# gem 'friendly_id', '~> 5.2', '>= 5.2.5'
-# gem 'gravatar_image_tag', github: 'mdeering/gravatar_image_tag'
-# gem 'mini_magick', '~> 4.9', '>= 4.9.2'
-# gem 'name_of_person', '~> 1.1'
-# gem 'omniauth-facebook', '~> 5.0'
-# gem 'omniauth-github', '~> 1.3'
-# gem 'omniauth-twitter', '~> 1.4'
-
+gem 'slim'
 
 group :development, :test do
   gem 'faker'
@@ -74,4 +65,3 @@ group :test do
   gem 'shoulda-matchers'
   gem 'rails-controller-testing'
 end
-

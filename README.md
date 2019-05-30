@@ -9,9 +9,9 @@ The envied gem ensures that the environment variables you specify in Envfile exi
 If they don't you'll get initialization errors like the following:
 
 ```
-[lex@k2 uhura]$ unset SOURCE_CLI_ID
-[lex@k2 uhura]$ irb
-Loading Rails...Error : 'load /home/lex/.irbrc' : uninitialized constant Source
+$ unset SOURCE_CLI_ID
+$ irb
+Loading Rails...Error : 'load $HOME/.irbrc' : uninitialized constant Source
 irb: warn: can't alias context from irb_context.
 2.6.1 :001 >
 ```
@@ -19,8 +19,8 @@ irb: warn: can't alias context from irb_context.
 Export the missing environment variable:
 
 ```
-[lex@k2 uhura]$ export SOURCE_CLI_ID=4
-[lex@k2 uhura]$ irb
+$ export SOURCE_CLI_ID=4
+$ irb
 Loading Rails...SUCCESS!  Loaded ENV['IRB_LOGGER']: development, ENV['IRB_LOGGER']:
 ActiveRecord::Base.connection.instance_values['config'][:adapter]: postgresql
 @db = ActiveRecord::Base.connection
@@ -282,3 +282,64 @@ Ditto for Clearstream.
 | 1  | 1             | 1               |                    | 1          | 2           | 1       | So maybe the r ...
 +----+---------------+-----------------+--------------------+------------+-------------+---------+--------------- 
 ```
+
+# Failure/Error: require File.expand_path('../config/environment', __dir__)
+
+If you get this error, then you probably just need to source your .env file.
+
+```
+$ be rspec spec/controllers/api/v1/messages_spec.rb:130
+
+An error occurred while loading ./spec/controllers/api/v1/messages_spec.rb.
+Failure/Error: require File.expand_path('../config/environment', __dir__)
+
+RuntimeError:
+  The following environment variables should be set: TOKEN_AUTH_USER, TOKEN_AUTH_PASSWORD, PGUSER, PGPASSWORD, GITHUB_KEY, GITHUB_SECRET, GITHUB_TOKEN, SENDGRID_API_KEY, CLEARSTREAM_KEY, CLEARSTREAM_URL, CLEARSTREAM_DEFAULT_LIST_ID, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_TOKEN_SECRET, TWITTER_KEY, TWITTER_SECRET, SSO_KEY, SSO_SECRET, HIGHLANDS_AUTH_REDIRECT, HIGHLANDS_AUTH_SUPPORT_EMAIL, HIGHLANDS_SSO_EMAIL, HIGHLANDS_SSO_PASSWORD.
+# $HOME/.rvm/gems/ruby-2.6.1/gems/envied-0.9.1/lib/envied.rb:38:in `error_on_missing_variables!'
+# $HOME/.rvm/gems/ruby-2.6.1/gems/envied-0.9.1/lib/envied.rb:19:in `require'
+# ./config/application.rb:8:in `<top (required)>'
+# ./config/environment.rb:2:in `require_relative'
+# ./config/environment.rb:2:in `<top (required)>'
+# ./spec/rails_helper.rb:5:in `require'
+# ./spec/rails_helper.rb:5:in `<top (required)>'
+# ./spec/controllers/api/v1/messages_spec.rb:3:in `require'
+# ./spec/controllers/api/v1/messages_spec.rb:3:in `<top (required)>'
+Run options: include {:locations=>{"./spec/controllers/api/v1/messages_spec.rb"=>[130]}}
+
+All examples were filtered out
+
+
+Finished in 0.00074 seconds (files took 3.8 seconds to load)
+0 examples, 0 failures, 1 error occurred outside of examples
+
+$ . .env
+
+$ be rspec spec/controllers/api/v1/messages_spec.rb:130
+Run options: include {:locations=>{"./spec/controllers/api/v1/messages_spec.rb"=>[130]}}
+. . .
+```
+
+# Error and Success Handling 
+
+In Uhura, we catch errors early and handle them ASAP.
+
+When all input has been validate and properly formed, after all errors have been handled, we make our request.
+```
+    if ret&.error && !ret.error.blank?
+      # Uhura received bad input; unable to form request.
+      render json: ret.error, status: :unprocessable_entity
+    else
+      # Both message_params_vo, manager_team_vo params are valid.
+      message_vo = MessageVo.new(message_params_vo, manager_team_vo)
+      # Send message (MessageDirector will determine if its an Email or SMS message).
+      ret = MessageDirector.send(message_vo)
+      if ret&.error && !ret.error.blank?
+        render json: ret.error, status: :unprocessable_entity
+      else
+        render json: ret.value
+      end
+    end
+```
+When we get the response, we check for errors first.
+
+Again, success processing comes after error handling.

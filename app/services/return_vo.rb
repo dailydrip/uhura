@@ -21,12 +21,15 @@ class ReturnVo
     { value: @value, error: @error }
   end
 
-  def is_error?
+  def error?
+    # rubocop:disable Style/DoubleNegation
     !!@error
+    # rubocop:enable Style/DoubleNegation
   end
 
   private
 
+  # rubocop:disable Metrics/AbcSize
   def concistency_check
     if error.nil? && value.nil?
       errors.add(:value, 'cannot be nil when error is nil')
@@ -37,4 +40,5 @@ class ReturnVo
       errors.add(:error, 'cannot be populated when value is populated')
     end
   end
+  # rubocop:enable Metrics/AbcSize
 end

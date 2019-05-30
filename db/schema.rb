@@ -33,15 +33,6 @@ ActiveRecord::Schema.define(version: 2019_05_12_215905) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "event_types", force: :cascade do |t|
-    t.string "name"
-    t.string "label"
-    t.text "description"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["name"], name: "index_event_types_on_name", unique: true
-  end
-
   create_table "managers", force: :cascade do |t|
     t.string "name"
     t.string "public_token"
@@ -106,14 +97,6 @@ ActiveRecord::Schema.define(version: 2019_05_12_215905) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "sources", force: :cascade do |t|
-    t.string "name"
-    t.json "details"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["name"], name: "index_sources_on_name", unique: true
-  end
-
   create_table "teams", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
@@ -128,16 +111,6 @@ ActiveRecord::Schema.define(version: 2019_05_12_215905) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["name"], name: "index_templates_on_name", unique: true
-  end
-
-  create_table "ulogs", force: :cascade do |t|
-    t.bigint "source_id", null: false
-    t.bigint "event_type_id", null: false
-    t.text "details"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["event_type_id"], name: "index_ulogs_on_event_type_id"
-    t.index ["source_id"], name: "index_ulogs_on_source_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -170,6 +143,4 @@ ActiveRecord::Schema.define(version: 2019_05_12_215905) do
   add_foreign_key "messages", "sendgrid_msgs"
   add_foreign_key "messages", "teams"
   add_foreign_key "messages", "templates"
-  add_foreign_key "ulogs", "event_types"
-  add_foreign_key "ulogs", "sources"
 end

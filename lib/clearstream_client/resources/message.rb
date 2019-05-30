@@ -8,20 +8,37 @@ module ClearstreamClient
     validates :send_to_fb, inclusion: [true, false]
     validates :send_to_tw, inclusion: [true, false]
 
-    attr_accessor :id, :template_id, :message_body, :lists, :subscribers,
-                  :schedule, :datetime, :timezone, :send_to_fb, :send_to_tw
+    attr_accessor :id,
+                  :template_id,
+                  :message_body,
+                  :lists,
+                  :subscribers,
+                  :schedule,
+                  :datetime,
+                  :timezone,
+                  :send_to_fb,
+                  :send_to_tw
 
     def initialize(attributes = {})
       deserialize(attributes['message'])
     end
 
     def to_h
-      methodize_attributes(:id, :template_id, :message_body, :lists, :subscribers,
-                           :schedule, :datetime, :timezone, :send_to_fb, :send_to_tw)
+      methodize_attributes(:id,
+                           :template_id,
+                           :message_body,
+                           :lists,
+                           :subscribers,
+                           :schedule,
+                           :datetime,
+                           :timezone,
+                           :send_to_fb,
+                           send_to_tw)
     end
 
     private
 
+    # rubocop:disable Metrics/MethodLength
     def deserialize(json)
       self.id = json['id']
       self.template_id = json['template_id']
@@ -35,5 +52,6 @@ module ClearstreamClient
       self.send_to_tw = json['send_to_tw']
       self
     end
+    # rubocop:enable Metrics/MethodLength
   end
 end

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Sendgrid
+  # rubocop:disable Metrics/MethodLength
   def self.link_sendgrid_msg_to_message(message_id, sendgrid_msg_id)
     sendgrid_msg = SendgridMsg.find_by(id: sendgrid_msg_id)
     if sendgrid_msg.nil?
@@ -8,7 +9,7 @@ class Sendgrid
       return false
     end
     message = Message.find_by(id: message_id)
-    if sendgrid_msg.nil?
+    if message.nil?
       log_error("Unable to find message (#{message_id}). Did not link sendgrid_msg (#{sendgrid_msg_id})")
       return false
     end
@@ -16,36 +17,26 @@ class Sendgrid
     message.save!
   end
 
+  # rubocop:disable all
   def self.send(message_vo)
-    # Get a new API Client to send the new email
-    sg = SendGrid::API.new(api_key: AppCfg['SENDGRID_API_KEY'])
-
-    template_data = message_vo.email_message
-    template_data['email_subject'] = message_vo.email_subject
-
-    mail = SendgridMail.new(
-      from: message_vo.manager_email,
-      subject: message_vo.email_subject,
-      receiver_sso_id: message_vo.receiver_sso_id,
-      template_id: message_vo.template_id,
-      dynamic_template_data: template_data
-    ).get
-
-    response = sg.client.mail._('send').post(request_body: mail.to_json)
-
+    # Execute Sendgrid request
+    response_and_mail = SendgridMailer.new.send_email(message_vo)
+    response = response_and_mail[:response]
+    mail = response_and_mail[:mail]
+    # Record date Sendgrid server said they got the message. body attribute will be populated if there's an error.
     trimmed_response = {
-      date: response.headers && response.headers['date'] ? response.headers['date'][0] : ''
+      date: response&.headers['date'] ? response.headers['date'][0] : '',
+      body: response&.body
     }
-
+    # Record time message sent to Sendgrid. Later, populate with response time.
     sendgrid_msg = SendgridMsg.create!(sent_to_sendgrid: Time.now,
                                        mail_and_response: { mail: mail.to_json, response: trimmed_response },
                                        got_response_at: nil,
                                        sendgrid_response: nil,
                                        read_by_user_at: nil)
-    rsc = response.status_code
     sendgrid_msg.got_response_at = Time.now
-    sendgrid_msg.sendgrid_response = rsc
-
+    sendgrid_msg.sendgrid_response = response.status_code
+    # Link message record to sendgrid_msg record
     if sendgrid_msg.save! && link_sendgrid_msg_to_message(message_vo.message_id, sendgrid_msg.id)
       return ReturnVo.new(value: return_accepted("sendgrid_msg": sendgrid_msg), error: nil)
     else
