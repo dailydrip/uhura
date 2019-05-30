@@ -52,7 +52,8 @@ class MessageVo
 
     # Valid input. Now, perform lookups to fill in missing data prior to processing request.
     assign_attributes(message_params_vo.my_attrs.merge(manager_team_vo.my_attrs))
-    receiver = Receiver.find_by(receiver_sso_id: receiver_sso_id)
+
+    receiver = Receiver.find_or_enroll(receiver_sso_id)
     if receiver
       self.receiver_id = receiver.id # Required by  Message.create!
       # Following message_vo attributes required by ClearstreamClient::MessageClient.create_subscriber
