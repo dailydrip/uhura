@@ -27,6 +27,11 @@ class ReturnVo
     # rubocop:enable Style/DoubleNegation
   end
 
+  def status
+    # If there is a status, then return that else :unprocessable_entity
+    @value[:status] || unprocessable_entity
+  end
+
   private
 
   # rubocop:disable Metrics/AbcSize

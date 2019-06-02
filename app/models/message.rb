@@ -11,4 +11,14 @@ class Message < ApplicationRecord
 
   alias_attribute :app, :manager
   alias_attribute :app_id, :manager_id
+
+  def target
+    if self.msg_target.name.eql?('Sendgrid')
+      self.sendgrid_msg
+    elsif self.msg_target.name.eql?('Clearstream')
+      self.clearstream_msg
+    else
+      log_err!("Invalid msg_target #{self.msg_target} for message #{self.id}")
+    end
+  end
 end

@@ -4,7 +4,6 @@ class Api::V1::ApiBaseController < ApplicationController
   protect_from_forgery with: :null_session
   before_action :verify_auth_token
   before_action :set_manager
-  before_action :set_team_name
 
   protected
 
@@ -16,26 +15,6 @@ class Api::V1::ApiBaseController < ApplicationController
       msg = "Manager with public_token (#{params[:public_token]}) NOT found!"
       log_error(msg)
       render json: return_error(msg), status: :unprocessable_entity
-    end
-  end
-
-  def set_team_name
-    x_team_id = request.headers['X-Team-ID']
-    err_msg = nil
-    if x_team_id.nil? || x_team_id.strip.size.eql?(0)
-      err_msg = 'Required HTTP header (X-Team-ID) is missing.'
-    else
-      team = Team.find_by(id: x_team_id)
-      if team.nil?
-        err_msg = "Team ID (#{x_team_id}) from the X-Team-ID HTTP header NOT found! "
-        err_msg += "Consider adding Team for ID (#{x_team_id}) using the Admin app on the Teams page."
-      else
-        @team_name = team.name
-      end
-    end
-    if err_msg
-      log_error(err_msg)
-      render json: return_error(err_msg), status: :unprocessable_entity
     end
   end
 

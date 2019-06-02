@@ -21,6 +21,8 @@ class Clearstream
     response = ClearstreamClient::MessageClient.new(data: data[:clearstream_data],
                                                     resource: 'messages').send_message
 
+    ap response
+
     clearstream_msg = ClearstreamMsg.create!(sent_to_clearstream: Time.now,
                                              response: { response: response['data'] })
 

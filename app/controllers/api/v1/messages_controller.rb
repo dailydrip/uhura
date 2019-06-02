@@ -2,6 +2,29 @@
 
 # rubocop:disable all
 class Api::V1::MessagesController < Api::V1::ApiBaseController
+  include StatusHelper
+  before_action :set_team_name
+
+  def set_team_name
+    return if params[:action]&.eql?('status')
+    x_team_id = request.headers['X-Team-ID']
+    err_msg = nil
+    if x_team_id.nil? || x_team_id.strip.size.eql?(0)
+      err_msg = 'Required HTTP header (X-Team-ID) is missing.'
+    else
+      team = Team.find_by(id: x_team_id)
+      if team.nil?
+        err_msg = "Team ID (#{x_team_id}) from the X-Team-ID HTTP header NOT found! "
+        err_msg += "Consider adding Team for ID (#{x_team_id}) using the Admin app on the Teams page."
+      else
+        @team_name = team.name
+      end
+    end
+    if err_msg
+      render_error_msg(err_msg)
+    end
+  end
+
   def create
     message_params_vo = MessageParamsVo.new(
       public_token: params[:public_token],
@@ -41,23 +64,32 @@ class Api::V1::MessagesController < Api::V1::ApiBaseController
     end
     if ret&.error?
       # Uhura received bad input; unable to form request.
-      render json: ret.error, status: :unprocessable_entity
+      # render json: ret.error, status: :unprocessable_entity
+
+      # Unable to collect data for a proper send request
+      render_response(ret)
     else
       # Both message_params_vo, manager_team_vo params are valid.
       message_vo = MessageVo.new(message_params_vo, manager_team_vo)
-      # Send message (MessageDirector will determine if its an Email or SMS message).
-      ret = MessageDirector.send(message_vo)
-      if ret&.error?
-        render json: ret.error, status: :unprocessable_entity
-      else
-        render json: ret.value
-      end
+      # message_vo is valid. MessageDirector will determine if its an Email or SMS message.
+
+      # render_response MessageDirector.send(message_vo) <= Throw away return value
+      MessageDirector.send(message_vo)
+
+      # Render ‘we got the message, go here for details on it later’ message
+      status(message_vo.message_id)
     end
+
   end
 
   def index
-    @messages = @manager.messages
-    render json: @messages
+    render_response @manager.messages
+  end
+
+  def status(message_id)
+    message = Message.find(message_id)
+    msg = "we got the message, go here (#{api_v1_message_status_url(message)}) for details on it later"
+    render_success_msg(msg)
   end
 end
 # rubocop:enable all
