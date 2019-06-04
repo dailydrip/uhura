@@ -24,7 +24,6 @@ module ClearstreamClient
     def create
       @data.delete(:resource)
       response = connection.post(@resource, @data)
-      ap response
       raise APIError, response.body unless response.success?
 
       JSONConverter.to_hash(response.body)

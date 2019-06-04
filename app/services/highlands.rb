@@ -46,7 +46,6 @@ class Highlands
     mobile_phones = mobile_communications.map{|item| item['communicationValue']}
     emails = email_communications.map{|item| item['communicationValue']}
 
-    ap response
     if !err.nil?
       msg = 'GET highlands user Error'
       return ReturnVo.new(value: nil, error: return_error(msg, :unprocessable_entity))

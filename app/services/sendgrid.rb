@@ -38,14 +38,22 @@ class Sendgrid
     sendgrid_msg.sendgrid_response = response.status_code
     # Link message record to sendgrid_msg record
     if sendgrid_msg.save! && link_sendgrid_msg_to_message(message_vo.message_id, sendgrid_msg.id)
-      return ReturnVo.new(value: return_accepted("sendgrid_msg": sendgrid_msg), error: nil)
+      return ReturnVo.new_value({sendgrid_msg: sendgrid_msg})
     else
       err = sendgrid_msg.errors || "Error for sendgrid_id (#{sendgrid_id})"
-      return ReturnVo.new(value: nil, error: return_error(err, :unprocessable_entity))
+      return ReturnVo.new_err(err_msg)
     end
   rescue StandardError => e
-    msg = "Sendgrid.send Error: #{e.message}"
-    log_error(msg)
-    ReturnVo.new(value: nil, error: return_error(msg, :unprocessable_entity))
+    err_msg = JSON.parse(e.message)['error']['msg'] if err_msg.nil?
+    log_error(err_msg)
+    # A error occurs while processing the request. Record ERROR status.
+    sendgrid_msg = SendgridMsg.create!(
+        mail_and_response: { mail: mail.to_json, response: { error: err_msg } },
+        status: 'ERROR')
+    # Link sendgrid_msg to message
+    message = Message.find(message_vo.message_id)
+    message.sendgrid_msg = sendgrid_msg
+    message.save!
+    ReturnVo.new_err(err_msg)
   end
 end

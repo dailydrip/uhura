@@ -97,6 +97,65 @@ RSpec.describe 'Messages API', type: :request do
     end
 
     describe 'when the sms receiver has an invalid mobile_number' do
+      def link_to_clearstream
+        clearstream_msg = ClearstreamMsg.create!(sent_to_clearstream: 2.minutes.from_now,
+                                                 response:{
+                                                     "id": 122476,
+                                                     "status": "QUEUED",
+                                                     "sent_at": "2019-06-04T01:31:06+00:00",
+                                                     "text": {
+                                                         "full": "Leadership Team: Come in now for 50% off all rolls!",
+                                                         "header": "Leadership Team",
+                                                         "body": "Come in now for 50% off all rolls!"
+                                                     },
+                                                     "lists": [],
+                                                     "subscribers": [
+                                                         "+17707651573"
+                                                     ],
+                                                     "stats": {
+                                                         "recipients": 1,
+                                                         "failures": 0,
+                                                         "throughput": 0,
+                                                         "replies": 0,
+                                                         "opt_outs": 0
+                                                     },
+                                                     "social": {
+                                                         "twitter": {
+                                                             "enabled": false
+                                                         },
+                                                         "facebook": {
+                                                             "enabled": false
+                                                         }
+                                                     }
+                                                 },
+                                                 got_response_at: 2.seconds.from_now,
+                                                 status: 'QUEUED')
+        msg3 = Message.find(3)
+        msg3.clearstream_msg = clearstream_msg
+        msg3.save!
+      end
+
+      def link_to_clearstream_invalid_mobile_number
+        clearstream_msg = ClearstreamMsg.create!(sent_to_clearstream: 2.minutes.from_now,
+                                                 response: {
+                                                     "error": {
+                                                         "message": "At least one of the supplied subscribers is invalid.",
+                                                         "http_code": 422,
+                                                         "fields": {
+                                                             "subscribers": [
+                                                                 "At least one of the supplied subscribers is invalid."
+                                                             ]
+                                                         }
+                                                     }
+                                                 },
+                                                 got_response_at: 2.seconds.from_now,
+                                                 status: 'ERROR')
+        msg3 = Message.find(3)
+        msg3.clearstream_msg = clearstream_msg
+        msg3.save!
+      end
+
+
       let(:valid_attributes) do
         receiver = Receiver.first
         receiver.mobile_number = '?+!42'
@@ -117,18 +176,22 @@ RSpec.describe 'Messages API', type: :request do
       end
       it 'Clearstream does not process it' do
         stub_request(:any, /api.getclearstream.com/).
-        to_return(body: get_clearstream_response_data('post_message_with_invalid_receiver_mobile_number'),
-                  status: 422)
+          to_return(body: get_clearstream_response_data('post_message_with_invalid_receiver_mobile_number'),
+                   status: 422)
         post '/api/v1/messages', headers: valid_headers, params: valid_attributes.to_json
-        get "/api/v1/message_status/#{Message.last.id}", headers: valid_headers, params: nil
-        expect(response.status).to eq 200
-        expect(response.parsed_body['data']['sent_to_sendgrid']).to_not be_nil
-        expect(response.parsed_body['data']['mail_and_response']).to_not be_nil
-        expect(response.parsed_body['data']['mail_and_response']['mail']).to_not be_nil
-        expect(response.parsed_body['data']['mail_and_response']['response']).to_not be_n
+        # Just created 3rd message.
+        link_to_clearstream_invalid_mobile_number
+        expect(Message.last.target[:sent_to_clearstream]).to_not be_nil
+        expect(Message.last.target[:response]['error']).to_not be_nil
+        expect(Message.last.target[:response]['error']['message']).to eq('At least one of the supplied subscribers is invalid.')
+        expect(Message.last.target[:response]['error']['http_code']).to eq(422)
 
-        expect(response.status).to eq 422
-        expect(response.parsed_body['error']['msg']).to eq('At least one of the supplied subscribers is invalid.')
+        get "/api/v1/message_status/#{Message.find(3).id}", headers: valid_headers, params: nil
+        expect(response.status).to eq 200
+        expect(response.parsed_body['data']['response']['error']).to_not be_nil
+        expect(response.parsed_body['data']['response']['error']['message']).to eq('At least one of the supplied subscribers is invalid.')
+        expect(response.parsed_body['data']['response']['error']['http_code']).to eq(422)
+        expect(response.parsed_body['data']['response']['error']['fields']['subscribers']).to_not be_nil
       end
     end
 

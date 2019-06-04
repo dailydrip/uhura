@@ -343,3 +343,17 @@ When all input has been validate and properly formed, after all errors have been
 When we get the response, we check for errors first.
 
 Again, success processing comes after error handling.
+
+# Handle Hanging RSpec processes
+
+Run `be-rspec` rather than `bundle exec rspec`.  
+```
+# When an rspec process is already running (did not terminate) rspec will hang shortly after starting. Run this alias to kill any running rspec processes and start rspec (without it hanging).
+alias be-rspec='ps -ef | grep -v grep|grep "\/rspec" | while read line; do pid2kill="$(echo \"$line\" | awk '\''{print $2}'\'')"; if [ "$pid2kill" != "" ]; then kill -9 $pid2kill; fi; done; bundle exec rspec'
+```
+
+Run `print-rspec-stacktrace` to see the stacktrace when it appears rspec is hung.
+``` 
+# Print rspec stacktrace. Assumes trap 'USR1' has been created in spec_helper.rb.
+alias print-rspec-stacktrace='kill -USR1 "$(cat /tmp/rspec.pid)"'
+```

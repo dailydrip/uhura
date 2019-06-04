@@ -46,4 +46,12 @@ class ReturnVo
     end
   end
   # rubocop:enable Metrics/AbcSize
+
+  def self.new_value(value_hash)
+    self.new(value: return_accepted(value_hash), error: return_error(err, :unprocessable_entity))
+  end
+
+  def self.new_err(err)
+    self.new(value: nil, error: return_error(err, :unprocessable_entity))
+  end
 end

@@ -18,14 +18,12 @@ class Clearstream
   end
 
   def self.send_msg(data)
+    # Request Clearstream to send message
     response = ClearstreamClient::MessageClient.new(data: data[:clearstream_data],
                                                     resource: 'messages').send_message
-
-    ap response
-
+    # Record Clearstream response
     clearstream_msg = ClearstreamMsg.create!(sent_to_clearstream: Time.now,
                                              response: response['data'] )
-
     clearstream_msg.got_response_at = Time.now
     clearstream_msg.status = response['data']['status']
 
@@ -48,10 +46,10 @@ class Clearstream
 
     send_msg(clearstream_data: data, message_id: message_vo.message_id)
   rescue StandardError => e
-    err_msg = JSON.parse(e.message)['error']['message']
-    err_msg = JSON.parse(e.message)['error']['msg'] if err_msg.nil?
+#byebug
+    err_msg = JSON.parse(e.message)['error']['message'] if err_msg.nil?
     # Log Clearstream subscription warnings if necessary. Note Uhura does not submit create_subscriber requests.
-    if err_msg.include?('supplied subscribers is invalid') # "At least one of the supplied subscribers is invalid."
+    if err_msg&.include?('supplied subscribers is invalid') # "At least one of the supplied subscribers is invalid."
       # If the subscriber is invalid, let's assume that they've not been registered with Clearstream.io
       # So, an entity outside of Uhura should create the subscriber see that they opt in before returning to Uhura.
       action_msg = {
@@ -64,7 +62,7 @@ class Clearstream
         "msg": err_msg,
         "action_required:": action_msg
       }
-    elsif err_msg.include?('You must send your message to at least one subscriber')
+    elsif err_msg&.include?('You must send your message to at least one subscriber')
       # Since Uhura does not submit subscription requests, this block should never be executed
       action_msg = {
         "error_from_clearstream": err_msg,
@@ -76,8 +74,19 @@ class Clearstream
         "action_required:": action_msg
       }
     end
-    # Handle error in caller
-    ReturnVo.new(value: nil, error: return_error(err_msg, :unprocessable_entity))
+    log_error(err_msg)
+    # A error occurs while processing the request. Record ERROR status.
+    clearstream_msg = ClearstreamMsg.create!(
+        response: {
+          error: err_msg
+        },
+        status: 'ERROR'
+    )
+    # Link clearstream_msg to message
+    message = Message.find(message_vo.message_id)
+    message.clearstream_msg = clearstream_msg
+    message.save!
+    ReturnVo.new_err(err_msg)
   end
-  # rubocop:enable all
 end
+# rubocop:enable all
