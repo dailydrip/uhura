@@ -76,7 +76,7 @@ class Api::V1::MessagesController < Api::V1::ApiBaseController
       # render_response MessageDirector.send(message_vo) <= Throw away return value
       MessageDirector.send(message_vo)
 
-      # Render ‘we got the message, go here for details on it later’ message
+      # Render ‘We got the message. Go here for details on it later’ message
       status(message_vo.message_id)
     end
 
@@ -88,7 +88,7 @@ class Api::V1::MessagesController < Api::V1::ApiBaseController
 
   def status(message_id)
     message = Message.find(message_id)
-    msg = "we got the message, go here (#{api_v1_message_status_url(message)}) for details on it later"
+    msg = "We got the message. Go here (#{api_v1_message_status_url(message)}) for details on it later."
     render_success_msg(msg)
   end
 end

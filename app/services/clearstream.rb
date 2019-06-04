@@ -24,7 +24,7 @@ class Clearstream
     ap response
 
     clearstream_msg = ClearstreamMsg.create!(sent_to_clearstream: Time.now,
-                                             response: { response: response['data'] })
+                                             response: response['data'] )
 
     clearstream_msg.got_response_at = Time.now
     clearstream_msg.status = response['data']['status']

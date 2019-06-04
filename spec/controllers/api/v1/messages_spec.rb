@@ -34,7 +34,7 @@ RSpec.describe 'Messages API', type: :request do
                     status: 200)
         post '/api/v1/messages', headers: valid_headers, params: valid_attributes.to_json
         expect(response.status).to eq 200
-        expect(response.parsed_body['data']['clearstream_msg']['status']).to eq('QUEUED')
+        expect(response.parsed_body['data']['message']).to include('We got the message. Go here').and include('/api/v1/message_status/')
       end
     end
 
@@ -62,7 +62,7 @@ RSpec.describe 'Messages API', type: :request do
                     status: 422)
         post '/api/v1/messages', headers: header_without_team_id, params: valid_attributes.to_json
         expect(response.status).to eq 422
-        expect(response.parsed_body['error']).to eq('Required HTTP header (X-Team-ID) is missing.')
+        expect(response.parsed_body['error']['message']).to eq('Required HTTP header (X-Team-ID) is missing.')
       end
     end
 
@@ -80,32 +80,19 @@ RSpec.describe 'Messages API', type: :request do
                     status: 422)
         post '/api/v1/messages', headers: header_without_team_id, params: valid_attributes.to_json
         expect(response.status).to eq 422
-        expect(response.parsed_body['error']).to include('X-Team-ID HTTP header NOT found')
+        expect(response.parsed_body['error']['message']).to include('X-Team-ID HTTP header NOT found')
       end
     end
 
     describe 'when the preferred channel is sms' do
-      let(:valid_attributes) do
-        {
-          "public_token": manager.public_token,
-          "receiver_sso_id": receiver.receiver_sso_id,
-          "email_subject": 'Picnic Saturday',
-          "email_message": {
-            "header": 'Dragon Rage',
-            "section1": 'imagine you are writing an email.',
-            "button": 'Count me in!'
-          },
-          "template_id": 'd-f986df533e514f978f4460bedca50db0',
-          "sms_message": 'Come in now for 50% off all rolls!'
-        }
-      end
       it 'calls clearstream returning a status of QUEUED' do
         stub_request(:any, /api.getclearstream.com/).
-          to_return(body: get_clearstream_response_data('post_message'),
+          to_return(body: get_clearstream_response_data('get_message_status_queued'),
                     status: 200)
-        post '/api/v1/messages', headers: valid_headers, params: valid_attributes.to_json
+
+        get '/api/v1/message_status/2', headers: valid_headers, params: nil
         expect(response.status).to eq 200
-        expect(response.parsed_body['data']['clearstream_msg']['status']).to eq('QUEUED')
+        expect(response.parsed_body['data']['status']).to eq('QUEUED')
       end
     end
 
@@ -133,6 +120,13 @@ RSpec.describe 'Messages API', type: :request do
         to_return(body: get_clearstream_response_data('post_message_with_invalid_receiver_mobile_number'),
                   status: 422)
         post '/api/v1/messages', headers: valid_headers, params: valid_attributes.to_json
+        get "/api/v1/message_status/#{Message.last.id}", headers: valid_headers, params: nil
+        expect(response.status).to eq 200
+        expect(response.parsed_body['data']['sent_to_sendgrid']).to_not be_nil
+        expect(response.parsed_body['data']['mail_and_response']).to_not be_nil
+        expect(response.parsed_body['data']['mail_and_response']['mail']).to_not be_nil
+        expect(response.parsed_body['data']['mail_and_response']['response']).to_not be_n
+
         expect(response.status).to eq 422
         expect(response.parsed_body['error']['msg']).to eq('At least one of the supplied subscribers is invalid.')
       end
