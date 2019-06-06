@@ -52,5 +52,24 @@ class SendgridMail
     personalization.add_dynamic_template_data(@dynamic_template_data)
     mail.add_personalization(personalization)
     mail
+
+    # # Sendgrid personalization stopped working June 5
+    # mail = SendGrid::Mail.new(
+    #     Email.new(email: @from),
+    #     @subject,
+    #     Email.new(email: @to),
+    #     Content.new(type: 'text/plain', value: self.text_content)) # Content
+    #
+    # mail
+  end
+
+  def text_content
+    content = []
+    content << @dynamic_template_data['header']
+    content << @dynamic_template_data.
+        each_pair.select {|k,v| v if k.to_s.include?('section') }.
+        map{|i| i[1]}
+    content.
+        join("\n\n")
   end
 end

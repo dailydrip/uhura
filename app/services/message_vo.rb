@@ -22,6 +22,7 @@ class MessageVo
   validates :email, presence: true
   validates :lists, presence: true # <<
   validate :receiver_preferences
+  validate :template_found
 
   attr_accessor :public_token,
                 :manager_id,
@@ -43,12 +44,15 @@ class MessageVo
                 :first,
                 :last,
                 :email,
-                :lists # <<
+                :lists, # <<
+                :errors
 
   # rubocop:disable all
   def initialize(message_params_vo, manager_team_vo)
     raise InvalidMessageError, 'invalid message_params_vo' unless message_params_vo.valid?
     raise InvalidManagerTeamError, 'invalid manager_team_vo' unless manager_team_vo.valid?
+
+    @errors = ActiveModel::Errors.new(self)
 
     # Valid input. Now, perform lookups to fill in missing data prior to processing request.
     assign_attributes(message_params_vo.my_attrs.merge(manager_team_vo.my_attrs))
@@ -94,5 +98,34 @@ class MessageVo
       log_error(msg)
       errors.add(:value, msg)
     end
+  end
+
+  def template_found
+    sendgrid_template = Template.find(self.template_id)
+    if sendgrid_template.nil?
+      msg = "Template ID (#{self.template_id}) not found. If it is valid, add it via the Admin application."
+      log_error(msg)
+      errors.add(:value, msg)
+    end
+  end
+
+  def invalid_message_attrs
+    {
+        msg_target_id: self.msg_target_id,
+        manager_id: self.manager_id,
+        receiver_id: self.receiver_id,
+        team_id: self.team_id,
+        email_subject: self.email_subject,
+        email_message: self.email_message,
+        template_id: self.template_id,
+        sms_message: self.sms_message
+    }
+  end
+
+  def to_hash
+    Hash[instance_variables.map { |name|
+      # Strip "@"  Example: {"@first": "Cindy"} => {"first": "Cindy"}
+      [name[1..-1], instance_variable_get(name)] unless name.eql?('@errors')
+    } ]
   end
 end

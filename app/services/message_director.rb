@@ -22,7 +22,7 @@ class MessageDirector
         log_error(msg)
       else
         msg = "Sent Email: subject (#{message_vo.email_subject}) "
-        msg += "from (#{message_vo.manager_name}) to (#{message_vo.receiver_email})"
+        msg += "from (#{message_vo.manager_name}) to (#{message_vo.email})"
         log_info(msg)
       end
     when 'Clearstream'
@@ -36,7 +36,7 @@ class MessageDirector
         log_info(msg)
       end
     else
-      msg = "Sent message: subject (#{message_vo.sms_message}) to (#{message_vo.receiver_email}), "
+      msg = "Sent message: subject (#{message_vo.sms_message}) to (#{message_vo.email}), "
       msg += 'but receiver prefers neither Email nor SMS!'
       log_error(msg)
       message = ReturnVo.new(value: nil, error: return_error(msg, :precondition_failed))
@@ -46,10 +46,16 @@ class MessageDirector
 
   # This is where we verify that the data passed matches with data in the database and set the message target.
   private_class_method def self.create_message(message_vo)
-    if !message_vo.valid?
+    begin
+      message_vo_is_valid = message_vo.valid?
+    rescue StandardError => e
+      message_vo_is_valid = false
+      message_vo.errors.add(:value, e.message)
+    end
+    if !message_vo_is_valid
       ReturnVo.new(value: nil, error: return_error(message_vo.errors, :unprocessable_entity))
     else
-      ActiveRecord::Base.transaction do
+      begin
         message = Message.create!(msg_target_id: message_vo.msg_target_id,
                                   manager_id: message_vo.manager_id, # <= source of message (an application)
                                   receiver_id: message_vo.receiver_id,

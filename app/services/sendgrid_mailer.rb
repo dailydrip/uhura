@@ -20,6 +20,17 @@ class SendgridMailer #< Module
       dynamic_template_data: template_data
     ).get
 
-    {response: @client.mail._('send').post(request_body: mail.to_json), mail: mail}
+    ap mail
+
+    # Send email
+    response = @client.mail._('send').post(request_body: mail.to_json)
+    body = response.body.blank? ? '' : JSON.parse(response.body)
+    {
+       response: {
+         body: body,
+         server_date: response&.headers && response&.headers['date'] && response&.headers['date'][0],
+         status_code: response.status_code
+       },
+       mail: mail}
   end
 end

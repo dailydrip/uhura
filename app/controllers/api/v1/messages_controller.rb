@@ -72,21 +72,33 @@ class Api::V1::MessagesController < Api::V1::ApiBaseController
       # Both message_params_vo, manager_team_vo params are valid.
       message_vo = MessageVo.new(message_params_vo, manager_team_vo)
       # message_vo is valid. MessageDirector will determine if its an Email or SMS message.
-
-      # render_response MessageDirector.send(message_vo) <= Throw away return value
-      MessageDirector.send(message_vo)
-
-      # Render ‘We got the message. Go here for details on it later’ message
-      status(message_vo.message_id)
+      return_vo = MessageDirector.send(message_vo) # <= Send message!
+      if return_vo.is_error?  #message_vo.message_id.nil?
+        # Store failed message attempt
+        invalid_message = InvalidMessage.create!(
+            message_vo.invalid_message_attrs.merge(
+                message_params: message_params_vo.message_params,
+                message_attrs: message_vo.to_hash,
+                )
+        )
+        # There are no ClearstreamMsg or SendgridMsg FKeys since message was not sent
+        render_error_status(invalid_message.id)
+      else
+        render_success_status(message_vo.message_id)
+      end
     end
-
   end
 
   def index
     render_response @manager.messages
   end
 
-  def status(message_id)
+  def render_error_status(invalid_message)
+    msg = "Invalid message. Go here (#{api_v1_invalid_message_status_url(invalid_message)}) for details on it later."
+    render_success_msg(msg)
+  end
+
+  def render_success_status(message_id)
     message = Message.find(message_id)
     msg = "We got the message. Go here (#{api_v1_message_status_url(message)}) for details on it later."
     render_success_msg(msg)

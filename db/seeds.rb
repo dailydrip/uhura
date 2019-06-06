@@ -60,9 +60,9 @@ bob = Receiver.create!(
   preferences: {email: true, sms: false}
 )
 cindy = Receiver.create!(
-  receiver_sso_id: Faker::Number.number(digits = 8),
+  receiver_sso_id: '55357450', # <= used in test queries
   email: 'cindy@yahoo.com',
-  mobile_number: Faker::PhoneNumber.cell_phone,
+  mobile_number: '?+!42',  # <= invalid mobile_number!
   first_name: 'Cindy',
   last_name: 'Red',
   preferences: {email: false, sms: true}

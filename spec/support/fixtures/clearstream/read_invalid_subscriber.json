@@ -1,0 +1,11 @@
+{
+  "error": {
+    "message": "At least one of the supplied subscribers is invalid.",
+    "http_code": 422,
+    "fields": {
+      "subscribers": [
+        "At least one of the supplied subscribers is invalid."
+      ]
+    }
+  }
+}

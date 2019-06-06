@@ -1,0 +1,29 @@
+{
+  "id": 122476,
+  "status": "QUEUED",
+  "sent_at": "2019-06-04T01:31:06+00:00",
+  "text": {
+    "full": "Leadership Team: Come in now for 50% off all rolls!",
+    "header": "Leadership Team",
+    "body": "Come in now for 50% off all rolls!"
+  },
+  "lists": [],
+  "subscribers": [
+    "+17707651573"
+  ],
+  "stats": {
+    "recipients": 1,
+    "failures": 0,
+    "throughput": 0,
+    "replies": 0,
+    "opt_outs": 0
+  },
+  "social": {
+    "twitter": {
+      "enabled": false
+    },
+    "facebook": {
+      "enabled": false
+    }
+  }
+}

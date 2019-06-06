@@ -25,6 +25,7 @@ Rails.application.routes.draw do
         end
       end
       resources :message_status, only: [:show]
+      resources :invalid_message_status, only: [:show]
     end
   end
 

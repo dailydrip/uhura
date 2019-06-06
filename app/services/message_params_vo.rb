@@ -35,4 +35,15 @@ class MessageParamsVo < BaseClass
       end
     end
   end
+
+  def message_params
+    {
+        public_token: self.public_token,
+        receiver_sso_id: self.receiver_sso_id,
+        email_subject: self.email_subject,
+        email_message: self.email_message,
+        template_id: self.template_id,
+        sms_message: self.sms_message
+    }
+  end
 end
