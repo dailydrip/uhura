@@ -31,8 +31,7 @@ class MessageDirector
         msg = message.error[:error]
         log_error(msg)
       else
-        msg = "Sent SMS: (#{message_vo.team_name}:#{message_vo.email_subject}) "
-        msg += "from (#{message_vo.manager_name}) to (#{message_vo.mobile_number})"
+        msg = message.value[:data]
         log_info(msg)
       end
     else

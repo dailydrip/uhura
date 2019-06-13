@@ -18,6 +18,11 @@ class Sendgrid
   end
 
   # rubocop:disable all
+  # def self.send(message_vo)
+  #   SendClearstreamMessageWorker.perform_async(message_vo)
+  # end
+
+
   def self.send(message_vo)
     sent_to_sendgrid_at = Time.now
     # Execute Sendgrid request
@@ -55,4 +60,5 @@ class Sendgrid
     message.save!
     ReturnVo.new_err(err_msg)
   end
+
 end

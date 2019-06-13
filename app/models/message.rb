@@ -21,4 +21,17 @@ class Message < ApplicationRecord
       log_err!("Invalid msg_target #{self.msg_target} for message #{self.id}")
     end
   end
+
+  def target_name
+    if self.target.nil?
+      msg_target = MsgTarget.find(self.msg_target_id)
+      if msg_target.nil?
+        log_err!("Invalid msg_target #{self.msg_target}")
+      else
+        msg_target.name
+      end
+    else
+      msg_target.name
+    end
+  end
 end

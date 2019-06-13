@@ -3,11 +3,24 @@ class Api::V1::MessageStatusController < Api::V1::ApiBaseController
 
   # Note that message.target should be updated by delayed job upon change of status.
   def show
-    target = Message.find(params[:id]).target
-    if target.nil?
-      render_error_msg("No message was sent to any target for message_id (#{params[:id]})")
+    message = Message.find(params[:id])
+    if message.nil?
+      render_error_msg("No message found for message_id (#{params[:id]})")
     else
-      render_response target
+      # message.target will be populated when the target (SendGrid/Clearstream) processes the message.
+      target = message.target
+      if target.nil?
+        if message.target_name
+          msg = "Message for message_id (#{params[:id]}) has been sent for processing to #{message.target_name} "
+          render_success_msg(msg)
+        else
+          msg = "Message for message_id (#{params[:id]}) was received, but has an invalid target (#{target})"
+          render_error_msg(msg)
+        end
+      else
+        # This will likely not occur now that processing is asynchronous.
+        render_response target
+      end
     end
   end
 end

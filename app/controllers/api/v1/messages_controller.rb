@@ -103,5 +103,31 @@ class Api::V1::MessagesController < Api::V1::ApiBaseController
     msg = "We got the message. Go here (#{api_v1_message_status_url(message)}) for details on it later."
     render_success_msg(msg)
   end
+
+
+  def report76
+    #generate_report
+
+    clearstream_vo = {
+        "resource": "messages",
+        "message_id": 76,
+        "mobile_number": "+17707651573‬",
+        "message_header": "Leadership Team",
+        "message_body": "Come in now for 50% off all rolls!",
+        "subscribers": "+17707651573‬",
+        "schedule": false,
+        "send_to_fb": false,
+        "send_to_tw": false
+    }
+    ClearstreamMessageWorker.perform_async(clearstream_vo)
+    render_success_status(clearstream_vo[:message_id])
+  end
+
+  private
+
+  def generate_report
+    sleep 3
+  end
+
 end
 # rubocop:enable all

@@ -189,7 +189,6 @@ RSpec.describe 'Messages API', type: :request do
         post '/api/v1/messages', headers: valid_headers, params: valid_attributes.to_json
         # Just created 3rd message.
         link_to_sendgrid
-byebug
         expect(Message.last.target[:sent_to_sendgrid]).to_not be_nil
         expect(Message.last.target[:response]['error']).to_not be_nil
         expect(Message.last.target[:response]['error']['message']).to eq('At least one of the supplied subscribers is invalid.')

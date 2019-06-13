@@ -20,8 +20,6 @@ class SendgridMailer #< Module
       dynamic_template_data: template_data
     ).get
 
-    ap mail
-
     # Send email
     response = @client.mail._('send').post(request_body: mail.to_json)
     body = response.body.blank? ? '' : JSON.parse(response.body)

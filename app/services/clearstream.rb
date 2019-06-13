@@ -18,6 +18,9 @@ class Clearstream
   end
 
   def self.send_msg(data)
+
+    log!(">> Clearstream.send_msg data: #{data}")
+
     # Request Clearstream to send message
     response = ClearstreamClient::MessageClient.new(data: data[:clearstream_data],
                                                     resource: 'messages').send_message
@@ -37,14 +40,21 @@ class Clearstream
 
   def self.send(message_vo)
     # Populate and sanitize data
-    data = ClearstreamSmsVo.new(
+    clearstream_vo = ClearstreamSmsVo.new(
       receiver_sso_id: message_vo.receiver_sso_id,
       team_name: message_vo.team_name,
       sms_message: message_vo.sms_message,
       message_id: message_vo.message_id
     ).get
 
-    send_msg(clearstream_data: data, message_id: message_vo.message_id)
+    ClearstreamMessageWorker.perform_async(clearstream_vo)
+    #TODO:Refactor
+    # log_info(message_vo.sent_for_processing_msg)
+    msg = "Sent SMS: (#{message_vo.team_name}:#{message_vo.email_subject}) "
+    msg += "from (#{message_vo.manager_name}) to (#{message_vo.mobile_number})"
+    log_info(msg)
+    return ReturnVo.new(value: return_accepted("clearstream_msg": msg), error: nil)
+
   rescue StandardError => e
 #byebug
     err_msg = JSON.parse(e.message)['error']['message'] if err_msg.nil?

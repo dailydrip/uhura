@@ -81,6 +81,7 @@ class ClearstreamSmsVo
     raise Invalid, errors.full_messages unless valid?
 
     { resource: 'messages',
+      message_id: @message_id,
       mobile_number: @mobile_number,
       message_header: @message_header,
       message_body: @message_body,
@@ -88,5 +89,12 @@ class ClearstreamSmsVo
       schedule: @schedule,
       send_to_fb: @send_to_fb,
       send_to_tw: @send_to_tw }
+  end
+
+  def sent_for_processing_msg
+    msg = "Sent SMS: (#{self.team_name}:#{self.email_subject}) "
+    msg += "from (#{self.manager_name}) to (#{self.mobile_number})"
+    msg += "for processing."
+    msg
   end
 end

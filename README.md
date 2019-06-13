@@ -357,3 +357,9 @@ Run `print-rspec-stacktrace` to see the stacktrace when it appears rspec is hung
 # Print rspec stacktrace. Assumes trap 'USR1' has been created in spec_helper.rb.
 alias print-rspec-stacktrace='kill -USR1 "$(cat /tmp/rspec.pid)"'
 ```
+
+
+# Generate SideKiq worker
+```
+rails g sidekiq:worker SendMessage
+```
