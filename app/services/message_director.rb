@@ -16,9 +16,9 @@ class MessageDirector
     # Send message using receiver's delivery preference:
     case ret.value.msg_target.name
     when 'Sendgrid'
-      message = Sendgrid.send(message_vo)
-      if message.error
-        msg = message.error[:error]
+      response = Sendgrid.send(message_vo)
+      if response.error
+        msg = response.error[:error]
         log_error(msg)
       else
         msg = "Sent Email: subject (#{message_vo.email_subject}) "
@@ -26,21 +26,21 @@ class MessageDirector
         log_info(msg)
       end
     when 'Clearstream'
-      message = Clearstream.send(message_vo)
-      if message.error
-        msg = message.error[:error]
+      response = Clearstream.send(message_vo)
+      if response.error
+        msg = response.error[:error]
         log_error(msg)
       else
-        msg = message.value[:data]
+        msg = response.value[:data]
         log_info(msg)
       end
     else
       msg = "Sent message: subject (#{message_vo.sms_message}) to (#{message_vo.email}), "
       msg += 'but receiver prefers neither Email nor SMS!'
       log_error(msg)
-      message = ReturnVo.new(value: nil, error: return_error(msg, :precondition_failed))
+      response = ReturnVo.new(value: nil, error: return_error(msg, :precondition_failed))
     end
-    message # Return message in a ReturnVo
+    response # Return message in a ReturnVo
   end
 
   # This is where we verify that the data passed matches with data in the database and set the message target.

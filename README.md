@@ -361,5 +361,6 @@ alias print-rspec-stacktrace='kill -USR1 "$(cat /tmp/rspec.pid)"'
 
 # Generate SideKiq worker
 ```
-rails g sidekiq:worker SendMessage
+bundle exec rails g sidekiq:worker SendgridMessage
+bundle exec rails g sidekiq:worker ClearstreamMessage
 ```

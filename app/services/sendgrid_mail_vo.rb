@@ -3,7 +3,7 @@
 require 'sendgrid-ruby'
 include SendGrid
 
-class SendgridMail
+class SendgridMailVo
   Invalid = Class.new(StandardError)
   include ActiveModel::Model
   include ActiveModel::Validations
@@ -13,7 +13,8 @@ class SendgridMail
                 :to_name,
                 :subject,
                 :template_id,
-                :dynamic_template_data
+                :dynamic_template_data,
+                :message_id
 
   validates :template_id,
             :from,
@@ -51,7 +52,11 @@ class SendgridMail
     personalization.add_to(Email.new(email: @to, name: @to_name))
     personalization.add_dynamic_template_data(@dynamic_template_data)
     mail.add_personalization(personalization)
-    mail
+    # Bug in Sendgrid's add_custom_arg.  Following will throw error "no implicit conversion of String into Hash"
+    # mail.add_custom_arg(Hash["custom_arg" => {message_id: @message_id}])
+    { mail: mail,
+      message_id: @message_id }
+
 
     # # Sendgrid personalization stopped working June 5
     # mail = SendGrid::Mail.new(

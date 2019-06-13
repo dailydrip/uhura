@@ -21,7 +21,7 @@ class Clearstream
 
     log!(">> Clearstream.send_msg data: #{data}")
 
-    # Request Clearstream to send message
+    # Request Clearstream client to send message
     response = ClearstreamClient::MessageClient.new(data: data[:clearstream_data],
                                                     resource: 'messages').send_message
     # Record Clearstream response
@@ -31,15 +31,14 @@ class Clearstream
     clearstream_msg.status = response['data']['status']
 
     if clearstream_msg.save! && link_clearstream_msg_to_message(data[:message_id], clearstream_msg.id)
-      return ReturnVo.new(value: return_accepted("clearstream_msg": clearstream_msg), error: nil)
+      return ReturnVo.new_value({clearstream_msg: clearstream_msg})
     else
-      err = clearstream_msg.errors || "Error for clearstream_id (#{clearstream_id})"
-      return ReturnVo.new(value: nil, error: return_error(err, :unprocessable_entity))
+      return ReturnVo.new_err(clearstream_msg.errors || "Error for clearstream_id (#{clearstream_id})")
     end
   end
 
   def self.send(message_vo)
-    # Populate and sanitize data
+    # Populate attributes required for request
     clearstream_vo = ClearstreamSmsVo.new(
       receiver_sso_id: message_vo.receiver_sso_id,
       team_name: message_vo.team_name,
