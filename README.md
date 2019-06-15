@@ -364,3 +364,86 @@ alias print-rspec-stacktrace='kill -USR1 "$(cat /tmp/rspec.pid)"'
 bundle exec rails g sidekiq:worker SendgridMessage
 bundle exec rails g sidekiq:worker ClearstreamMessage
 ```
+
+# API for Uhura's Messages API 
+
+Uhura provides a single API endpoint (/api/v1/messages) for submitting messages.
+
+And one API for checking on message statuses (/api/v1/message_status/${MESSAGE_ID})
+
+## Target Determination
+- It's not possible to determine the target (SMS/Email) from the request.
+- The Receiver's preference tells Uhura where to send the message
+-- Ex: This receiver gets SMS only:  {"email"=>false, "sms"=>true} 
+
+## Email Message
+- The body of the POST below is for an email that has one section.
+-- The template_id identifies a SendGrid html template that has one section.
+- Change the Host address `localhost:3000` to your Uhura host server address.
+```
+export X_TEAM_ID=1
+export UHURA_AUTORIZATION_TOKEN=b1dcc4b8287a82fe8889
+export BODY='{
+	"public_token": "42c50c442ee3ca01378e",
+    "receiver_sso_id": "55357499",
+    "email_subject": "Picnic Saturday",
+    "email_message": {
+	  "header": "Dragon Rage",
+	  "section1": "imagine you are writing an email. you are in front of the computer. you are operating the computer, clicking a mouse and typing on a keyboard, but the message will be sent to a human over the internet. so you are working before the computer, but with a human behind the computer.",
+	  "button": "Count me in!"
+	},
+    "template_id": "d-0ce0d614007d4a72b8242838451e9a65",
+    "sms_message": "Bring Drinks to the Picnic this Saturday"
+}'
+export UHURA_HOST="http://localhost:3000"
+
+curl -X POST \
+  -H "X-Team-ID: $X_TEAM_ID" \
+  -H "Authorization: Bearer $UHURA_AUTORIZATION_TOKEN" \
+  -H "Content-Type: application/json" \
+  -H "cache-control: no-cache" \
+  -d "$BODY" \
+  $UHURA_HOST/api/v1/messages
+```
+
+### Email message with two sections
+The message BODY below is sent to a SendGrid template (d-2a5278f48f0c41b992509f4039614930) that expects two sections:
+```
+{
+	"public_token": "{{UHURA_PUBLIC_TOKEN}}",
+    "receiver_sso_id": "88543891",
+    "email_subject": "Picnic Next Saturday",
+    "email_message": {
+	  "header": "Bind",
+	  "section1": "You're more like a game show host.",
+	  "section2": "I think we can get her a guest shot on 'Wild Kingdom.' I just whacked her up with about 300 cc's of Thorazaine... she's gonna take a little nap now.",
+	  "button": "Action!"
+	},
+    "template_id": "d-2a5278f48f0c41b992509f4039614930",
+    "sms_message": "Bring Dessert to the Picnic Next Saturday"
+}
+```
+
+# Response Examples
+
+## A Successful Response
+```
+{
+  "status": 200,
+  "data": {
+    "message": "We got the message. Go here (http://localhost:3000/api/v1/message_status/29) for details on it later."
+  },
+  "error": null
+}
+```
+
+## A Failed Response
+```
+{
+  "status": 422,
+  "data": null,
+  "error": {
+    "message": "Team ID (-Team-ID) from the X-Team-ID HTTP header NOT found! Consider adding Team for ID (-Team-ID) using the Admin app on the Teams page."
+  }
+}
+```
