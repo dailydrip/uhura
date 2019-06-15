@@ -41,31 +41,33 @@ class SendgridMailVo
 
   attr_reader :receiver_sso_id
 
-  def get
+  def get_vo
     raise Invalid, errors.full_messages unless valid?
 
-    mail = SendGrid::Mail.new
-    mail.template_id = @template_id
-    mail.from = Email.new(email: @from)
-    mail.subject = @subject
-    personalization = Personalization.new
-    personalization.add_to(Email.new(email: @to, name: @to_name))
-    personalization.add_dynamic_template_data(@dynamic_template_data)
-    mail.add_personalization(personalization)
+    mail_vo = {
+        template_id: @template_id,
+        from: @from,
+        subject: @subject,
+        to: @to,
+        to_name: @to_name,
+        dynamic_template_data: @dynamic_template_data
+    }
     # Bug in Sendgrid's add_custom_arg.  Following will throw error "no implicit conversion of String into Hash"
     # mail.add_custom_arg(Hash["custom_arg" => {message_id: @message_id}])
-    { mail: mail,
+    { mail_vo: mail_vo,
       message_id: @message_id }
+  end
 
-
-    # # Sendgrid personalization stopped working June 5
-    # mail = SendGrid::Mail.new(
-    #     Email.new(email: @from),
-    #     @subject,
-    #     Email.new(email: @to),
-    #     Content.new(type: 'text/plain', value: self.text_content)) # Content
-    #
-    # mail
+  def self.get_mail(mail_vo)
+    mail = SendGrid::Mail.new
+    mail.template_id = mail_vo[:template_id]
+    mail.from = Email.new(email: mail_vo[:from])
+    mail.subject = mail_vo[:subject]
+    personalization = Personalization.new
+    personalization.add_to(Email.new(email: mail_vo[:to], name: mail_vo[:to_name]))
+    personalization.add_dynamic_template_data(mail_vo[:dynamic_template_data])
+    mail.add_personalization(personalization)
+    mail
   end
 
   def text_content

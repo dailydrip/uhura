@@ -16,7 +16,7 @@ class MessageDirector
     # Send message using receiver's delivery preference:
     case ret.value.msg_target.name
     when 'Sendgrid'
-      response = Sendgrid.send(message_vo)
+      response = SendgridHandler.send(message_vo)
       if response.error
         msg = response.error[:error]
         log_error(msg)
@@ -26,7 +26,7 @@ class MessageDirector
         log_info(msg)
       end
     when 'Clearstream'
-      response = Clearstream.send(message_vo)
+      response = ClearstreamHandler.send(message_vo)
       if response.error
         msg = response.error[:error]
         log_error(msg)

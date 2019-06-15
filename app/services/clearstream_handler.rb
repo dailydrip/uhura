@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Clearstream
+class ClearstreamHandler
   # rubocop:disable all
   def self.link_clearstream_msg_to_message(message_id, clearstream_msg_id)
     clearstream_msg = ClearstreamMsg.find_by(id: clearstream_msg_id)
@@ -18,11 +18,8 @@ class Clearstream
   end
 
   def self.send_msg(data)
-
-    log!(">> Clearstream.send_msg data: #{data}")
-
     # Request Clearstream client to send message
-    response = ClearstreamClient::MessageClient.new(data: data[:clearstream_data],
+    response = ClearstreamClient::MessageClient.new(data: data[:clearstream_vo],
                                                     resource: 'messages').send_message
     # Record Clearstream response
     clearstream_msg = ClearstreamMsg.create!(sent_to_clearstream: Time.now,
@@ -47,16 +44,14 @@ class Clearstream
     ).get
 
     ClearstreamMessageWorker.perform_async(clearstream_vo)
-    #TODO:Refactor
-    # log_info(message_vo.sent_for_processing_msg)
-    msg = "Sent SMS: (#{message_vo.team_name}:#{message_vo.email_subject}) "
+
+    msg = "Asynchronously sent SMS: (#{message_vo.team_name}:#{message_vo.email_subject}) "
     msg += "from (#{message_vo.manager_name}) to (#{message_vo.mobile_number})"
     log_info(msg)
     return ReturnVo.new(value: return_accepted("clearstream_msg": msg), error: nil)
 
   rescue StandardError => e
-#byebug
-    err_msg = JSON.parse(e.message)['error']['message'] if err_msg.nil?
+    err_msg = get_err_msg(e)
     # Log Clearstream subscription warnings if necessary. Note Uhura does not submit create_subscriber requests.
     if err_msg&.include?('supplied subscribers is invalid') # "At least one of the supplied subscribers is invalid."
       # If the subscriber is invalid, let's assume that they've not been registered with Clearstream.io

@@ -3,6 +3,6 @@ class ClearstreamMessageWorker
   sidekiq_options retry: false
 
   def perform(clearstream_vo)
-    Clearstream.send_msg(clearstream_data: clearstream_vo)
+    ClearstreamHandler.send_msg(clearstream_vo: clearstream_vo)
   end
 end

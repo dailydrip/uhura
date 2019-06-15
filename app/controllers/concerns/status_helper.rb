@@ -23,9 +23,9 @@ module StatusHelper
     end
   end
 
-  def render_error_msg(msg)
+  def render_error_msg(msg, status=unprocessable_entity)
     log_error(msg)
-    render json: return_error(message: msg), status: unprocessable_entity
+    render json: return_error(message: msg), status: status
   end
 
   def render_success_msg(msg)

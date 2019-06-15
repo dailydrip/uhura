@@ -29,7 +29,6 @@ Rails.application.routes.draw do
       end
       resources :message_status, only: [:show]
       resources :invalid_message_status, only: [:show]
-      get "/report76" => "messages#report76", as: "report76"
     end
   end
 

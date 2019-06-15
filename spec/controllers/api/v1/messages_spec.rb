@@ -182,25 +182,21 @@ RSpec.describe 'Messages API', type: :request do
           "sms_message": 'Come in now for 50% off all rolls!'
         }
       end
-      it 'calls Sendgrid and returns a successful sendgrid_response' do
+      it 'calls Sendgrid and returns a successful response and stores the message send request' do
         stub_request(:any, /api.sendgrid.com/).
           to_return(body: get_sendgrid_response_data('post_message'),
                     status: 200)
+
         post '/api/v1/messages', headers: valid_headers, params: valid_attributes.to_json
         # Just created 3rd message.
         link_to_sendgrid
+        expect(response.parsed_body['status']).to eq 200
         expect(Message.last.target[:sent_to_sendgrid]).to_not be_nil
-        expect(Message.last.target[:response]['error']).to_not be_nil
-        expect(Message.last.target[:response]['error']['message']).to eq('At least one of the supplied subscribers is invalid.')
-        expect(Message.last.target[:response]['error']['http_code']).to eq(422)
-
+        expect(JSON.parse(Message.last.target[:mail_and_response])['response']['status_code']).to eq('202')
+        # Created new MesssageStatus
         get "/api/v1/message_status/#{Message.find(3).id}", headers: valid_headers, params: nil
         expect(response.status).to eq 200
-        expect(response.parsed_body['data']['response']['error']).to_not be_nil
-        expect(response.parsed_body['data']['response']['error']['message']).to eq('At least one of the supplied subscribers is invalid.')
-        expect(response.parsed_body['data']['response']['error']['http_code']).to eq(422)
-        expect(response.parsed_body['data']['response']['error']['fields']['subscribers']).to_not be_nil
-
+        expect(JSON.parse(response.parsed_body['data']['mail_and_response'])['response']['status_code']).to eq('202')
       end
     end
 
@@ -217,17 +213,17 @@ RSpec.describe 'Messages API', type: :request do
             "section2": "I think we can get her a guest shot on 'Wild Kingdom.' I just whacked her up with about 300 cc's of Thorazaine... she's gonna take a little nap now.",
             "button": 'Action!'
           },
-          "template_id": '4d10bf26b57247deba602127dab1ba60',
+          "template_id": '4d10bf26b57247deba602127dab1ba60-XXX',
           "sms_message": 'Bring Dessert to the Picnic Next Saturday'
         }
       end
       it 'returns status code 422' do
         stub_request(:any, /api.sendgrid.com/).
-          to_return(body: get_sendgrid_response_data('post_message'),
+          to_return(body: get_sendgrid_response_data('post_message_with_invalid_template_id'),
                     status: 422)
         post '/api/v1/messages', headers: valid_headers, params: valid_attributes.to_json
         expect(response.status).to eq 422
-        expect(response.parsed_body['error']).to include('Validation failed: Template must exist')
+        expect(response.parsed_body['error']['message']).to include('Invalid message')
       end
     end
 
@@ -253,7 +249,8 @@ RSpec.describe 'Messages API', type: :request do
                     status: 200)
         post '/api/v1/messages', headers: valid_headers, params: valid_attributes.to_json
         expect(response.status).to eq 200
-        expect(response.parsed_body['data']['sendgrid_msg']['mail_and_response']['mail']['personalizations'][0]['dynamic_template_data']['section1']).to eq('imagine you are writing an email.')
+        #expect(response.parsed_body['data']['sendgrid_msg']['mail_and_response']['mail']['personalizations'][0]['dynamic_template_data']['section1']).to eq('imagine you are writing an email.')
+        expect(response.parsed_body['data']['message']).to include('We got the message')
       end
     end
 
@@ -280,7 +277,8 @@ RSpec.describe 'Messages API', type: :request do
                     status: 200)
         post '/api/v1/messages', headers: valid_headers, params: valid_attributes.to_json
         expect(response.status).to eq 200
-        expect(response.parsed_body['data']['sendgrid_msg']['mail_and_response']['mail']['personalizations'][0]['dynamic_template_data']['section2']).to eq("I think we can get her a guest shot on 'Wild Kingdom.' I just whacked her up with about 300 cc's of Thorazaine... she's gonna take a little nap now.")
+        #expect(response.parsed_body['data']['sendgrid_msg']['mail_and_response']['mail']['personalizations'][0]['dynamic_template_data']['section2']).to eq("I think we can get her a guest shot on 'Wild Kingdom.' I just whacked her up with about 300 cc's of Thorazaine... she's gonna take a little nap now.")
+        expect(response.parsed_body['data']['message']).to include('We got the message')
       end
     end
 

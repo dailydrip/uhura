@@ -78,8 +78,8 @@ class Api::V1::MessagesController < Api::V1::ApiBaseController
         invalid_message = InvalidMessage.create!(
             message_vo.invalid_message_attrs.merge(
                 message_params: message_params_vo.message_params,
-                message_attrs: message_vo.to_hash,
-                )
+                message_attrs: message_vo.to_hash
+            )
         )
         # There are no ClearstreamMsg or SendgridMsg FKeys since message was not sent
         render_error_status(invalid_message.id)
@@ -95,7 +95,7 @@ class Api::V1::MessagesController < Api::V1::ApiBaseController
 
   def render_error_status(invalid_message)
     msg = "Invalid message. Go here (#{api_v1_invalid_message_status_url(invalid_message)}) for details on it later."
-    render_success_msg(msg)
+    render_error_msg(msg)
   end
 
   def render_success_status(message_id)

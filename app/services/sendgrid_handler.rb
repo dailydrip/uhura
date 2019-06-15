@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Sendgrid
+class SendgridHandler
   # rubocop:disable Metrics/MethodLength
   def self.link_sendgrid_msg_to_message(message_id, sendgrid_msg_id)
     sendgrid_msg = SendgridMsg.find_by(id: sendgrid_msg_id)
@@ -17,13 +17,15 @@ class Sendgrid
     message.save!
   end
 
-  def self.send_msg(mail_vo)
-    log!(">> Sendgrid.send_msg data: #{mail_vo}")
-
-    message_id = mail_vo[:message_id]
-
+  def self.send_msg(sendgrid_vo)
+    if sendgrid_vo[:mail_vo].blank?
+      log_warn('Sidekiq performs a deep_stringify_keys on the hash; reverse that with deep_symbolize_keys.')
+      sendgrid_vo = sendgrid_vo.deep_symbolize_keys
+    end
+    message_id = sendgrid_vo[:message_id]
+    mail_obj = SendgridMailVo.get_mail(sendgrid_vo[:mail_vo])
     # Request Clearstream client to send message
-    response_and_mail = SendgridMailer.new.send_email(mail_vo[:mail])
+    response_and_mail = SendgridMailer.new.send_email(mail_obj)
     response = response_and_mail[:response]
     mail = response_and_mail[:mail]
     # Record date Sendgrid server said they got the message. body attribute will be populated if there's an error.
@@ -57,25 +59,22 @@ class Sendgrid
         template_id: message_vo.sendgrid_template_id,
         dynamic_template_data: template_data,
         message_id: message_vo.message_id
-    ).get
+    ).get_vo
 
-    # SendgridMessageWorker.perform_async(sendgrid_vo)
 
-    send_msg(sendgrid_vo)
+    #SendgridHandler.send_msg(sendgrid_vo)
+    SendSendgridMessageWorker.perform_async(sendgrid_vo)
 
-    #TODO:Refactor
-    # log_info(message_vo.sent_for_processing_msg)
-    msg = "Sent SMS: (#{message_vo.team_name}:#{message_vo.email_subject}) "
+    msg = "Asynchronously sent SMS: (#{message_vo.team_name}:#{message_vo.email_subject}) "
     msg += "from (#{message_vo.manager_name}) to (#{message_vo.mobile_number})"
     log_info(msg)
     return ReturnVo.new(value: return_accepted("clearstream_msg": msg), error: nil)
 
   rescue StandardError => e
-    err_msg = JSON.parse(e.message)['error']['msg'] if err_msg.nil?
-    log_error(err_msg)
+    err_msg = get_err_msg(e)
     # A error occurs while processing the request. Record ERROR status.
     sendgrid_msg = SendgridMsg.create!(
-        mail_and_response: { mail: mail.to_json, response: { error: err_msg } },
+        mail_and_response: { mail: sendgrid_vo[:mail].to_json, response: { error: err_msg } },
         status: 'ERROR')
     # Link sendgrid_msg to message
     message = Message.find(message_vo.message_id)
