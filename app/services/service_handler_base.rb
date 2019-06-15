@@ -1,5 +1,5 @@
-class BaseClass
-  def get_err_msg(e)
+class ServiceHandlerBase
+  def self.get_err_msg(e)
     begin
       err_msg = JSON.parse(e.message)['error']['message']
     rescue JSON::ParserError

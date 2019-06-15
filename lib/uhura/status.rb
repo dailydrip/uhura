@@ -2,6 +2,7 @@
 
 def symbol_to_status(status)
   return Rack::Utils::SYMBOL_TO_STATUS_CODE[status] if status.is_a? Symbol
+
   log_error("Invalid status (#{status}) received") if status.to_i.eql?(0)
   status.to_i
 end

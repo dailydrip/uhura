@@ -73,7 +73,7 @@ class Api::V1::MessagesController < Api::V1::ApiBaseController
       message_vo = MessageVo.new(message_params_vo, manager_team_vo)
       # message_vo is valid. MessageDirector will determine if its an Email or SMS message.
       return_vo = MessageDirector.send(message_vo) # <= Send message!
-      if return_vo.is_error?  #message_vo.message_id.nil?
+      if return_vo.error?  #message_vo.message_id.nil?
         # Store failed message attempt
         invalid_message = InvalidMessage.create!(
             message_vo.invalid_message_attrs.merge(

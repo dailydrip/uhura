@@ -26,14 +26,12 @@ module HighlandsClient
 
     private
 
-    # rubocop:disable Layout/AlignHash
     def headers
       {
-        'Authorization' => "Token token=#{@api_key.to_s}",
+        'Authorization' => "Token token=#{@api_key}",
         'Content-Type' => 'application/json'
       }
     end
-    # rubocop:enable Layout/AlignHash
 
     def connection
       Faraday.new(url: HighlandsClient::Config.base_url, headers: headers) do |builder|

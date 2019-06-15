@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ClearstreamHandler
+class ClearstreamHandler < ServiceHandlerBase
   # rubocop:disable all
   def self.link_clearstream_msg_to_message(message_id, clearstream_msg_id)
     clearstream_msg = ClearstreamMsg.find_by(id: clearstream_msg_id)
@@ -51,7 +51,7 @@ class ClearstreamHandler
     return ReturnVo.new(value: return_accepted("clearstream_msg": msg), error: nil)
 
   rescue StandardError => e
-    err_msg = get_err_msg(e)
+    err_msg = self.get_err_msg(e)
     # Log Clearstream subscription warnings if necessary. Note Uhura does not submit create_subscriber requests.
     if err_msg&.include?('supplied subscribers is invalid') # "At least one of the supplied subscribers is invalid."
       # If the subscriber is invalid, let's assume that they've not been registered with Clearstream.io

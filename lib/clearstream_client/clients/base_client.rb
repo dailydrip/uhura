@@ -24,6 +24,7 @@ module ClearstreamClient
     def create
       response = connection.post(@resource, @data)
       raise APIError, response.body unless response.success?
+
       JSONConverter.to_hash(response.body)
     end
 

@@ -22,18 +22,12 @@ class ReturnVo
   end
 
   def error?
-    # rubocop:disable Style/DoubleNegation
-    !!@error
-    # rubocop:enable Style/DoubleNegation
+    !self.error.nil?
   end
 
   def status
     # If there is a status, then return that else :unprocessable_entity
     @value[:status] || unprocessable_entity
-  end
-
-  def is_error?
-    !self.error.nil?
   end
 
   def self.new_value(value_hash)

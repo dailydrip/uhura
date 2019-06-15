@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class SendgridHandler
+class SendgridHandler < ServiceHandlerBase
   # rubocop:disable Metrics/MethodLength
   def self.link_sendgrid_msg_to_message(message_id, sendgrid_msg_id)
     sendgrid_msg = SendgridMsg.find_by(id: sendgrid_msg_id)
@@ -71,7 +71,7 @@ class SendgridHandler
     return ReturnVo.new(value: return_accepted("clearstream_msg": msg), error: nil)
 
   rescue StandardError => e
-    err_msg = get_err_msg(e)
+    err_msg = self.get_err_msg(e)
     # A error occurs while processing the request. Record ERROR status.
     sendgrid_msg = SendgridMsg.create!(
         mail_and_response: { mail: sendgrid_vo[:mail].to_json, response: { error: err_msg } },
