@@ -447,3 +447,15 @@ The message BODY below is sent to a SendGrid template (d-2a5278f48f0c41b992509f4
   }
 }
 ```
+
+# Admin App
+
+We used the Administrate gem (https://github.com/thoughtbot/administrate) to help use build the /admin application.
+
+When you access the home pages, for example, http://localhost:3000/admin, in development, you'll be redirected to the Highlands SSO login page (http://localhost:3000/highlands_sso/sessions/new).
+
+If you are a admin or super_admin in the Highlands SSO realm, then after logging in you'll be redirected to the /admin application.
+
+If you are a user, but not an admin, you'll be redirected to the Uhura home page with the following message: You are not authorized to access the admin application.
+
+If your credentials get upgraded to a Highlands SSO admin, you should clear your browser cache, i.e., remove your site cookies and try again.
