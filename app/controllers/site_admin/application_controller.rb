@@ -9,17 +9,16 @@
 module SiteAdmin
   class ApplicationController < Administrate::ApplicationController
     include HighlandsAuth::ApplicationHelper
-    before_action :authenticate_admin!
     protect_from_forgery with: :exception
+    before_action :authenticate_user!
+    before_action :authenticate_admin
 
-    def authenticate_admin!
+    def authenticate_user!
       redirect_to auth.new_session_path unless current_user
     end
 
-    # Override this value to specify the number of elements to display at a time
-    # on index pages. Defaults to 20.
-    # def records_per_page
-    #   params[:per_page] || 20
-    # end
+    def authenticate_admin
+      redirect_to '/', alert: 'You are not authorized to access the admin application.' unless current_user&.admin?
+    end
   end
 end

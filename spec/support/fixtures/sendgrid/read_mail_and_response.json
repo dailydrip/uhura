@@ -1,0 +1,30 @@
+{
+  "mail": {
+    "from": {
+      "email": "app1@highlands.org"
+    },
+    "subject": "Picnic Saturday",
+    "personalizations": [
+      {
+        "to": [
+          {
+            "email": "bob.replace.me@gmail.com",
+            "name": "Bob Brown"
+          }
+        ],
+        "dynamic_template_data": {
+          "header": "Dragon Rage",
+          "section1": "imagine you are writing an email. you are in front of the computer. you are operating the computer, clicking a mouse and typing on a keyboard, but the message will be sent to a human over the internet. so you are working before the computer, but with a human behind the computer.",
+          "button": "Count me in!",
+          "email_subject": "Picnic Saturday"
+        }
+      }
+    ],
+    "template_id": "d-0ce0d614007d4a72b8242838451e9a65"
+  },
+  "response": {
+    "body": "",
+    "server_date": "Sat, 15 Jun 2019 21:18:45 GMT",
+    "status_code": "202"
+  }
+}

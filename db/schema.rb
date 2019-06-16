@@ -33,6 +33,26 @@ ActiveRecord::Schema.define(version: 2019_05_12_215905) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "invalid_messages", force: :cascade do |t|
+    t.bigint "msg_target_id"
+    t.bigint "manager_id"
+    t.bigint "receiver_id"
+    t.bigint "team_id"
+    t.string "email_subject"
+    t.text "email_message"
+    t.bigint "template_id"
+    t.text "sms_message"
+    t.json "message_params"
+    t.json "message_attrs"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["manager_id"], name: "index_invalid_messages_on_manager_id"
+    t.index ["msg_target_id"], name: "index_invalid_messages_on_msg_target_id"
+    t.index ["receiver_id"], name: "index_invalid_messages_on_receiver_id"
+    t.index ["team_id"], name: "index_invalid_messages_on_team_id"
+    t.index ["template_id"], name: "index_invalid_messages_on_template_id"
+  end
+
   create_table "managers", force: :cascade do |t|
     t.string "name"
     t.string "public_token"
@@ -93,6 +113,7 @@ ActiveRecord::Schema.define(version: 2019_05_12_215905) do
     t.datetime "got_response_at"
     t.text "sendgrid_response"
     t.datetime "read_by_user_at"
+    t.text "status"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

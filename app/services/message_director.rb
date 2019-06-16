@@ -16,40 +16,45 @@ class MessageDirector
     # Send message using receiver's delivery preference:
     case ret.value.msg_target.name
     when 'Sendgrid'
-      message = Sendgrid.send(message_vo)
-      if message.error
-        msg = message.error[:error]
+      response = SendgridHandler.send(message_vo)
+      if response.error
+        msg = response.error[:error]
         log_error(msg)
       else
         msg = "Sent Email: subject (#{message_vo.email_subject}) "
-        msg += "from (#{message_vo.manager_name}) to (#{message_vo.receiver_email})"
+        msg += "from (#{message_vo.manager_name}) to (#{message_vo.email})"
         log_info(msg)
       end
     when 'Clearstream'
-      message = Clearstream.send(message_vo)
-      if message.error
-        msg = message.error[:error]
+      response = ClearstreamHandler.send(message_vo)
+      if response.error
+        msg = response.error[:error]
         log_error(msg)
       else
-        msg = "Sent SMS: (#{message_vo.team_name}:#{message_vo.email_subject}) "
-        msg += "from (#{message_vo.manager_name}) to (#{message_vo.mobile_number})"
+        msg = response.value[:data]
         log_info(msg)
       end
     else
-      msg = "Sent message: subject (#{message_vo.sms_message}) to (#{message_vo.receiver_email}), "
+      msg = "Sent message: subject (#{message_vo.sms_message}) to (#{message_vo.email}), "
       msg += 'but receiver prefers neither Email nor SMS!'
       log_error(msg)
-      message = ReturnVo.new(value: nil, error: return_error(msg, :precondition_failed))
+      response = ReturnVo.new(value: nil, error: return_error(msg, :precondition_failed))
     end
-    message # Return message in a ReturnVo
+    response # Return message in a ReturnVo
   end
 
   # This is where we verify that the data passed matches with data in the database and set the message target.
   private_class_method def self.create_message(message_vo)
-    if !message_vo.valid?
+    begin
+      message_vo_is_valid = message_vo.valid?
+    rescue StandardError => e
+      message_vo_is_valid = false
+      message_vo.errors.add(:value, e.message)
+    end
+    if !message_vo_is_valid
       ReturnVo.new(value: nil, error: return_error(message_vo.errors, :unprocessable_entity))
     else
-      ActiveRecord::Base.transaction do
+      begin
         message = Message.create!(msg_target_id: message_vo.msg_target_id,
                                   manager_id: message_vo.manager_id, # <= source of message (an application)
                                   receiver_id: message_vo.receiver_id,

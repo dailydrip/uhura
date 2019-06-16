@@ -1,0 +1,61 @@
+{
+  "status": 200,
+  "data": {
+    "id": 2,
+    "msg_target_id": 2,
+    "manager_id": 1,
+    "receiver_id": 3,
+    "team_id": 1,
+    "email_subject": "Picnic Saturday",
+    "email_message": "{\"header\"=>\"Dragon Rage\", \"section1\"=>\"imagine you are writing an email. you are in front of the computer. you are operating the computer, clicking a mouse and typing on a keyboard, but the message will be sent to a human over the internet. so you are working before the computer, but with a human behind the computer.\", \"button\"=>\"Count me in!\"}",
+    "template_id": 1,
+    "sms_message": "Come in now for 50% off all rolls!",
+    "message_params": {
+      "public_token": "42c50c442ee3ca01378e",
+      "receiver_sso_id": "55357450",
+      "email_subject": "Picnic Saturday",
+      "email_message": {
+        "header": "Dragon Rage",
+        "section1": "imagine you are writing an email. you are in front of the computer. you are operating the computer, clicking a mouse and typing on a keyboard, but the message will be sent to a human over the internet. so you are working before the computer, but with a human behind the computer.",
+        "button": "Count me in!"
+      },
+      "template_id": "d-f986df533e514f978f4460bedca50db0",
+      "sms_message": "Come in now for 50% off all rolls!"
+    },
+    "message_attrs": {
+      "errors": {},
+      "public_token": "42c50c442ee3ca01378e",
+      "receiver_sso_id": "55357450",
+      "email_subject": "Picnic Saturday",
+      "email_message": {
+        "header": "Dragon Rage",
+        "section1": "imagine you are writing an email. you are in front of the computer. you are operating the computer, clicking a mouse and typing on a keyboard, but the message will be sent to a human over the internet. so you are working before the computer, but with a human behind the computer.",
+        "button": "Count me in!"
+      },
+      "template_id": 1,
+      "sms_message": "Come in now for 50% off all rolls!",
+      "manager_id": 1,
+      "manager_name": "Sample - App 1",
+      "manager_email": "app1@highlands.org",
+      "team_name": "Leadership Team",
+      "receiver_id": 3,
+      "mobile_number": "?+!42",
+      "first": "Cindy",
+      "last": "Red",
+      "email": "cindy@yahoo.com",
+      "lists": "25057",
+      "receiver_preferences": {
+        "email": false,
+        "sms": true
+      },
+      "msg_target_id": 2,
+      "team_id": 1,
+      "sendgrid_template_id": "d-f986df533e514f978f4460bedca50db0",
+      "validation_context": null,
+      "message_id": 8
+    },
+    "created_at": "2019-06-05T23:10:25.077Z",
+    "updated_at": "2019-06-05T23:10:25.077Z"
+  },
+  "error": null
+}

@@ -38,7 +38,6 @@ module ClearstreamClient
 
     private
 
-    # rubocop:disable Metrics/MethodLength
     def deserialize(json)
       self.id = json['id']
       self.template_id = json['template_id']
@@ -52,6 +51,5 @@ module ClearstreamClient
       self.send_to_tw = json['send_to_tw']
       self
     end
-    # rubocop:enable Metrics/MethodLength
   end
 end
