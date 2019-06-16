@@ -7,6 +7,7 @@ RSpec.describe 'MessageStatus API', type: :request do
     setup_data
   end
 
+  # rubocop:disable all
   describe 'GET /api/v1/message_status' do
     let(:manager) do Manager.first; end
     let(:receiver) do Receiver.first; end
@@ -22,4 +23,5 @@ RSpec.describe 'MessageStatus API', type: :request do
       end
     end
   end
+  # rubocop:enable all
 end

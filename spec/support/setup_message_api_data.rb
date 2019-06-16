@@ -1,4 +1,6 @@
-# Seed tables
+# frozen_string_literal: true
+
+# rubocop:disable all
 def setup_data
   app1 = Manager.create!(name: 'Sample - App 1', email: 'app1@highlands.org')
   app1.public_token = '42c50c442ee3ca01378e' # Set to specific value to match tests
@@ -145,3 +147,4 @@ def setup_data
   msg2.clearstream_msg = cs1
   msg2.save!
 end
+# rubocop:enable all

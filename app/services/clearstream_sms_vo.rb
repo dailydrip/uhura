@@ -92,9 +92,9 @@ class ClearstreamSmsVo
   end
 
   def sent_for_processing_msg
-    msg = "Sent SMS: (#{self.team_name}:#{self.email_subject}) "
-    msg += "from (#{self.manager_name}) to (#{self.mobile_number})"
-    msg += "for processing."
+    msg = "Sent SMS: (#{@team_name}:#{@email_subject}) "
+    msg += "from (#{@manager_name}) to (#{@mobile_number})"
+    msg += 'for processing.'
     msg
   end
 end

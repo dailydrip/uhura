@@ -22,7 +22,7 @@ class ReturnVo
   end
 
   def error?
-    !self.error.nil?
+    !@error.nil?
   end
 
   def status
@@ -31,16 +31,15 @@ class ReturnVo
   end
 
   def self.new_value(value_hash)
-    self.new(value: return_accepted(value_hash), error: nil)
+    new(value: return_accepted(value_hash), error: nil)
   end
 
   def self.new_err(err)
-    self.new(value: nil, error: return_error(err, :unprocessable_entity))
+    new(value: nil, error: return_error(err, :unprocessable_entity))
   end
 
   private
 
-  # rubocop:disable Metrics/AbcSize
   def concistency_check
     if error.nil? && value.nil?
       errors.add(:value, 'cannot be nil when error is nil')
@@ -51,5 +50,4 @@ class ReturnVo
       errors.add(:error, 'cannot be populated when value is populated')
     end
   end
-  # rubocop:enable Metrics/AbcSize
 end

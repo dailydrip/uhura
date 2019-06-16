@@ -41,21 +41,21 @@ class SendgridMailVo
 
   attr_reader :receiver_sso_id
 
+  # rubocop:disable Naming/AccessorMethodName
   def get_vo
     raise Invalid, errors.full_messages unless valid?
 
     mail_vo = {
-        template_id: @template_id,
-        from: @from,
-        subject: @subject,
-        to: @to,
-        to_name: @to_name,
-        dynamic_template_data: @dynamic_template_data
+      template_id: @template_id,
+      from: @from,
+      subject: @subject,
+      to: @to,
+      to_name: @to_name,
+      dynamic_template_data: @dynamic_template_data
     }
     # Bug in Sendgrid's add_custom_arg.  Following will throw error "no implicit conversion of String into Hash"
     # mail.add_custom_arg(Hash["custom_arg" => {message_id: @message_id}])
-    { mail_vo: mail_vo,
-      message_id: @message_id }
+    { mail_vo: mail_vo, message_id: @message_id }
   end
 
   def self.get_mail(mail_vo)
@@ -69,14 +69,16 @@ class SendgridMailVo
     mail.add_personalization(personalization)
     mail
   end
+  # rubocop:enable Naming/AccessorMethodName
 
+  # rubocop:disable all
   def text_content
     content = []
     content << @dynamic_template_data['header']
-    content << @dynamic_template_data.
-        each_pair.select {|k,v| v if k.to_s.include?('section') }.
-        map{|i| i[1]}
-    content.
-        join("\n\n")
+    content << @dynamic_template_data
+                   .each_pair.select { |k, v| v if k.to_s.include?('section') }
+                   .map { |i| i[1] }
+    content.join("\n\n")
   end
+  # rubocop:enable all
 end

@@ -2,6 +2,7 @@
 
 require 'rails_helper'
 
+# rubocop:disable all
 RSpec.describe 'Messages API', type: :request do
   before do
     setup_data
@@ -310,3 +311,4 @@ RSpec.describe 'Messages API', type: :request do
     end
   end
 end
+# rubocop:enable all

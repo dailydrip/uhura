@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ClearstreamMessageWorker
   include Sidekiq::Worker
   sidekiq_options retry: false

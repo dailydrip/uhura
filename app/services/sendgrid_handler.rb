@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class SendgridHandler < ServiceHandlerBase
-  # rubocop:disable Metrics/MethodLength
+  # rubocop:disable all
   def self.link_sendgrid_msg_to_message(message_id, sendgrid_msg_id)
     sendgrid_msg = SendgridMsg.find_by(id: sendgrid_msg_id)
     if sendgrid_msg.nil?
@@ -42,7 +42,7 @@ class SendgridHandler < ServiceHandlerBase
     # Link message record to sendgrid_msg record
 
     if sendgrid_msg.save! && link_sendgrid_msg_to_message(message_id, sendgrid_msg.id)
-      return ReturnVo.new_value({sendgrid_msg: sendgrid_msg})
+      return ReturnVo.new_value(sendgrid_msg: sendgrid_msg)
     else
       return ReturnVo.new_err(sendgrid_msg.errors || "Error for sendgrid_id (#{sendgrid_id})")
     end
@@ -82,4 +82,5 @@ class SendgridHandler < ServiceHandlerBase
     message.save!
     ReturnVo.new_err(err_msg)
   end
+  # rubocop:enable all
 end

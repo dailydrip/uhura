@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable Metrics/ClassLength
 # This is a value object that also performs data presence validation
 class MessageVo
   InvalidMessageError = Class.new(StandardError)

@@ -1,4 +1,8 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
+
+# rubocop:disable all
 RSpec.describe SendSendgridMessageWorker do
   before do
     Sidekiq::Worker.clear_all
@@ -79,3 +83,4 @@ RSpec.describe SendSendgridMessageWorker do
     end
   end
 end
+# rubocop:enable all

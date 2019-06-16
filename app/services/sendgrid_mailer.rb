@@ -7,7 +7,7 @@ class SendgridMailer
     @client = SendGrid::API.new(api_key: ENV['SENDGRID_API_KEY']).client
   end
 
-  # rubocop:disable
+  # rubocop:disable all
   def send_email(mail_vo)
     response = @client.mail._('send').post(request_body: mail_vo.to_json) # <= Send email!
     body = response.body.blank? ? '' : JSON.parse(response.body)
@@ -20,5 +20,5 @@ class SendgridMailer
       mail: mail_vo
     }
   end
-  # rubocop:enable
+  # rubocop:enable all
 end

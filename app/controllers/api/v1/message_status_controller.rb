@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Api::V1::MessageStatusController < Api::V1::ApiBaseController
   include StatusHelper
 

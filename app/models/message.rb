@@ -13,20 +13,20 @@ class Message < ApplicationRecord
   alias_attribute :app_id, :manager_id
 
   def target
-    if self.msg_target.name.eql?('Sendgrid')
-      self.sendgrid_msg
-    elsif self.msg_target.name.eql?('Clearstream')
-      self.clearstream_msg
+    if msg_target.name.eql?('Sendgrid')
+      sendgrid_msg
+    elsif msg_target.name.eql?('Clearstream')
+      clearstream_msg
     else
-      log_err!("Invalid msg_target #{self.msg_target} for message #{self.id}")
+      log_err!("Invalid msg_target #{msg_target} for message #{id}")
     end
   end
 
   def target_name
-    if self.target.nil?
-      msg_target = MsgTarget.find(self.msg_target_id)
+    if target.nil?
+      msg_target = MsgTarget.find(msg_target_id)
       if msg_target.nil?
-        log_err!("Invalid msg_target #{self.msg_target}")
+        log_err!("Invalid msg_target #{msg_target}")
       else
         msg_target.name
       end
