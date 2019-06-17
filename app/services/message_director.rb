@@ -61,6 +61,7 @@ class MessageDirector
                                   team_id: message_vo.team_id, # <= message coming from this team
                                   email_subject: message_vo.email_subject,
                                   email_message: message_vo.email_message,
+                                  email_options: message_vo.email_options,
                                   template_id: message_vo.template_id,
                                   sms_message: message_vo.sms_message)
 

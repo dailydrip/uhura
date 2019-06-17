@@ -19,6 +19,7 @@ class MessageParamsVo < BaseClass
                 :receiver_sso_id,
                 :email_subject,
                 :email_message,
+                :email_options,
                 :template_id,
                 :sms_message,
                 :my_attributes
@@ -42,6 +43,7 @@ class MessageParamsVo < BaseClass
       receiver_sso_id: @receiver_sso_id,
       email_subject: @email_subject,
       email_message: @email_message,
+      email_options: @email_options,
       template_id: @template_id,
       sms_message: @sms_message
     }

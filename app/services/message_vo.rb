@@ -36,6 +36,7 @@ class MessageVo
                 :receiver_email, # Populated when receiver_sso_id is assigned a value
                 :email_subject,
                 :email_message,
+                :email_options,
                 :template_id, # ID to templates table
                 :sendgrid_template_id,
                 :sms_message,
@@ -118,6 +119,7 @@ class MessageVo
         team_id: self.team_id,
         email_subject: self.email_subject,
         email_message: self.email_message,
+        email_options: self.email_options,
         template_id: self.template_id,
         sms_message: self.sms_message
     }
