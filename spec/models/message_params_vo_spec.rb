@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable all
 require 'rails_helper'
 
 RSpec.describe MessageParamsVo, type: :model do
@@ -75,3 +76,4 @@ RSpec.describe MessageParamsVo, type: :model do
     end
   end
 end
+# rubocop:enable all

@@ -1,47 +1,24 @@
 # frozen_string_literal: true
 
-# class SendgridMailer < ActionMailer::Base
-class SendgridMailer #< Module
+class SendgridMailer
   include SendGrid
 
   def initialize
     @client = SendGrid::API.new(api_key: ENV['SENDGRID_API_KEY']).client
   end
 
-  def send_email(message_vo)
-    template_data = message_vo.email_message
-    template_data['email_subject'] = message_vo.email_subject
-    # Populate attributes required for request
-    mail = SendgridMail.new(
-      from: message_vo.manager_email,
-      subject: message_vo.email_subject,
-      receiver_sso_id: message_vo.receiver_sso_id,
-      template_id: message_vo.sendgrid_template_id,
-      dynamic_template_data: template_data
-    ).get
-
-    {response: @client.mail._('send').post(request_body: mail.to_json), mail: mail}
+  # rubocop:disable all
+  def send_email(mail_vo)
+    response = @client.mail._('send').post(request_body: mail_vo.to_json) # <= Send email!
+    body = response.body.blank? ? '' : JSON.parse(response.body)
+    {
+      response: {
+        body: body,
+        server_date: response&.headers && response&.headers['date'] && response&.headers['date'][0],
+        status_code: response.status_code
+      },
+      mail: mail_vo
+    }
   end
+  # rubocop:enable all
 end
-
-# Module.new { def self.hi; 'hi'; end }.hi
-#
-# Module.new {
-#   def self.hi; 'hi'; end
-#
-#   def send_email(message_vo)
-#     client = SendGrid::API.new(api_key: ENV['SENDGRID_API_KEY']).client
-#     template_data = message_vo.email_message
-#     template_data['email_subject'] = message_vo.email_subject
-#     # Populate attributes required for request
-#     mail = SendgridMail.new(
-#         from: message_vo.manager_email,
-#         subject: message_vo.email_subject,
-#         receiver_sso_id: message_vo.receiver_sso_id,
-#         template_id: message_vo.template_id,
-#         dynamic_template_data: template_data
-#     ).get
-#
-#     client.mail._('send').post(request_body: mail.to_json)
-#   end
-# }

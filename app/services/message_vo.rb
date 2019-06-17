@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable Metrics/ClassLength
 # This is a value object that also performs data presence validation
 class MessageVo
   InvalidMessageError = Class.new(StandardError)
@@ -22,6 +23,7 @@ class MessageVo
   validates :email, presence: true
   validates :lists, presence: true # <<
   validate :receiver_preferences
+  validate :template_found
 
   attr_accessor :public_token,
                 :manager_id,
@@ -43,17 +45,35 @@ class MessageVo
                 :first,
                 :last,
                 :email,
-                :lists # <<
+                :lists, # <<
+                :errors
 
   # rubocop:disable all
   def initialize(message_params_vo, manager_team_vo)
     raise InvalidMessageError, 'invalid message_params_vo' unless message_params_vo.valid?
     raise InvalidManagerTeamError, 'invalid manager_team_vo' unless manager_team_vo.valid?
 
+    @errors = ActiveModel::Errors.new(self)
+
     # Valid input. Now, perform lookups to fill in missing data prior to processing request.
     assign_attributes(message_params_vo.my_attrs.merge(manager_team_vo.my_attrs))
-    receiver = Receiver.find_by(receiver_sso_id: receiver_sso_id)
-    if receiver
+
+    receiver = Receiver.find_by(receiver_sso_id: @receiver_sso_id)
+    if receiver.nil?
+      # Create Receiver
+      user = Highlands.get_user_by_email(message_vo.email)
+      if user.error
+        msg = user.error[:error]
+        log_error(msg)
+      else
+        msg = "Sent SMS: (#{message_vo.team_name}:#{message_vo.email_subject}) "
+        msg += "from (#{message_vo.manager_name}) to (#{message_vo.mobile_number})"
+        log_info(msg)
+      end
+
+
+    else
+      # Receiver already exists
       self.receiver_id = receiver.id # Required by  Message.create!
       # Following message_vo attributes required by ClearstreamClient::MessageClient.create_subscriber
       self.mobile_number = receiver.mobile_number
@@ -79,5 +99,34 @@ class MessageVo
       log_error(msg)
       errors.add(:value, msg)
     end
+  end
+
+  def template_found
+    sendgrid_template = Template.find(self.template_id)
+    if sendgrid_template.nil?
+      msg = "Template ID (#{self.template_id}) not found. If it is valid, add it via the Admin application."
+      log_error(msg)
+      errors.add(:value, msg)
+    end
+  end
+
+  def invalid_message_attrs
+    {
+        msg_target_id: self.msg_target_id,
+        manager_id: self.manager_id,
+        receiver_id: self.receiver_id,
+        team_id: self.team_id,
+        email_subject: self.email_subject,
+        email_message: self.email_message,
+        template_id: self.template_id,
+        sms_message: self.sms_message
+    }
+  end
+
+  def to_hash
+    Hash[instance_variables.map { |name|
+      # Strip "@"  Example: {"@first": "Cindy"} => {"first": "Cindy"}
+      [name[1..-1], instance_variable_get(name)] unless name.eql?('@errors')
+    } ]
   end
 end

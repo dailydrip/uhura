@@ -19,4 +19,8 @@ RSpec.describe Receiver, type: :model do
       expect(receiver.email).to match(URI::MailTo::EMAIL_REGEXP)
     end
   end
+
+  describe 'find_or_enroll' do
+    it { is_expected.to validate_presence_of(:mobile_number) }
+  end
 end

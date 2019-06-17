@@ -1,0 +1,7 @@
+{
+  "status": 422,
+  "data": null,
+  "error": {
+    "message": "Invalid message. Go here (http://localhost:3000/api/v1/invalid_message_status/16) for details on it later."
+  }
+}

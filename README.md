@@ -343,3 +343,119 @@ When all input has been validate and properly formed, after all errors have been
 When we get the response, we check for errors first.
 
 Again, success processing comes after error handling.
+
+# Handle Hanging RSpec processes
+
+Run `be-rspec` rather than `bundle exec rspec`.  
+```
+# When an rspec process is already running (did not terminate) rspec will hang shortly after starting. Run this alias to kill any running rspec processes and start rspec (without it hanging).
+alias be-rspec='ps -ef | grep -v grep|grep "\/rspec" | while read line; do pid2kill="$(echo \"$line\" | awk '\''{print $2}'\'')"; if [ "$pid2kill" != "" ]; then kill -9 $pid2kill; fi; done; bundle exec rspec'
+```
+
+Run `print-rspec-stacktrace` to see the stacktrace when it appears rspec is hung.
+``` 
+# Print rspec stacktrace. Assumes trap 'USR1' has been created in spec_helper.rb.
+alias print-rspec-stacktrace='kill -USR1 "$(cat /tmp/rspec.pid)"'
+```
+
+
+# Generate SideKiq worker
+```
+bundle exec rails g sidekiq:worker SendgridMessage
+bundle exec rails g sidekiq:worker ClearstreamMessage
+```
+
+# API for Uhura's Messages API 
+
+Uhura provides a single API endpoint (/api/v1/messages) for submitting messages.
+
+And one API for checking on message statuses (/api/v1/message_status/${MESSAGE_ID})
+
+## Target Determination
+- It's not possible to determine the target (SMS/Email) from the request.
+- The Receiver's preference tells Uhura where to send the message
+-- Ex: This receiver gets SMS only:  {"email"=>false, "sms"=>true} 
+
+## Email Message
+- The body of the POST below is for an email that has one section.
+-- The template_id identifies a SendGrid html template that has one section.
+- Change the Host address `localhost:3000` to your Uhura host server address.
+```
+export X_TEAM_ID=1
+export UHURA_AUTORIZATION_TOKEN=b1dcc4b8287a82fe8889
+export BODY='{
+	"public_token": "42c50c442ee3ca01378e",
+    "receiver_sso_id": "55357499",
+    "email_subject": "Picnic Saturday",
+    "email_message": {
+	  "header": "Dragon Rage",
+	  "section1": "imagine you are writing an email. you are in front of the computer. you are operating the computer, clicking a mouse and typing on a keyboard, but the message will be sent to a human over the internet. so you are working before the computer, but with a human behind the computer.",
+	  "button": "Count me in!"
+	},
+    "template_id": "d-0ce0d614007d4a72b8242838451e9a65",
+    "sms_message": "Bring Drinks to the Picnic this Saturday"
+}'
+export UHURA_HOST="http://localhost:3000"
+
+curl -X POST \
+  -H "X-Team-ID: $X_TEAM_ID" \
+  -H "Authorization: Bearer $UHURA_AUTORIZATION_TOKEN" \
+  -H "Content-Type: application/json" \
+  -H "cache-control: no-cache" \
+  -d "$BODY" \
+  $UHURA_HOST/api/v1/messages
+```
+
+### Email message with two sections
+The message BODY below is sent to a SendGrid template (d-2a5278f48f0c41b992509f4039614930) that expects two sections:
+```
+{
+	"public_token": "{{UHURA_PUBLIC_TOKEN}}",
+    "receiver_sso_id": "88543891",
+    "email_subject": "Picnic Next Saturday",
+    "email_message": {
+	  "header": "Bind",
+	  "section1": "You're more like a game show host.",
+	  "section2": "I think we can get her a guest shot on 'Wild Kingdom.' I just whacked her up with about 300 cc's of Thorazaine... she's gonna take a little nap now.",
+	  "button": "Action!"
+	},
+    "template_id": "d-2a5278f48f0c41b992509f4039614930",
+    "sms_message": "Bring Dessert to the Picnic Next Saturday"
+}
+```
+
+# Response Examples
+
+## A Successful Response
+```
+{
+  "status": 200,
+  "data": {
+    "message": "We got the message. Go here (http://localhost:3000/api/v1/message_status/29) for details on it later."
+  },
+  "error": null
+}
+```
+
+## A Failed Response
+```
+{
+  "status": 422,
+  "data": null,
+  "error": {
+    "message": "Team ID (-Team-ID) from the X-Team-ID HTTP header NOT found! Consider adding Team for ID (-Team-ID) using the Admin app on the Teams page."
+  }
+}
+```
+
+# Admin App
+
+We used the Administrate gem (https://github.com/thoughtbot/administrate) to help use build the /admin application.
+
+When you access the home pages, for example, http://localhost:3000/admin, in development, you'll be redirected to the Highlands SSO login page (http://localhost:3000/highlands_sso/sessions/new).
+
+If you are a admin or super_admin in the Highlands SSO realm, then after logging in you'll be redirected to the /admin application.
+
+If you are a user, but not an admin, you'll be redirected to the Uhura home page with the following message: You are not authorized to access the admin application.
+
+If your credentials get upgraded to a Highlands SSO admin, you should clear your browser cache, i.e., remove your site cookies and try again.

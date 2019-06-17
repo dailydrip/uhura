@@ -6,6 +6,7 @@ ruby '2.6.1'
 gem 'rails', '~> 6.0.0.rc1'   # You can bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'pg', '>= 0.18', '< 2.0'  # Use postgresql as the database for Active Record
 gem 'puma', '~> 3.11'         # Use Puma as the app server
+gem 'sidekiq', '~>5.2.7'      # Simple, efficient background processing for Ruby
 # gem 'sass-rails', '~> 5'      # Use SCSS for stylesheets
 gem 'webpacker', '~> 4.0'     # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
 gem 'turbolinks', '~> 5'      # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks

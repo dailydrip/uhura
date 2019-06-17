@@ -1,7 +1,6 @@
 # Most of the things are optional. If you need to use a
 # custom key, please create an application.yml for it
 
-
 enable_defaults! { ENV["RACK_ENV"] != "production" }
 
 #-----------------------------------------------
