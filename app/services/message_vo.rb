@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable Metrics/ClassLength
 # This is a value object that also performs data presence validation
 class MessageVo
   InvalidMessageError = Class.new(StandardError)
@@ -71,8 +70,6 @@ class MessageVo
         msg += "from (#{message_vo.manager_name}) to (#{message_vo.mobile_number})"
         log_info(msg)
       end
-
-
     else
       # Receiver already exists
       self.receiver_id = receiver.id # Required by  Message.create!

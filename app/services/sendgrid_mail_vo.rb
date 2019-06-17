@@ -54,18 +54,14 @@ class SendgridMailVo
       to: @to,
       to_name: @to_name,
       dynamic_template_data: @dynamic_template_data,
-      email_options: @email_options
+      email_options: JSON.parse(@email_options.to_json) # <= ActionController::Parameters only a problem for rspec
     }
-    # # Add options, e.g., cc, bcc, reply_to, send_at, batch_id
-    # @email_options.each do |k, v|
-    #   mail_vo[k] = v
-    # end
-
     # Bug in Sendgrid's add_custom_arg.  Following will throw error "no implicit conversion of String into Hash"
     # mail.add_custom_arg(Hash["custom_arg" => {message_id: @message_id}])
     { mail_vo: mail_vo, message_id: @message_id }
   end
 
+  # rubocop:disable all
   def self.add_options(mail_vo, mail, personalization)
     email_options = JSON.parse(mail_vo[:email_options].to_json) # Convert from ActionController::Parameters
     email_options.each do |k, v|
@@ -101,14 +97,16 @@ class SendgridMailVo
     end
     {mail: mail, personalization: personalization}
   end
+  # rubocop:enable all
 
   def self.get_mail(mail_vo)
     mail = SendGrid::Mail.new
     personalization = Personalization.new
-    # Add options
-    m_and_p = add_options(mail_vo, mail, personalization)
-    mail = m_and_p[:mail]
-    personalization = m_and_p[:personalization]
+    if mail_vo[:email_options]
+      m_and_p = add_options(mail_vo, mail, personalization)
+      mail = m_and_p[:mail]
+      personalization = m_and_p[:personalization]
+    end
     # Set base mail attributes
     mail.template_id = mail_vo[:template_id]
     mail.from = Email.new(email: mail_vo[:from])

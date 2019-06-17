@@ -148,15 +148,6 @@ RSpec.describe 'Messages API', type: :request do
     end
 
     describe 'when the preferred channel is email' do
-      # def link_to_clearstream
-      #   clearstream_msg = ClearstreamMsg.create!(sent_to_clearstream: 2.minutes.from_now,
-      #                                            response: get_clearstream_response_data('read_queued_request'),
-      #                                            got_response_at: 2.seconds.from_now,
-      #                                            status: 'QUEUED')
-      #   msg3 = Message.find(3)
-      #   msg3.clearstream_msg = clearstream_msg
-      #   msg3.save!
-      # end
       def link_to_sendgrid
         sendgrid_msg = SendgridMsg.create!(sent_to_sendgrid: 2.seconds.from_now,
                                               mail_and_response: get_sendgrid_response_data('read_mail_and_response'),
@@ -279,6 +270,40 @@ RSpec.describe 'Messages API', type: :request do
         post '/api/v1/messages', headers: valid_headers, params: valid_attributes.to_json
         expect(response.status).to eq 200
         #expect(response.parsed_body['data']['sendgrid_msg']['mail_and_response']['mail']['personalizations'][0]['dynamic_template_data']['section2']).to eq("I think we can get her a guest shot on 'Wild Kingdom.' I just whacked her up with about 300 cc's of Thorazaine... she's gonna take a little nap now.")
+        expect(response.parsed_body['data']['message']).to include('We got the message')
+      end
+    end
+
+    describe 'when an email with options is sent' do
+      let(:receiver) do Receiver.find_by(first_name: 'Bob'); end
+      let(:valid_attributes) do
+        {
+            "public_token": manager.public_token,
+            "receiver_sso_id": receiver.receiver_sso_id,
+            "email_subject": 'Picnic Next Saturday',
+            "email_message": {
+                "header": 'Bind',
+                "section1": "You're more like a game show host.",
+                "section2": "I think we can get her a guest shot on 'Wild Kingdom.' I just whacked her up with about 300 cc's of Thorazaine... she's gonna take a little nap now.",
+                "button": 'Action!'
+            },
+            "email_options": {
+                "cc": ["recipient1@example.com <Alice Recipient>","recipient2@example.com"],
+                "bcc": ["recipient3@example.com","recipient4@example.com <Bob Recipient>"],
+                "reply_to": "recipient5@example.com <Cindy Recipient>",
+                "send_at": 1577854800,
+                "batch_id": "YOUR_BATCH_ID"
+            },
+            "template_id": 'd-4d10bf26b57247deba602127dab1ba60',
+            "sms_message": 'Bring Dessert to the Picnic Next Saturday'
+        }
+      end
+      it 'returns status code 200' do
+        stub_request(:any, /api.sendgrid.com/).
+            to_return(body: get_sendgrid_response_data('post_message'),
+                      status: 200)
+        post '/api/v1/messages', headers: valid_headers, params: valid_attributes.to_json
+        expect(response.status).to eq 200
         expect(response.parsed_body['data']['message']).to include('We got the message')
       end
     end
