@@ -10,8 +10,9 @@ class Api::V1::MessagesController < Api::V1::ApiBaseController
 
   def create
     ret = validate_message_params
-    render_bad_response(ret) if ret&.error?
-    unless ret&.error?
+    if ret&.error?
+      render_bad_response(ret)
+    else
       message_vo = MessageVo.new(message_params_vo, manager_team_vo)
       return_vo = MessageDirector.send(message_vo)
 
