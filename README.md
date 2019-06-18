@@ -28,9 +28,7 @@ export CLEARSTREAM_BASE_URL=""
 
 ### Tests
 
-We use Rubocop for Ruby linting, stylelint for CSS linting, rspec for unit tests, and spinach for
-integration tests. You can run all four simply by running `rake` or indivdually with the following
-commands:
+We use Rubocop for Ruby linting, rspec for unit tests. You can run them indivdually with the following commands:
 
 * $ bundle exec rubocop
 * $ bundle exec rspec
