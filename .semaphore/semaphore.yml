@@ -12,7 +12,7 @@ blocks:
     task:
       secrets:
         # Mount the secret:
-        - name: private-repo
+        - name: uhura
       prologue:
         commands:
           # Correct premissions since they are too open by default:
