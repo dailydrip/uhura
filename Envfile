@@ -17,19 +17,9 @@ variable :BASE_URI, :String, default: "http://localhost:3000"
 variable :API_ENDPOINT, :String, default: "http://localhost:3000/api/v1/"
 variable :ADMIN_PATH, :String, default: "/admin"
 
-# Service Timeout
-#variable :RACK_TIMEOUT_SERVICE_TIMEOUT, :Integer, default: 15
-#variable :RACK_TIMEOUT_WAIT_TIMEOUT, :Integer, default: 30
-#variable :RACK_TIMEOUT_WAIT_OVERTIME, :Integer, default: 60
-#variable :RACK_TIMEOUT_SERVICE_PAST_WAIT, :Boolean, default: false
-
 # Basic Auth
 variable :TOKEN_AUTH_USER, :String
 variable :TOKEN_AUTH_PASSWORD, :String
-
-# Postgres Access
-variable :PGUSER, :String
-variable :PGPASSWORD, :String
 
 # Testing
 variable :NUMBER_OF_SLOW_TESTS_TO_DISPLAY, :Integer, default: 3
@@ -52,11 +42,6 @@ variable :CLEARSTREAM_BASE_URL, :String, default: 'https://api.getclearstream.co
 variable :CLEARSTREAM_URL, :String
 variable :CLEARSTREAM_DEFAULT_LIST_ID, :String
 
-# Twitter Access
-variable :TWITTER_ACCESS_TOKEN, :String
-variable :TWITTER_ACCESS_TOKEN_SECRET, :String
-variable :TWITTER_KEY, :String
-variable :TWITTER_SECRET, :String
 
 # Highlands SSO Access
 variable :SSO_KEY, :String
