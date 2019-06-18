@@ -19,6 +19,7 @@ class MessageDashboard < Administrate::BaseDashboard
     id: Field::Number,
     email_subject: Field::String,
     email_message: Field::Text,
+    email_options: Field::String.with_options(searchable: false),
     sms_message: Field::Text,
     created_at: Field::DateTime,
     updated_at: Field::DateTime
@@ -48,6 +49,7 @@ class MessageDashboard < Administrate::BaseDashboard
     id
     email_subject
     email_message
+    email_options
     sms_message
     created_at
     updated_at
@@ -65,6 +67,7 @@ class MessageDashboard < Administrate::BaseDashboard
     template
     email_subject
     email_message
+    email_options
     sms_message
   ].freeze
 

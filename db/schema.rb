@@ -40,6 +40,7 @@ ActiveRecord::Schema.define(version: 2019_05_12_215905) do
     t.bigint "team_id"
     t.string "email_subject"
     t.text "email_message"
+    t.json "email_options"
     t.bigint "template_id"
     t.text "sms_message"
     t.json "message_params"
@@ -73,6 +74,7 @@ ActiveRecord::Schema.define(version: 2019_05_12_215905) do
     t.bigint "team_id", null: false
     t.string "email_subject"
     t.text "email_message"
+    t.json "email_options"
     t.bigint "template_id", null: false
     t.text "sms_message"
     t.datetime "created_at", precision: 6, null: false

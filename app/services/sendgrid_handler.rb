@@ -58,9 +58,9 @@ class SendgridHandler < ServiceHandlerBase
         receiver_sso_id: message_vo.receiver_sso_id,
         template_id: message_vo.sendgrid_template_id,
         dynamic_template_data: template_data,
+        email_options: message_vo.email_options,
         message_id: message_vo.message_id
     ).get_vo
-
 
     #SendgridHandler.send_msg(sendgrid_vo)
     SendSendgridMessageWorker.perform_async(sendgrid_vo)

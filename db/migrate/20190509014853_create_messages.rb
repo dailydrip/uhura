@@ -9,6 +9,7 @@ class CreateMessages < ActiveRecord::Migration[6.0]
       t.references :team, null: false, foreign_key: true
       t.string :email_subject
       t.text :email_message
+      t.json :email_options
       t.references :template, null: false, foreign_key: true
       t.text :sms_message
 

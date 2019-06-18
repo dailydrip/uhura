@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable Metrics/ClassLength
 # This is a value object that also performs data presence validation
 class MessageVo
   InvalidMessageError = Class.new(StandardError)
@@ -36,6 +35,7 @@ class MessageVo
                 :receiver_email, # Populated when receiver_sso_id is assigned a value
                 :email_subject,
                 :email_message,
+                :email_options,
                 :template_id, # ID to templates table
                 :sendgrid_template_id,
                 :sms_message,
@@ -70,8 +70,6 @@ class MessageVo
         msg += "from (#{message_vo.manager_name}) to (#{message_vo.mobile_number})"
         log_info(msg)
       end
-
-
     else
       # Receiver already exists
       self.receiver_id = receiver.id # Required by  Message.create!
@@ -118,6 +116,7 @@ class MessageVo
         team_id: self.team_id,
         email_subject: self.email_subject,
         email_message: self.email_message,
+        email_options: self.email_options,
         template_id: self.template_id,
         sms_message: self.sms_message
     }

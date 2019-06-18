@@ -31,6 +31,7 @@ class Api::V1::MessagesController < Api::V1::ApiBaseController
       receiver_sso_id: params[:receiver_sso_id],
       email_subject: params[:email_subject],
       email_message: params[:email_message],
+      email_options: params[:email_options],
       template_id: params[:template_id],
       sms_message: params[:sms_message]
     )
