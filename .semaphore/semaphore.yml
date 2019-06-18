@@ -48,7 +48,7 @@ blocks:
       jobs:
         - name: rubocop
           commands:
-          - bundle exec rake rubocop
+          - bundle exec rubocop
   - name: Tests
     task:
       secrets:
@@ -57,7 +57,7 @@ blocks:
       jobs:
         - name: rspec
           commands:
-          - bundle exec rake spec
+          - bundle exec rspec
       prologue:
         commands:
           # Correct premissions since they are too open by default:
