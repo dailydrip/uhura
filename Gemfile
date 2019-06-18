@@ -41,7 +41,9 @@ group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'rspec'
-  gem 'webmock'
+  gem 'webmock', '~>3.6.0'
+  # https://github.com/liufengyun/hashdiff/issues/45#issuecomment-499566400
+  gem 'hashdiff', ['>= 1.0.0.beta1', '< 2.0.0']
   gem 'awesome_print'
   gem 'rubocop', require: false
   gem 'rubocop-performance'
