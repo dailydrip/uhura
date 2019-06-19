@@ -13,7 +13,9 @@
 ActiveRecord::Schema.define(version: 2019_05_12_215905) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pgcrypto"
   enable_extension "plpgsql"
+  enable_extension "uuid-ossp"
 
   create_table "api_keys", force: :cascade do |t|
     t.string "auth_token"
@@ -67,7 +69,7 @@ ActiveRecord::Schema.define(version: 2019_05_12_215905) do
 
   create_table "messages", force: :cascade do |t|
     t.bigint "msg_target_id"
-    t.bigint "sendgrid_msg_id"
+    t.uuid "sendgrid_msg_id"
     t.bigint "clearstream_msg_id"
     t.bigint "manager_id", null: false
     t.bigint "receiver_id", null: false
@@ -109,7 +111,7 @@ ActiveRecord::Schema.define(version: 2019_05_12_215905) do
     t.index ["receiver_sso_id"], name: "index_receivers_on_receiver_sso_id", unique: true
   end
 
-  create_table "sendgrid_msgs", force: :cascade do |t|
+  create_table "sendgrid_msgs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "sent_to_sendgrid"
     t.string "x_message_id"
     t.json "mail_and_response"
