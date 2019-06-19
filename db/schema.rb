@@ -111,6 +111,7 @@ ActiveRecord::Schema.define(version: 2019_05_12_215905) do
 
   create_table "sendgrid_msgs", force: :cascade do |t|
     t.datetime "sent_to_sendgrid"
+    t.string "x_message_id"
     t.json "mail_and_response"
     t.datetime "got_response_at"
     t.text "sendgrid_response"
