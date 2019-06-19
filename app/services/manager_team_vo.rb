@@ -2,8 +2,6 @@
 
 # This is a value object that also performs data presence validation
 class ManagerTeamVo < BaseClass
-  InvalidManagerTeam = Class.new(StandardError)
-
   include ActiveModel::Model
   include ActiveModel::Validations
 
@@ -20,6 +18,5 @@ class ManagerTeamVo < BaseClass
 
   def initialize(*args)
     super(args[0])
-    raise InvalidManagerTeam, 'invalid manager_team_vo' unless valid?
   end
 end

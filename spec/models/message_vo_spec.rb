@@ -54,13 +54,13 @@ RSpec.describe MessageVo, type: :model do
       it 'must have valid message_params_vo' do
         expect do
           MessageVo.new(bogus_message_params_vo, manager_team_vo)
-        end.to raise_error(MessageParamsVo::InvalidMessageError, /invalid message_params_vo/)
+        end.to raise_error(MessageVo::InvalidMessageError, /invalid message_params_vo/)
       end
 
       it 'must have valid manager_team_vo' do
         expect do
           MessageVo.new(message_params_vo, bogus_manager_team_vo)
-        end.to raise_error(ManagerTeamVo::InvalidManagerTeam, /invalid manager_team_vo/)
+        end.to raise_error(MessageVo::InvalidManagerTeamError, /invalid manager_team_vo/)
       end
     end
 

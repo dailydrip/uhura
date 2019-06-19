@@ -56,11 +56,9 @@ RSpec.describe SendSendgridMessageWorker do
             with(
                 body: "\"null\"",
                 headers: {
-                    'Accept'=>'application/json',
-                    'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-                    'Authorization'=>'Bearer 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',
-                    'Content-Type'=>'application/json',
-                    'User-Agent'=>'sendgrid/5.3.0;ruby'
+                    'Accept' =>'application/json',
+                    'Authorization'=> "Bearer #{ENV['SENDGRID_API_KEY']}",
+                    'Content-Type' => 'application/json',
                 }).
             to_return(status: 200, body: "", headers: {})
 

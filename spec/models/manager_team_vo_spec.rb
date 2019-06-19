@@ -19,34 +19,29 @@ RSpec.describe ManagerTeamVo, type: :model do
 
     context 'initialization' do
       it 'must have valid manager_id' do
-        expect do
-          ManagerTeamVo.new(manager_team(manager_id: nil))
-        end.to raise_error(ManagerTeamVo::InvalidManagerTeam, /invalid manager_team_vo/)
+        manager_team_vo = ManagerTeamVo.new(manager_team(manager_id: nil))
+        expect(manager_team_vo.valid?).to eq(false)
       end
 
       it 'must have valid manager_name' do
-        expect do
-          ManagerTeamVo.new(manager_team(manager_name: nil))
-        end.to raise_error(ManagerTeamVo::InvalidManagerTeam, /invalid manager_team_vo/)
+        manager_team_vo = ManagerTeamVo.new(manager_team(manager_name: nil))
+        expect(manager_team_vo.valid?).to eq(false)
       end
 
       it 'must have valid manager_email' do
-        expect do
-          ManagerTeamVo.new(manager_team(manager_email: nil))
-        end.to raise_error(ManagerTeamVo::InvalidManagerTeam, /invalid manager_team_vo/)
+        manager_team_vo = ManagerTeamVo.new(manager_team(manager_email: nil))
+        expect(manager_team_vo.valid?).to eq(false)
       end
 
       it 'must have valid team_name' do
-        expect do
-          ManagerTeamVo.new(manager_team(team_name: nil))
-        end.to raise_error(ManagerTeamVo::InvalidManagerTeam, /invalid manager_team_vo/)
+        manager_team_vo = ManagerTeamVo.new(manager_team(team_name: nil))
+        expect(manager_team_vo.valid?).to eq(false)
       end
 
       describe 'when manager_team params are valid' do
-        it 'does not raise any exception' do
-          expect do
-            ManagerTeamVo.new(manager_team).not_to raise_error
-          end
+        it 'is valid' do
+          manager_team_vo = ManagerTeamVo.new(manager_team)
+          expect(manager_team_vo.valid?).to eq(true)
         end
       end
     end

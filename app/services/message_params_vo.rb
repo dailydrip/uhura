@@ -2,8 +2,6 @@
 
 # This is a value object that also performs data presence validation
 class MessageParamsVo < BaseClass
-  InvalidMessageError = Class.new(StandardError)
-
   include ActiveModel::Model
   include ActiveModel::Validations
 
@@ -26,7 +24,6 @@ class MessageParamsVo < BaseClass
 
   def initialize(*args)
     super(args[0])
-    raise InvalidMessageError, 'invalid message_params_vo' unless valid?
   end
 
   def email_message_sections

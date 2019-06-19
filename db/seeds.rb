@@ -22,18 +22,18 @@ campus_pastor_team = Team.create!(name: 'Campus Pastor Team')
 accounting_team = Team.create!(name: 'Accounting Team')
 
 log! "4. Seeding Templates"
-template_a = Template.create!(name: 'template_with_1_section', template_id: 'd-0ce0d614007d4a72b8242838451e9a65', sample_template_data: {
+template_a = Template.create!(name: 'template_with_1_section', template_id: 'd-05d33214e6994b01b577602036bfa9f5', sample_template_data: {
   "header": Faker::Games::Pokemon.move.titleize,
   "section1": Faker::Quote.matz,
   "button": Faker::Verb.base.capitalize
 })
-template_b = Template.create!(name: 'template_with_2_sections', template_id: 'd-4d10bf26b57247deba602127dab1ba60', sample_template_data: {
+template_b = Template.create!(name: 'template_with_2_sections', template_id: 'd-9cb910a98ffc4f99b9b5952b5d2c7f6b', sample_template_data: {
   "header": Faker::Games::Pokemon.move.titleize,
   "section1": Faker::Quote.matz,
   "section2": Faker::Quote.matz,
   "button": Faker::Verb.base.capitalize
 })
-template_c = Template.create!(name: 'template_with_3_sections', template_id: 'd-211d56caaf0544038d353a98ece2b367', sample_template_data: {
+template_c = Template.create!(name: 'template_with_3_sections', template_id: 'd-05d33214e6994b01b577602036bfa9f5', sample_template_data: {
   "header": Faker::Games::Pokemon.move.titleize,
   "section1": Faker::Quote.matz,
   "section2": Faker::Quote.matz,
