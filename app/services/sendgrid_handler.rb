@@ -63,6 +63,8 @@ class SendgridHandler < ServiceHandlerBase
         message_id: message_vo.message_id
     ).get_vo
 
+
+
     #SendgridHandler.send_msg(sendgrid_vo)
     SendSendgridMessageWorker.perform_async(sendgrid_vo)
 
