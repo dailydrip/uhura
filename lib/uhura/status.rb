@@ -11,7 +11,7 @@ def unprocessable_entity
   symbol_to_status(:unprocessable_entity)
 end
 
-def return_success(data, status = 200)
+def return_success(data=nil, status = 200)
   status = Rack::Utils::SYMBOL_TO_STATUS_CODE[status] if status.is_a? Symbol
   {
     status: status,

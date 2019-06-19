@@ -26,7 +26,7 @@ class MessageParamsVo < BaseClass
 
   def initialize(*args)
     super(args[0])
-    raise InvalidMessageError, 'invalid message_params_vo' unless valid?
+    # raise InvalidMessageError, 'invalid message_params_vo' unless valid?
   end
 
   def email_message_sections
