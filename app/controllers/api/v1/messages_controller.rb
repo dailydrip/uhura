@@ -10,8 +10,8 @@ class Api::V1::MessagesController < Api::V1::ApiBaseController
 
   def create
     err = validate_params
-    if err != nil
-        render_error_msg(err)
+    if !err.nil?
+      render_error_msg(err)
     else
       message_vo = MessageVo.new(message_params_vo, manager_team_vo)
       return_vo = MessageDirector.send(message_vo)
@@ -24,41 +24,41 @@ class Api::V1::MessagesController < Api::V1::ApiBaseController
 
   def render_message_director_error(message_vo)
     invalid_message = InvalidMessage.create!(
-        message_vo.invalid_message_attrs.merge(
-            message_params: message_params_vo.message_params,
-            message_attrs: message_vo.to_hash
-        )
+      message_vo.invalid_message_attrs.merge(
+        message_params: message_params_vo.message_params,
+        message_attrs: message_vo.to_hash
+      )
     )
     render_error_status(invalid_message.id)
   end
 
   def validate_params
     err = validate_message_params(message_params_vo)
-    return err[:error] if err != nil
+    return err[:error] unless err.nil?
+
     err = validate_manager_team_params(manager_team_vo)
-    return err[:error] if err != nil
+    return err[:error] unless err.nil?
   end
 
-
   def validate_message_params(message_params_vo)
-    if !message_params_vo.valid?
+    unless message_params_vo.valid?
       msg = message_params_vo.errors.full_messages
       err_msg = {
-          "msg": 'Invalid message_params_vo parameters received. Message was not processed.',
-          "error": msg,
-          "message_params_vo": message_params_vo
+        "msg": 'Invalid message_params_vo parameters received. Message was not processed.',
+        "error": msg,
+        "message_params_vo": message_params_vo
       }
       return_error(err_msg)
     end
   end
 
   def validate_manager_team_params(manager_team_vo)
-    if !manager_team_vo.valid?
+    unless manager_team_vo.valid?
       msg = manager_team_vo.errors.full_messages
       err_msg = {
-          "msg": 'Invalid manager_team_vo parameters received. Message was not processed.',
-          "error": msg,
-          "message_params_vo": message_params_vo
+        "msg": 'Invalid manager_team_vo parameters received. Message was not processed.',
+        "error": msg,
+        "message_params_vo": message_params_vo
       }
       return_error(err_msg)
     end
