@@ -22,55 +22,47 @@ RSpec.describe MessageParamsVo, type: :model do
 
     context 'initialization' do
       it 'must have valid public_token' do
-        expect do
-          MessageParamsVo.new(message_params(public_token: nil))
-        end.to raise_error(MessageParamsVo::InvalidMessageError, /invalid message_params_vo/)
+        message_params_vo = MessageParamsVo.new(message_params(public_token: nil))
+        expect(message_params_vo.valid?).to eq(false)
       end
 
       it 'must have valid receiver_sso_id' do
-        expect do
-          MessageParamsVo.new(message_params(receiver_sso_id: nil))
-        end.to raise_error(MessageParamsVo::InvalidMessageError, /invalid message_params_vo/)
+          message_params_vo = MessageParamsVo.new(message_params(receiver_sso_id: nil))
+          expect(message_params_vo.valid?).to eq(false)
       end
 
       it 'must have valid email_subject' do
-        expect do
-          MessageParamsVo.new(message_params(email_subject: nil))
-        end.to raise_error(MessageParamsVo::InvalidMessageError, /invalid message_params_vo/)
+        message_params_vo = MessageParamsVo.new(message_params(email_subject: nil))
+        expect(message_params_vo.valid?).to eq(false)
       end
 
       it 'must have valid section1 in email_message' do
-        expect do
-          MessageParamsVo.new(message_params(email_message: {
+        message_params_vo = MessageParamsVo.new(message_params(email_message: {
                                                header: 'Rock Slide',
                                                section1: nil,
                                                button: 'Brush'
                                              }))
-        end.to raise_error(MessageParamsVo::InvalidMessageError, /invalid message_params_vo/)
+        expect(message_params_vo.valid?).to eq(false)
       end
       it 'must have valid email_message' do
-        expect do
-          MessageParamsVo.new(message_params(email_message: nil))
-        end.to raise_error(MessageParamsVo::InvalidMessageError, /invalid message_params_vo/)
+        message_params_vo = MessageParamsVo.new(message_params(email_message: nil))
+        expect(message_params_vo.valid?).to eq(false)
       end
 
       it 'must have valid template_id' do
-        expect do
-          MessageParamsVo.new(message_params(template_id: nil))
-        end.to raise_error(MessageParamsVo::InvalidMessageError, /invalid message_params_vo/)
+         message_params_vo = MessageParamsVo.new(message_params(template_id: nil))
+         expect(message_params_vo.valid?).to eq(false)
       end
 
       it 'must have valid sms_message' do
-        expect do
-          MessageParamsVo.new(message_params(sms_message: nil))
-        end.to raise_error(MessageParamsVo::InvalidMessageError, /invalid message_params_vo/)
+        message_params_vo = MessageParamsVo.new(message_params(sms_message: nil))
+        expect(message_params_vo.valid?).to eq(false)
       end
 
       describe 'when message params are valid' do
         it 'does not raise any exception' do
-          expect do
-            MessageParamsVo.new(message_params).not_to raise_error
-          end
+          message_params_vo = MessageParamsVo.new(message_params)
+          expect(message_params_vo.valid?).to eq(true)
         end
       end
     end

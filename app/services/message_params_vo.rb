@@ -2,8 +2,6 @@
 
 # This is a value object that also performs data presence validation
 class MessageParamsVo < BaseClass
-  InvalidMessageError = Class.new(StandardError)
-
   include ActiveModel::Model
   include ActiveModel::Validations
 

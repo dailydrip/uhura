@@ -2,8 +2,6 @@
 
 # This is a value object that also performs data presence validation
 class ManagerTeamVo < BaseClass
-  InvalidManagerTeam = Class.new(StandardError)
-
   include ActiveModel::Model
   include ActiveModel::Validations
 
