@@ -14,6 +14,7 @@ class SendgridMailer
     {
       response: {
         body: body,
+        x_message_id: response&.headers && response&.headers['x-message-id'] && response&.headers['x-message-id'][0],
         server_date: response&.headers && response&.headers['date'] && response&.headers['date'][0],
         status_code: response.status_code
       },

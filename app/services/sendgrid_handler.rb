@@ -33,6 +33,7 @@ class SendgridHandler < ServiceHandlerBase
     log_warn("Received empty body from Sengdrid for messsage_id (#{message_id})") if response[:body].blank?
     # Record Clearstream response.
     sendgrid_msg = SendgridMsg.create!(sent_to_sendgrid: Time.now,
+                                       x_message_id: response_and_mail[:response][:x_message_id],
                                        mail_and_response: { mail: mail.to_json, response: response },
                                        got_response_at: nil,
                                        sendgrid_response: nil,
