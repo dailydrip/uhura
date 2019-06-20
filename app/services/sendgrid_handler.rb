@@ -24,6 +24,7 @@ class SendgridHandler < ServiceHandlerBase
     end
     message_id = sendgrid_vo[:message_id]
     mail_obj = SendgridMailVo.get_mail(sendgrid_vo[:mail_vo])
+
     # Request Clearstream client to send message
     response_and_mail = SendgridMailer.new.send_email(mail_obj)
     response = response_and_mail[:response]
@@ -32,6 +33,8 @@ class SendgridHandler < ServiceHandlerBase
     # An empty body from Sendgrid could indicate a message "Not Delivered" status from Sendgrid
     log_warn("Received empty body from Sengdrid for messsage_id (#{message_id})") if response[:body].blank?
     # Record Clearstream response.
+
+    # Look for a sendgrid msg here by id
     sendgrid_msg = SendgridMsg.create!(sent_to_sendgrid: Time.now,
                                        x_message_id: response_and_mail[:response][:x_message_id],
                                        mail_and_response: { mail: mail.to_json, response: response },
@@ -52,6 +55,9 @@ class SendgridHandler < ServiceHandlerBase
   def self.send(message_vo)
     template_data = message_vo.email_message
     template_data['email_subject'] = message_vo.email_subject
+
+    sendgrid_msg_on_uhura = SendgridMsg.create
+
     # Populate attributes required for request
     sendgrid_vo = SendgridMailVo.new(
         from: message_vo.manager_email,
@@ -60,12 +66,15 @@ class SendgridHandler < ServiceHandlerBase
         template_id: message_vo.sendgrid_template_id,
         dynamic_template_data: template_data,
         email_options: message_vo.email_options,
+        personalizations: [
+                    {
+                      custom_args: { uhura_msg_id: sendgrid_msg_on_uhura.id }
+                    }
+              ],
         message_id: message_vo.message_id
     ).get_vo
 
-
-
-    #SendgridHandler.send_msg(sendgrid_vo)
+    # SendgridHandler.send_msg(sendgrid_vo)
     SendSendgridMessageWorker.perform_async(sendgrid_vo)
 
     msg = "Asynchronously sent SMS: (#{message_vo.team_name}:#{message_vo.email_subject}) "

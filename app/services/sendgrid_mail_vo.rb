@@ -16,7 +16,8 @@ class SendgridMailVo
                 :email_options,
                 :template_id,
                 :dynamic_template_data,
-                :message_id
+                :message_id,
+                :personalizations
 
   validates :template_id,
             :from,
@@ -54,6 +55,7 @@ class SendgridMailVo
       to: @to,
       to_name: @to_name,
       dynamic_template_data: @dynamic_template_data,
+      personalizations: @personalizations,
       email_options: JSON.parse(@email_options.to_json) # <= ActionController::Parameters only a problem for rspec
     }
     # Bug in Sendgrid's add_custom_arg.  Following will throw error "no implicit conversion of String into Hash"
@@ -97,7 +99,6 @@ class SendgridMailVo
     end
     {mail: mail, personalization: personalization}
   end
-  # rubocop:enable all
 
   def self.get_mail(mail_vo)
     mail = SendGrid::Mail.new
@@ -114,12 +115,14 @@ class SendgridMailVo
     # Set base personalization attributes
     personalization.add_to(Email.new(email: mail_vo[:to], name: mail_vo[:to_name]))
     personalization.add_dynamic_template_data(mail_vo[:dynamic_template_data])
+    uhura_msg_id = mail_vo[:personalizations][0][:custom_args][:uhura_msg_id]
+    personalization.add_custom_arg(CustomArg.new(key: 'uhura_msg_id', value: uhura_msg_id))
     mail.add_personalization(personalization)
     mail
   end
   # rubocop:enable Naming/AccessorMethodName
 
-  # rubocop:disable all
+
   def text_content
     content = []
     content << @dynamic_template_data['header']
