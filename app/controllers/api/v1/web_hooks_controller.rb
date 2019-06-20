@@ -8,8 +8,8 @@ class Api::V1::WebHooksController < ApplicationController
     events = params['_json']
     events&.each do |event|
       status = event['event']
-      message_id = event['sg_message_id']
-      sendgrid_msg = SendgridMsg.find_by(x_message_id: message_id)
+      message_id = event['uhura_msg_id']
+      sendgrid_msg = SendgridMsg.find_by(id: message_id)
 
       if sendgrid_msg
         sendgrid_msg.status = status

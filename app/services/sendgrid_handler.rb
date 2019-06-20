@@ -24,6 +24,7 @@ class SendgridHandler < ServiceHandlerBase
     end
     message_id = sendgrid_vo[:message_id]
     mail_obj = SendgridMailVo.get_mail(sendgrid_vo[:mail_vo])
+
     # Request Clearstream client to send message
     response_and_mail = SendgridMailer.new.send_email(mail_obj)
     response = response_and_mail[:response]
@@ -65,7 +66,11 @@ class SendgridHandler < ServiceHandlerBase
         template_id: message_vo.sendgrid_template_id,
         dynamic_template_data: template_data,
         email_options: message_vo.email_options,
-        custom_args: { uhura_msg_id: sendgrid_msg_on_uhura.id },
+        personalizations: [
+                    {
+                      custom_args: { uhura_msg_id: sendgrid_msg_on_uhura.id }
+                    }
+              ],
         message_id: message_vo.message_id
     ).get_vo
 
