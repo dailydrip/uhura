@@ -26,25 +26,20 @@ class SendgridHandler < ServiceHandlerBase
     mail_obj = SendgridMailVo.get_mail(sendgrid_vo[:mail_vo])
 
     # Request Clearstream client to send message
+    sent_to_sendgrid_at = Time.now
     response_and_mail = SendgridMailer.new.send_email(mail_obj)
     response = response_and_mail[:response]
     mail = response_and_mail[:mail]
-    # Record date Sendgrid server said they got the message. body attribute will be populated if there's an error.
-    # An empty body from Sendgrid could indicate a message "Not Delivered" status from Sendgrid
-    log_warn("Received empty body from Sengdrid for messsage_id (#{message_id})") if response[:body].blank?
-    # Record Clearstream response.
 
-    # Look for a sendgrid msg here by id
-    sendgrid_msg = SendgridMsg.create!(sent_to_sendgrid: Time.now,
-                                       x_message_id: response_and_mail[:response][:x_message_id],
-                                       mail_and_response: { mail: mail.to_json, response: response },
-                                       got_response_at: nil,
-                                       sendgrid_response: nil,
-                                       read_by_user_at: nil)
-    sendgrid_msg.got_response_at = Time.now
-    sendgrid_msg.sendgrid_response = response[:status_code]
+    uhura_msg_id = sendgrid_vo[:mail_vo][:personalizations][0][:custom_args][:uhura_msg_id]
+    # body attribute will be populated if there's an error.
+    # An empty body from Sendgrid could indicate a message "Not Delivered" status from Sendgrid or success
+    sendgrid_msg = SendgridMsg.find_by(id: uhura_msg_id)
+    sendgrid_msg.update!(sent_to_sendgrid: sent_to_sendgrid_at,
+                         mail_and_response: { mail: mail.to_json, response: response },
+                         got_response_at: Time.now,
+                         sendgrid_response: response[:status_code])
     # Link message record to sendgrid_msg record
-
     if sendgrid_msg.save! && link_sendgrid_msg_to_message(message_id, sendgrid_msg.id)
       return ReturnVo.new_value(sendgrid_msg: sendgrid_msg)
     else
