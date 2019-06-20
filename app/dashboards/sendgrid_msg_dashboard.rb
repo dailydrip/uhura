@@ -10,7 +10,7 @@ class SendgridMsgDashboard < Administrate::BaseDashboard
   # which determines how the attribute is displayed
   # on pages throughout the dashboard.
   ATTRIBUTE_TYPES = {
-    id: Field::Number,
+    id: Field::String.with_options(searchable: false),
     sent_to_sendgrid: Field::DateTime,
     mail_and_response: Field::String.with_options(searchable: false),
     got_response_at: Field::DateTime,
