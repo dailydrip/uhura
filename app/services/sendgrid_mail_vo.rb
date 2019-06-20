@@ -16,7 +16,8 @@ class SendgridMailVo
                 :email_options,
                 :template_id,
                 :dynamic_template_data,
-                :message_id
+                :message_id,
+                :custom_args
 
   validates :template_id,
             :from,
@@ -54,6 +55,7 @@ class SendgridMailVo
       to: @to,
       to_name: @to_name,
       dynamic_template_data: @dynamic_template_data,
+      custom_arg: @custom_arg,
       email_options: JSON.parse(@email_options.to_json) # <= ActionController::Parameters only a problem for rspec
     }
     # Bug in Sendgrid's add_custom_arg.  Following will throw error "no implicit conversion of String into Hash"
