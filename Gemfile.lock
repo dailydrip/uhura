@@ -104,6 +104,7 @@ GEM
       rack-test (>= 0.6.3)
       regexp_parser (~> 1.5)
       xpath (~> 3.2)
+    chartkick (3.2.0)
     childprocess (1.0.1)
       rake (< 13.0)
     coercible (1.0.0)
@@ -148,6 +149,8 @@ GEM
       activerecord (>= 4.0.0)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
+    groupdate (4.1.2)
+      activesupport (>= 4.2)
     haml (5.1.1)
       temple (>= 0.8.0)
       tilt
@@ -385,6 +388,7 @@ DEPENDENCIES
   awesome_print
   byebug
   capybara (>= 2.15)
+  chartkick
   database_cleaner
   envied
   factory_bot
@@ -393,6 +397,7 @@ DEPENDENCIES
   faraday
   faraday_middleware
   font-awesome-sass (~> 5.6, >= 5.6.1)
+  groupdate
   haml-rails
   hashdiff (>= 1.0.0.beta1, < 2.0.0)
   highlands_auth!
