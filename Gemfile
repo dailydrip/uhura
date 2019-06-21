@@ -20,6 +20,9 @@ gem 'jbuilder', '~> 2.5'      # Build JSON APIs with ease. Read more: https://gi
 gem 'rack-timeout'            # Configure Rails middleware with a default timeout of 15
 gem 'envied'                  # Ensure presence and type of your app's ENV-variables
 gem 'sendgrid-ruby'           # For sending emails
+gem 'chartkick'
+gem 'groupdate'
+
 
 # For Clearstream
 gem 'faraday'
