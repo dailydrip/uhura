@@ -2,7 +2,15 @@
 
 class Api::V1::MessagesController < Api::V1::ApiBaseController
   include StatusHelper
-  before_action :set_team_name
+  before_action :set_team_name, except: [:status]
+
+  def status
+    message = Message.find(params[:id])
+    render json: {
+      sendgrid_msg_status: message&.sendgrid_msg&.status,
+      clearstream_msg_status: message&.clearstream_msg&.status
+    }
+  end
 
   def index
     render_response @manager.messages
