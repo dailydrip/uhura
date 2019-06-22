@@ -60,16 +60,10 @@ class MessageVo
 
     receiver = Receiver.find_by(receiver_sso_id: @receiver_sso_id)
     if receiver.nil?
-      # Create Receiver
-      user = Highlands.get_user_by_email(message_vo.email)
-      if user.error
-        msg = user.error[:error]
-        log_error(msg)
-      else
-        msg = "Sent SMS: (#{message_vo.team_name}:#{message_vo.email_subject}) "
-        msg += "from (#{message_vo.manager_name}) to (#{message_vo.mobile_number})"
-        log_info(msg)
-      end
+      return errors.add(:value, 'BLOCKER: We need a Highlands API to take an sso_id and return user attributes')
+      # Highlands.get_user_by_email(message_vo.email) returns what we need, but we don't have an email to pass it.
+      #user = Highlands.get_user_by_sso_id(@receiver_sso_id)
+      # Assign user attributes to message_vo
     else
       # Receiver already exists
       self.receiver_id = receiver.id # Required by  Message.create!

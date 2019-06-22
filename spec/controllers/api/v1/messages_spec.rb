@@ -10,9 +10,12 @@ RSpec.describe 'Messages API', type: :request do
 
   describe 'GET /api/v1/messages/:id/status' do
     context 'when it is authorized' do
-      let(:message) { create(:message,
-      clearstream_msg: create(:clearstream_msg, status: 'delivered'),
-      sendgrid_msg: create(:sendgrid_msg, status: 'delivered')) }
+      let(:message) {
+        create(:message,
+        clearstream_msg: create(:clearstream_msg, status: 'delivered'),
+        sendgrid_msg: create(:sendgrid_msg, status: 'delivered')
+        )
+      }
 
       it 'returns status code 200' do
         get "/api/v1/messages/#{message.id}/status", headers: valid_headers
