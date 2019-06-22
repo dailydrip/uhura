@@ -22,16 +22,16 @@ class Api::V1::MessagesController < Api::V1::ApiBaseController
       render_error_msg(err)
     else
       message_vo = MessageVo.new(message_params_vo, manager_team_vo)
-       if !message_vo.errors.blank?
-         render_message_director_error(message_vo)
-       else
-         return_vo = MessageDirector.send(message_vo)
-         if return_vo.error?
-           render_message_director_error(message_vo)
-         else
-           render_success_status(message_vo.message_id)
-         end
-       end
+      if !message_vo.errors.blank?
+        render_message_director_error(message_vo)
+      else
+        return_vo = MessageDirector.send(message_vo)
+        if return_vo.error?
+          render_message_director_error(message_vo)
+        else
+          render_success_status(message_vo.message_id)
+        end
+      end
     end
   end
 
