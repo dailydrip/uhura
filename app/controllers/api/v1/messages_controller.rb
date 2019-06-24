@@ -119,14 +119,8 @@ class Api::V1::MessagesController < Api::V1::ApiBaseController
       err_msg = 'Required HTTP header (X-Team-ID) is missing.'
     else
       team = Team.find_by(id: x_team_id)
-      team.nil? ? err_msg = error_message_for_team(x_team_id) : @team_name = team.name
+      team.nil? ? err_msg = Team.error_message_for_team(x_team_id) : @team_name = team.name
     end
     render_error_msg(err_msg) if err_msg
-  end
-
-  def error_message_for_team(x_team_id)
-    err_msg = "Team ID (#{x_team_id}) from the X-Team-ID HTTP header NOT found! "
-    err_msg += "Consider adding Team for ID (#{x_team_id}) using the Admin app on the Teams page."
-    err_msg
   end
 end

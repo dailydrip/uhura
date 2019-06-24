@@ -23,7 +23,7 @@ class SendgridHandler < ServiceHandlerBase
       sendgrid_vo = sendgrid_vo.deep_symbolize_keys
     end
     message_id = sendgrid_vo[:message_id]
-    mail_obj = SendgridMailVo.get_mail(sendgrid_vo[:mail_vo])
+    mail_obj = SendgridMailVo.mail(sendgrid_vo[:mail_vo])
 
     # Request Clearstream client to send message
     sent_to_sendgrid_at = Time.now
@@ -67,7 +67,7 @@ class SendgridHandler < ServiceHandlerBase
                     }
               ],
         message_id: message_vo.message_id
-    ).get_vo
+    ).vo
 
     #SendgridHandler.send_msg(sendgrid_vo)
     SendSendgridMessageWorker.perform_async(sendgrid_vo)
