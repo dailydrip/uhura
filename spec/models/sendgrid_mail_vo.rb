@@ -43,4 +43,26 @@ RSpec.describe SendgridMailVo do
       expect(vo[:message_id]).to eq '123'
     end
   end
+
+  describe '#text_content' do
+    it 'returns the right vo' do
+      text_content = SendgridMailVo.new(template_id: 3,
+                                        dynamic_template_data: { header: 'header' },
+                                        subject: 'Subject',
+                                        message_id: '123',
+                                        from: 'someone@example.com',
+                                        to_name: 'Person',
+                                        to: 'example@example.com').text_content
+      expect(text_content).to eq "header\n\n"
+
+      text_content = SendgridMailVo.new(template_id: 3,
+                                        dynamic_template_data: {},
+                                        subject: 'Subject',
+                                        message_id: '123',
+                                        from: 'someone@example.com',
+                                        to_name: 'Person',
+                                        to: 'example@example.com').text_content
+      expect(text_content).to eq "\n\n"
+    end
+  end
 end
