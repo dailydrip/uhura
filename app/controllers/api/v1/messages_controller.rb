@@ -5,7 +5,11 @@ class Api::V1::MessagesController < Api::V1::ApiBaseController
   before_action :set_team_name, except: [:status]
 
   def status
-    message = Message.find(params[:id])
+    if params[:id].is_a? Integer
+      message = Message.find(params[:id])
+    else
+      message = Message.find_by(client_id: params[:id])
+    end
     render json: {
       sendgrid_msg_status: message&.sendgrid_msg&.status,
       clearstream_msg_status: message&.clearstream_msg&.status
@@ -21,7 +25,7 @@ class Api::V1::MessagesController < Api::V1::ApiBaseController
     if !err.nil?
       render_error_msg(err)
     else
-      message_vo = MessageVo.new(message_params_vo, manager_team_vo)
+      message_vo = MessageVo.new(message_params_vo, manager_team_vo, params[:client_id])
       if !message_vo.errors.blank?
         render_message_director_error(message_vo)
       else

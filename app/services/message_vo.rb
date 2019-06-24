@@ -46,17 +46,18 @@ class MessageVo
                 :last,
                 :email,
                 :lists, # <<
+                :client_id, # Uhura frontend client application correlation ID
                 :errors
 
   # rubocop:disable all
-  def initialize(message_params_vo, manager_team_vo)
+  def initialize(message_params_vo, manager_team_vo, client_id)
     raise InvalidMessageError, 'invalid message_params_vo' unless message_params_vo.valid?
     raise InvalidManagerTeamError, 'invalid manager_team_vo' unless manager_team_vo.valid?
 
     @errors = ActiveModel::Errors.new(self)
 
     # Valid input. Now, perform lookups to fill in missing data prior to processing request.
-    assign_attributes(message_params_vo.my_attrs.merge(manager_team_vo.my_attrs))
+    assign_attributes(message_params_vo.my_attrs.merge(manager_team_vo.my_attrs.merge(client_id: client_id)))
 
     receiver = Receiver.find_by(receiver_sso_id: @receiver_sso_id)
     if receiver.nil?

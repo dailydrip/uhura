@@ -68,6 +68,7 @@ ActiveRecord::Schema.define(version: 2019_05_12_215905) do
   end
 
   create_table "messages", force: :cascade do |t|
+    t.uuid "client_id"
     t.bigint "msg_target_id"
     t.uuid "sendgrid_msg_id"
     t.bigint "clearstream_msg_id"
@@ -113,7 +114,6 @@ ActiveRecord::Schema.define(version: 2019_05_12_215905) do
 
   create_table "sendgrid_msgs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "sent_to_sendgrid"
-    t.string "x_message_id"
     t.json "mail_and_response"
     t.datetime "got_response_at"
     t.text "sendgrid_response"

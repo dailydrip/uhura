@@ -1,6 +1,7 @@
 class CreateMessages < ActiveRecord::Migration[6.0]
   def change
     create_table :messages do |t|
+      t.uuid :client_id, null: true
       t.references :msg_target, null: true, foreign_key: true
       t.references :sendgrid_msg, null: true, type: :uuid, foreign_key: true
       t.references :clearstream_msg, null: true, foreign_key: true
