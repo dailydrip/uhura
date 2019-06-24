@@ -65,4 +65,22 @@ RSpec.describe SendgridMailVo do
       expect(text_content).to eq "\n\n"
     end
   end
+
+  describe '#mail' do
+    it 'returns the right vo' do
+      vo = SendgridMailVo.new(template_id: 3,
+                              dynamic_template_data: { header: 'header' },
+                              subject: 'Subject',
+                              message_id: '123',
+                              from: 'someone@example.com',
+                              to_name: 'Person',
+                              to: 'example@example.com').vo
+
+      mail = SendgridMailVo.mail(vo[:mail_vo])
+
+      expect(mail).to be_a(SendGrid::Mail)
+      expect(mail.subject).to eq 'Subject'
+      expect(mail.from['email']).to eq 'someone@example.com'
+    end
+  end
 end
