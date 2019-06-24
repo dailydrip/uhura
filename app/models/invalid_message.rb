@@ -21,4 +21,8 @@ class InvalidMessage < ApplicationRecord
       log_err!("Invalid msg_target #{msg_target} for message #{id}")
     end
   end
+
+  def error_ary
+    self.message_attrs['errors']['value']
+  end
 end

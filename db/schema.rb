@@ -68,7 +68,6 @@ ActiveRecord::Schema.define(version: 2019_05_12_215905) do
   end
 
   create_table "messages", force: :cascade do |t|
-    t.uuid "client_id"
     t.bigint "msg_target_id"
     t.uuid "sendgrid_msg_id"
     t.bigint "clearstream_msg_id"
