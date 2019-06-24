@@ -44,8 +44,7 @@ class SendgridMailVo
 
   attr_reader :receiver_sso_id
 
-  # rubocop:disable Naming/AccessorMethodName
-  def get_vo
+  def vo
     raise Invalid, errors.full_messages unless valid?
 
     mail_vo = {
@@ -56,10 +55,9 @@ class SendgridMailVo
       to_name: @to_name,
       dynamic_template_data: @dynamic_template_data,
       personalizations: @personalizations,
-      email_options: JSON.parse(@email_options.to_json) # <= ActionController::Parameters only a problem for rspec
+      email_options: JSON.parse(@email_options.to_json)
     }
-    # Bug in Sendgrid's add_custom_arg.  Following will throw error "no implicit conversion of String into Hash"
-    # mail.add_custom_arg(Hash["custom_arg" => {message_id: @message_id}])
+
     { mail_vo: mail_vo, message_id: @message_id }
   end
 
@@ -97,7 +95,7 @@ class SendgridMailVo
         raise InvalidEmailOptionError, "unknown email option received {#{k}: #{v}}"
       end
     end
-    {mail: mail, personalization: personalization}
+    { mail: mail, personalization: personalization }
   end
 
   def self.get_mail(mail_vo)
