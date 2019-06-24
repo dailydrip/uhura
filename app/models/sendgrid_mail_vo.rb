@@ -112,9 +112,9 @@ class SendgridMailVo
     mail.subject = mail_vo[:subject]
     # Set base personalization attributes
     personalization.add_to(Email.new(email: mail_vo[:to], name: mail_vo[:to_name]))
-    personalization.add_dynamic_template_data(mail_vo[:dynamic_template_data])
-    uhura_msg_id = mail_vo[:personalizations][0][:custom_args][:uhura_msg_id]
-    personalization.add_custom_arg(CustomArg.new(key: 'uhura_msg_id', value: uhura_msg_id))
+    personalization.add_dynamic_template_data(mail_vo[:dynamic_template_data]) if mail_vo[:dynamic_template_data]
+    uhura_msg_id = mail_vo[:personalizations][0][:custom_args][:uhura_msg_id] if mail_vo[:personalizations]
+    personalization.add_custom_arg(CustomArg.new(key: 'uhura_msg_id', value: uhura_msg_id || ""))
     mail.add_personalization(personalization)
     mail
   end

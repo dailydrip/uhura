@@ -83,4 +83,38 @@ RSpec.describe SendgridMailVo do
       expect(mail.from['email']).to eq 'someone@example.com'
     end
   end
+
+  describe '.add_options' do
+    it 'adds options for the email' do
+      vo = SendgridMailVo.new(template_id: 3,
+                              dynamic_template_data: { header: 'header' },
+                              subject: 'Subject',
+                              message_id: '123',
+                              email_options: {
+                                cc: ['example@example.com'],
+                                bcc: ['bcc1@example.com', 'bcc2@example.com'],
+                                reply_to: 'reply-to@example.com',
+                                send_at: 1_231_231,
+                                batch_id: 'id'
+                              },
+                              from: 'someone@example.com',
+                              to_name: 'Person',
+                              to: 'example@example.com').vo
+
+      mail = SendGrid::Mail.new
+      personalization = Personalization.new
+      m_and_p = SendgridMailVo.add_options(vo[:mail_vo], mail, personalization)
+
+      mail = m_and_p[:mail]
+      personalization = m_and_p[:personalization]
+
+      expect(mail).to be_a(SendGrid::Mail)
+      expect(mail.send_at).to eq 1_231_231
+      expect(mail.batch_id).to eq 'id'
+
+      expect(personalization).to be_a(SendGrid::Personalization)
+      expect(personalization.ccs).to eq [{ 'email' => 'example@example.com' }]
+      expect(personalization.bccs).to eq [{ 'email' => 'bcc1@example.com' }, { 'email' => 'bcc2@example.com' }]
+    end
+  end
 end
