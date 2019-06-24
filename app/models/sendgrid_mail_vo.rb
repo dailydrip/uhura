@@ -98,7 +98,7 @@ class SendgridMailVo
     { mail: mail, personalization: personalization }
   end
 
-  def self.get_mail(mail_vo)
+  def self.mail(mail_vo)
     mail = SendGrid::Mail.new
     personalization = Personalization.new
     if mail_vo[:email_options]
@@ -118,8 +118,6 @@ class SendgridMailVo
     mail.add_personalization(personalization)
     mail
   end
-  # rubocop:enable Naming/AccessorMethodName
-
 
   def text_content
     content = []
