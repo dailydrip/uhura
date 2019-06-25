@@ -72,10 +72,10 @@ class SendgridHandler < ServiceHandlerBase
     #SendgridHandler.send_msg(sendgrid_vo)
     SendSendgridMessageWorker.perform_async(sendgrid_vo)
 
-    msg = "Asynchronously sent SMS: (#{message_vo.team_name}:#{message_vo.email_subject}) "
-    msg += "from (#{message_vo.manager_name}) to (#{message_vo.mobile_number})"
+    msg = "Asynchronously sent Email: (#{message_vo.team_name}:#{message_vo.email_subject}) "
+    msg += "from (#{message_vo.manager_name}) to (#{message_vo.email} <#{message_vo.first} #{message_vo.last}>)"
     log_info(msg)
-    return ReturnVo.new(value: return_accepted("clearstream_msg": msg), error: nil)
+    return ReturnVo.new(value: return_accepted(sendgrid_msg: msg), error: nil)
 
   rescue StandardError => e
     err_msg = self.get_err_msg(e)

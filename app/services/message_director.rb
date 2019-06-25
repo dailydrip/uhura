@@ -17,23 +17,8 @@ class MessageDirector
     case ret.value.msg_target.name
     when 'Sendgrid'
       response = SendgridHandler.send(message_vo)
-      if response.error
-        msg = response.error[:error]
-        log_error(msg)
-      else
-        msg = "Sent Email: subject (#{message_vo.email_subject}) "
-        msg += "from (#{message_vo.manager_name}) to (#{message_vo.email})"
-        log_info(msg)
-      end
     when 'Clearstream'
       response = ClearstreamHandler.send(message_vo)
-      if response.error
-        msg = response.error[:error]
-        log_error(msg)
-      else
-        msg = response.value[:data]
-        log_info(msg)
-      end
     else
       msg = "Sent message: subject (#{message_vo.sms_message}) to (#{message_vo.email}), "
       msg += 'but receiver prefers neither Email nor SMS!'
@@ -47,23 +32,25 @@ class MessageDirector
   private_class_method def self.create_message(message_vo)
     begin
       message_vo_is_valid = message_vo.valid?
-    rescue StandardError => e
+    rescue StandardError => error
       message_vo_is_valid = false
-      message_vo.errors.add(:value, e.message)
+      message_vo.errors.add(:value, error.to_s)
     end
     if !message_vo_is_valid
       ReturnVo.new(value: nil, error: return_error(message_vo.errors, :unprocessable_entity))
     else
       begin
-        message = Message.create!(msg_target_id: message_vo.msg_target_id,
-                                  manager_id: message_vo.manager_id, # <= source of message (an application)
-                                  receiver_id: message_vo.receiver_id,
-                                  team_id: message_vo.team_id, # <= message coming from this team
-                                  email_subject: message_vo.email_subject,
-                                  email_message: message_vo.email_message,
-                                  email_options: message_vo.email_options,
-                                  template_id: message_vo.template_id,
-                                  sms_message: message_vo.sms_message)
+        message = Message.create!(
+          msg_target_id: message_vo.msg_target_id,
+          manager_id: message_vo.manager_id, # <= source of message (an application)
+          receiver_id: message_vo.receiver_id,
+          team_id: message_vo.team_id, # <= message coming from this team
+          email_subject: message_vo.email_subject,
+          email_message: message_vo.email_message,
+          email_options: message_vo.email_options,
+          template_id: message_vo.template_id,
+          sms_message: message_vo.sms_message
+        )
 
         ReturnVo.new(value: message, error: nil)
       rescue StandardError => e

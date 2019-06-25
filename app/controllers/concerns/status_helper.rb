@@ -27,7 +27,8 @@ module StatusHelper
     render json: return_error(message: msg), status: status
   end
 
-  def render_success_msg(msg)
-    render json: return_success(message: msg)
+  def render_success_msg(msg, options = {})
+    data = { message: msg }.merge(options) # Return message.id in options
+    render json: return_success(data)
   end
 end

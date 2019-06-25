@@ -104,15 +104,15 @@ class MessageVo
 
   def invalid_message_attrs
     {
-        msg_target_id: self.msg_target_id,
-        manager_id: self.manager_id,
-        receiver_id: self.receiver_id,
-        team_id: self.team_id,
-        email_subject: self.email_subject,
-        email_message: self.email_message,
-        email_options: self.email_options,
-        template_id: self.template_id,
-        sms_message: self.sms_message
+        msg_target_id: @msg_target_id,
+        manager_id: @manager_id,
+        receiver_id: @receiver_id,
+        team_id: @team_id,
+        email_subject: @email_subject,
+        email_message: @email_message,
+        email_options: @email_options,
+        template_id: @template_id,
+        sms_message: @sms_message
     }
   end
 
