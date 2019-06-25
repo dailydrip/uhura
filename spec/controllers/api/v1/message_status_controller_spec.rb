@@ -26,9 +26,9 @@ RSpec.describe 'MessageStatus API', type: :request do
       it 'returns status code 200' do
         get '/api/v1/message_status/1', headers: {}, params: nil
         expect(response.status).to eq 401
-        expect(response.parsed_body).to eq ({ 'status' => 422,
-                                              'data' => nil,
-                                              'error' => 'This API Key does not exist.' })
+        expect(response.parsed_body).to eq('status' => 422,
+                                           'data' => nil,
+                                           'error' => 'This API Key does not exist.')
       end
     end
   end
