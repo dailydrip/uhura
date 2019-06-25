@@ -85,6 +85,14 @@ RSpec.describe SendgridMailVo do
 
       mail = SendgridMailVo.mail(vo[:mail_vo])
 
+      expect(mail.personalizations[0]['dynamic_template_data']).to eq(
+        'email_subject' => 'Picnic Saturday Week',
+        'header' => 'Karate Chop',
+        'section1' => 'Try to imagine all life as you know it stopping instantaneously and every molecule in your body exploding at the speed of light.',
+        'section2' => "Maybe now you'll never slime a guy with a positron collider, huh?",
+        'section3' => 'You will perish in flame, you and all your kind! Gatekeeper!',
+        'button' => 'Reply'
+      )
       expect(mail).to be_a(SendGrid::Mail)
       expect(mail.subject).to eq 'Subject'
       expect(mail.from['email']).to eq 'someone@example.com'
