@@ -121,9 +121,16 @@ RSpec.describe MessageVo, type: :model do
     end
 
     it 'has the receiver information' do
-      create(:receiver, receiver_sso_id: '88543890')
+      create(:msg_target, name: 'Clearstream')
+      Template.create!(name: 'Sample Template A', template_id: 'd-f986df533e514f978f4460bedca50db0', sample_template_data: {
+                         "header": Faker::Games::Pokemon.move.titleize,
+                         "section1": Faker::Quote.matz,
+                         "button": Faker::Verb.base.capitalize
+                       })
+      create(:receiver, receiver_sso_id: '88543890', email: 'example@example.com')
       message_vo = MessageVo.new(message_params_vo, manager_team_vo)
       expect(message_vo.receiver_id).to eq 1
+      expect(message_vo.email).to eq 'example@example.com'
     end
   end
 
