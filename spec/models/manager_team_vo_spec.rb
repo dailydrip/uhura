@@ -3,6 +3,13 @@
 require 'rails_helper'
 
 RSpec.describe ManagerTeamVo, type: :model do
+  describe 'fields' do
+    it { is_expected.to respond_to(:manager_id) }
+    it { is_expected.to respond_to(:manager_name) }
+    it { is_expected.to respond_to(:manager_email) }
+    it { is_expected.to respond_to(:team_name) }
+  end
+
   describe 'validations' do
     before(:each) do
       @manager_team = {
@@ -16,6 +23,11 @@ RSpec.describe ManagerTeamVo, type: :model do
     def manager_team(new_params = {})
       @manager_team.merge(new_params)
     end
+
+    it { is_expected.to validate_presence_of(:manager_id) }
+    it { is_expected.to validate_presence_of(:manager_name) }
+    it { is_expected.to validate_presence_of(:manager_email) }
+    it { is_expected.to validate_presence_of(:team_name) }
 
     context 'initialization' do
       it 'must have valid manager_id' do
