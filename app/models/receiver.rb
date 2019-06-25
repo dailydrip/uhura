@@ -8,19 +8,17 @@ class Receiver < ApplicationRecord
     "#{first_name} #{last_name}".strip
   end
 
-  # rubocop:disable all
   def self.find_or_enroll(message_vo)
     receiver = Receiver.find_by(receiver_sso_id: message_vo.receiver_sso_id)
     if receiver.nil?
       # Create receiver
       receiver = Receiver.create!(
-          receiver_sso_id: message_vo.receiver_sso_id,
-          email: message_vo.receiver_email
+        receiver_sso_id: message_vo.receiver_sso_id,
+        email: message_vo.receiver_email
       )
       # Lookup sso user by email and assign delivery preference, fname, lname
 
     end
     receiver
   end
-  # rubocop:enable all
 end
