@@ -9,18 +9,20 @@ RSpec.describe 'Messages API', type: :request do
   end
 
   describe 'GET /api/v1/messages/:id/status' do
+
     context 'when it is authorized' do
-      let(:message) {
+      let!(:message) {
         create(:message,
-        clearstream_msg: create(:clearstream_msg, status: 'delivered'),
-        sendgrid_msg: create(:sendgrid_msg, status: 'delivered')
+               msg_target: MsgTarget.find_by(name: 'Sendgrid'),
+               clearstream_msg: create(:clearstream_msg, status: nil),
+               sendgrid_msg: create(:sendgrid_msg, status: 'delivered')
         )
       }
 
       it 'returns status code 200' do
         get "/api/v1/messages/#{message.id}/status", headers: valid_headers
         expect(response.status).to eq 200
-        expect(response.parsed_body).to eq ({"clearstream_msg_status"=>"delivered", "sendgrid_msg_status"=>"delivered"})
+        expect(response.parsed_body).to eq ({"clearstream_msg_status"=>nil, "sendgrid_msg_status"=>"delivered"})
       end
     end
   end
