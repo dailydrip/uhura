@@ -40,4 +40,25 @@ RSpec.describe Message, type: :model do
       end
     end
   end
+
+  describe '.check_for_missing_status' do
+    context 'when we dot not have a target' do
+      let!(:message) { create(:message) }
+
+      it 'raises an error if we dont have a target' do
+        expect do
+          Message.check_for_missing_status(message)
+        end.to raise_error(Message::InvalidMessageError, /invalid_message__missing_target/)
+      end
+    end
+
+    context 'when we dot not have a target' do
+      let!(:message) { create(:message, msg_target: create(:msg_target, name: 'Sendgrid')) }
+
+      it 'raises an error if we dont have a target' do
+        result = Message.check_for_missing_status(message)
+        expect(result).to eq(sendgrid_error_msg: nil, clearstream_error_msg: nil)
+      end
+    end
+  end
 end
