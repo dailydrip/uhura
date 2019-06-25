@@ -1,19 +1,35 @@
 # frozen_string_literal: true
 
-# rubocop:disable all
 require 'rails_helper'
 
 RSpec.describe MessageParamsVo, type: :model do
+  describe 'fields' do
+    it { is_expected.to respond_to(:public_token) }
+    it { is_expected.to respond_to(:receiver_sso_id) }
+    it { is_expected.to respond_to(:email_subject) }
+    it { is_expected.to respond_to(:email_message) }
+    it { is_expected.to respond_to(:email_message_sections) }
+    it { is_expected.to respond_to(:template_id) }
+    it { is_expected.to respond_to(:sms_message) }
+    it { is_expected.to respond_to(:my_attributes) }
+  end
+
   describe 'validations' do
+    it { is_expected.to validate_presence_of(:public_token) }
+    it { is_expected.to validate_presence_of(:email_subject) }
+    it { is_expected.to validate_presence_of(:email_message) }
+    it { is_expected.to validate_presence_of(:template_id) }
+    it { is_expected.to validate_presence_of(:sms_message) }
+
     def message_params(new_params = {})
       {
         public_token: '82a1782d202d49efef87',
         receiver_sso_id: '88543890',
         email_subject: 'Picnic Saturday',
         email_message: {
-            header: 'Rock Slide',
-            section1: 'Plant a memory, plant a tree, do it today for tomorrow.',
-            button: 'Brush'
+          header: 'Rock Slide',
+          section1: 'Plant a memory, plant a tree, do it today for tomorrow.',
+          button: 'Brush'
         },
         template_id: 'd-f986df533e514f978f4460bedca50db0',
         sms_message: 'Come in now for 50% off all rolls!'
@@ -27,8 +43,8 @@ RSpec.describe MessageParamsVo, type: :model do
       end
 
       it 'must have valid receiver_sso_id' do
-          message_params_vo = MessageParamsVo.new(message_params(receiver_sso_id: nil))
-          expect(message_params_vo.valid?).to eq(false)
+        message_params_vo = MessageParamsVo.new(message_params(receiver_sso_id: nil))
+        expect(message_params_vo.valid?).to eq(false)
       end
 
       it 'must have valid email_subject' do
@@ -38,10 +54,10 @@ RSpec.describe MessageParamsVo, type: :model do
 
       it 'must have valid section1 in email_message' do
         message_params_vo = MessageParamsVo.new(message_params(email_message: {
-                                               header: 'Rock Slide',
-                                               section1: nil,
-                                               button: 'Brush'
-                                             }))
+                                                                 header: 'Rock Slide',
+                                                                 section1: nil,
+                                                                 button: 'Brush'
+                                                               }))
         expect(message_params_vo.valid?).to eq(false)
       end
       it 'must have valid email_message' do
@@ -50,8 +66,8 @@ RSpec.describe MessageParamsVo, type: :model do
       end
 
       it 'must have valid template_id' do
-         message_params_vo = MessageParamsVo.new(message_params(template_id: nil))
-         expect(message_params_vo.valid?).to eq(false)
+        message_params_vo = MessageParamsVo.new(message_params(template_id: nil))
+        expect(message_params_vo.valid?).to eq(false)
       end
 
       it 'must have valid sms_message' do
@@ -68,4 +84,3 @@ RSpec.describe MessageParamsVo, type: :model do
     end
   end
 end
-# rubocop:enable all
