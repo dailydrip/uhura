@@ -19,4 +19,25 @@ RSpec.describe Message, type: :model do
     it { is_expected.to respond_to(:app_id) }
     it { is_expected.to respond_to(:manager_id) }
   end
+
+  describe '.message_and_status' do
+    context 'when we dot not have a target' do
+      let!(:message) { create(:message) }
+      it 'raises an error if we dont have a target' do
+        expect do
+          Message.message_and_status(message.id)
+        end.to raise_error(Message::InvalidMessageError, /invalid_message__missing_target/)
+      end
+    end
+
+    context 'when we dot have a target' do
+      let!(:message) { create(:message, msg_target: create(:msg_target, name: 'Sendgrid')) }
+      it 'raises an error if we dont have a target' do
+        result = Message.message_and_status(message.id)
+
+        expect(result[:message].id).to eq message.id
+        expect(result[:status]).to eq(sendgrid_msg_status: nil, clearstream_msg_status: nil)
+      end
+    end
+  end
 end

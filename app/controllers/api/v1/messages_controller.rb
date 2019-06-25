@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Api::V1::MessagesController < Api::V1::ApiBaseController
-  InvalidMessageError = Class.new(StandardError)
   include StatusHelper
   before_action :set_team_name, except: [:status]
 

@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Message < ApplicationRecord
+  InvalidMessageError = Class.new(StandardError)
+  include StatusHelper
   belongs_to :msg_target
   belongs_to :sendgrid_msg, optional: true
   belongs_to :clearstream_msg, optional: true
