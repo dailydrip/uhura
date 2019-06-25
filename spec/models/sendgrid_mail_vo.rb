@@ -66,7 +66,7 @@ RSpec.describe SendgridMailVo do
     end
   end
 
-  describe '#mail' do
+  describe '.mail' do
     it 'returns the right vo' do
       vo = SendgridMailVo.new(template_id: 3,
                               dynamic_template_data: { header: 'header' },
