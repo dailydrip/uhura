@@ -45,7 +45,7 @@ RSpec.describe SendgridMailVo do
   end
 
   describe '#text_content' do
-    it 'returns the right vo' do
+    it 'returns the right text content' do
       text_content = SendgridMailVo.new(template_id: 3,
                                         dynamic_template_data: { header: 'header' },
                                         subject: 'Subject',
@@ -67,7 +67,7 @@ RSpec.describe SendgridMailVo do
   end
 
   describe '.mail' do
-    it 'returns the right vo' do
+    it 'returns the mail information' do
       vo = SendgridMailVo.new(template_id: 3,
                               dynamic_template_data: { header: 'header' },
                               subject: 'Subject',
