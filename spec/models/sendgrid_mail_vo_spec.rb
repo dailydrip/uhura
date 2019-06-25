@@ -69,7 +69,14 @@ RSpec.describe SendgridMailVo do
   describe '.mail' do
     it 'returns the mail information' do
       vo = SendgridMailVo.new(template_id: 3,
-                              dynamic_template_data: { header: 'header' },
+                              dynamic_template_data: {
+                                "email_subject": 'Picnic Saturday Week',
+                                "header": 'Karate Chop',
+                                "section1": 'Try to imagine all life as you know it stopping instantaneously and every molecule in your body exploding at the speed of light.',
+                                "section2": "Maybe now you'll never slime a guy with a positron collider, huh?",
+                                "section3": 'You will perish in flame, you and all your kind! Gatekeeper!',
+                                "button": 'Reply'
+                              },
                               subject: 'Subject',
                               message_id: '123',
                               from: 'someone@example.com',
@@ -87,7 +94,14 @@ RSpec.describe SendgridMailVo do
   describe '.add_options' do
     it 'adds options for the email' do
       vo = SendgridMailVo.new(template_id: 3,
-                              dynamic_template_data: { header: 'header' },
+                              dynamic_template_data: {
+                                "email_subject": 'Picnic Saturday Week',
+                                "header": 'Karate Chop',
+                                "section1": 'Try to imagine all life as you know it stopping instantaneously and every molecule in your body exploding at the speed of light.',
+                                "section2": "Maybe now you'll never slime a guy with a positron collider, huh?",
+                                "section3": 'You will perish in flame, you and all your kind! Gatekeeper!',
+                                "button": 'Reply'
+                              },
                               subject: 'Subject',
                               message_id: '123',
                               email_options: {
