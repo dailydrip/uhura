@@ -12,6 +12,30 @@ class InvalidMessage < ApplicationRecord
   alias_attribute :app, :manager
   alias_attribute :app_id, :manager_id
 
+  def self.invalid_message_and_status(id)
+    invalid_message = InvalidMessage.find(id)
+    if invalid_message&.target&.sendgrid?
+      sendgrid_msg_status = {
+        errors: invalid_message.error_ary
+      }
+      clearstream_msg_status = nil
+    elsif invalid_message&.target&.clearstream?
+      sendgrid_msg_status = nil
+      clearstream_msg_status = nil # TODO: implement me
+    else
+      sendgrid_msg_status = nil
+      clearstream_msg_status = nil
+      log_error("Invalid target for invalid_message (#{invalid_message})")
+    end
+    {
+      message: invalid_message,
+      status: {
+        sendgrid_msg_status: sendgrid_msg_status,
+        clearstream_msg_status: clearstream_msg_status
+      }
+    }
+  end
+
   def target
     if msg_target.name.eql?('Sendgrid')
       sendgrid_msg
@@ -23,6 +47,6 @@ class InvalidMessage < ApplicationRecord
   end
 
   def error_ary
-    self.message_attrs['errors']['value']
+    message_attrs['errors']['value']
   end
 end
