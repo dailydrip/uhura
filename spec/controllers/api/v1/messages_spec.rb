@@ -22,7 +22,7 @@ RSpec.describe 'Messages API', type: :request do
       it 'returns status code 200' do
         get "/api/v1/messages/#{message.id}/status", headers: valid_headers
         expect(response.status).to eq 200
-        expect(response.parsed_body).to eq ({"clearstream_msg_status"=>nil, "sendgrid_msg_status"=>"delivered"})
+        expect(response.parsed_body).to eq ({"clearstream_msg_status"=> nil, "sendgrid_msg_status"=>"delivered"})
       end
     end
   end

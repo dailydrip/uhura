@@ -6,8 +6,10 @@ class SendgridMsg < ApplicationRecord
   end
 
   def status
-    if self.sendgrid_response.eql?('202') && self.attributes['status'].nil?
+    if sendgrid_response.eql?('202') && attributes['status'].nil?
       'accepted_by_sendgrid'
+    else
+      attributes['status']
     end
   end
 end
