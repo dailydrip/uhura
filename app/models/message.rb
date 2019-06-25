@@ -22,6 +22,30 @@ class Message < ApplicationRecord
     end
   end
 
+  def self.message_and_status(id)
+    message = Message.find(id)
+    {
+      message: message,
+      status: {
+        sendgrid_msg_status: message&.sendgrid_msg&.status ||
+          check_for_missing_status(message)[:sendgrid_error_msg],
+        clearstream_msg_status: message&.clearstream_msg&.status ||
+          check_for_missing_status(message)[:clearstream_error_msg]
+      }
+    }
+  end
+
+  def self.check_for_missing_status(message)
+    if message&.msg_target&.sendgrid?
+      sendgrid_error_msg = 'message_has_been_queued' if message&.sendgrid_msg.nil?
+    elsif message&.msg_target&.clearstream?
+      clearstream_error_msg = 'message_has_been_queued' if message&.clearstream_msg.nil?
+    else
+      raise InvalidMessageError, 'invalid_message__missing_target'
+    end
+    { sendgrid_error_msg: sendgrid_error_msg, clearstream_error_msg: clearstream_error_msg }
+  end
+
   def target_name
     if target.nil?
       msg_target = MsgTarget.find(msg_target_id)

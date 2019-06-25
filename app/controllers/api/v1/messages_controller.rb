@@ -5,43 +5,6 @@ class Api::V1::MessagesController < Api::V1::ApiBaseController
   include StatusHelper
   before_action :set_team_name, except: [:status]
 
-  def check_for_missing_status(message)
-    if message&.msg_target&.sendgrid?
-      sendgrid_error_msg = 'message_has_been_queued' if message&.sendgrid_msg.nil?
-    elsif message&.msg_target&.clearstream?
-      clearstream_error_msg = 'message_has_been_queued' if message&.clearstream_msg.nil?
-    else
-      raise InvalidMessageError, 'invalid_message__missing_target'
-    end
-    { sendgrid_error_msg: sendgrid_error_msg, clearstream_error_msg: clearstream_error_msg }
-  end
-
-  def message_and_status(id)
-    message = Message.find(id)
-    {
-      message: message,
-      status: {
-        sendgrid_msg_status: message&.sendgrid_msg&.status ||
-          check_for_missing_status(message)[:sendgrid_error_msg],
-        clearstream_msg_status: message&.clearstream_msg&.status ||
-          check_for_missing_status(message)[:clearstream_error_msg]
-      }
-    }
-  end
-
-  def status
-    message_and_status = message_and_status(params[:id]&.to_i)
-
-    if message_and_status[:message].nil?
-      message_and_status = InvalidMessage.invalid_message_and_status(params[:id]&.to_i)
-    end
-
-    render json: {
-      sendgrid_msg_status: message_and_status[:status][:sendgrid_msg_status],
-      clearstream_msg_status: message_and_status[:status][:clearstream_msg_status]
-    }
-  end
-
   def index
     render_response @manager.messages
   end
@@ -63,6 +26,19 @@ class Api::V1::MessagesController < Api::V1::ApiBaseController
         end
       end
     end
+  end
+
+  def status
+    message_and_status = Message.message_and_status(params[:id]&.to_i)
+
+    if message_and_status[:message].nil?
+      message_and_status = InvalidMessage.invalid_message_and_status(params[:id]&.to_i)
+    end
+
+    render json: {
+      sendgrid_msg_status: message_and_status[:status][:sendgrid_msg_status],
+      clearstream_msg_status: message_and_status[:status][:clearstream_msg_status]
+    }
   end
 
   private
