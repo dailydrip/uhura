@@ -12,4 +12,10 @@ class Api::V1::WebHooksController < ApplicationController
       UpdateSendgridMsgStatusFromWebhookWorker.perform_async(message_id, status)
     end
   end
+
+  def clearstream
+    clearstream_msg_id = params[:data][:message][:id]
+    status = params[:data][:message][:status]
+    UpdateClearstreamMsgStatusFromWebhookWorker.perform_async(clearstream_msg_id, status)
+  end
 end

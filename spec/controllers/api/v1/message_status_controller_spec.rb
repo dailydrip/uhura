@@ -7,10 +7,9 @@ RSpec.describe 'MessageStatus API', type: :request do
     setup_data
   end
 
-  # rubocop:disable all
   describe 'GET /api/v1/message_status' do
-    let(:manager) do Manager.first; end
-    let(:receiver) do Receiver.first; end
+    let(:manager) { Manager.first }
+    let(:receiver) { Receiver.first }
 
     context 'when it is authorized' do
       it 'returns status code 200' do
@@ -22,6 +21,15 @@ RSpec.describe 'MessageStatus API', type: :request do
         expect(response.parsed_body['data']['mail_and_response']['response']).to_not be_nil
       end
     end
+
+    context 'when it is NOT authorized' do
+      it 'returns status code 200' do
+        get '/api/v1/message_status/1', headers: {}, params: nil
+        expect(response.status).to eq 401
+        expect(response.parsed_body).to eq('status' => 422,
+                                           'data' => nil,
+                                           'error' => 'This API Key does not exist.')
+      end
+    end
   end
-  # rubocop:enable all
 end

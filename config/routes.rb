@@ -23,6 +23,7 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       post '/web_hooks/sendgrid' => 'web_hooks#sendgrid'
+      post '/web_hooks/clearstream' => 'web_hooks#clearstream'
       resources :messages do
         member do
           get 'status'

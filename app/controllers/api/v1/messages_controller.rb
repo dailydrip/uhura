@@ -1,71 +1,8 @@
 # frozen_string_literal: true
 
 class Api::V1::MessagesController < Api::V1::ApiBaseController
-  InvalidMessageError = Class.new(StandardError)
   include StatusHelper
   before_action :set_team_name, except: [:status]
-
-  def check_for_missing_status(message)
-    if message&.msg_target&.is_sendgrid?
-      if message&.sendgrid_msg.nil?
-        sendgrid_error_msg = 'message_has_been_queued'
-      end
-    elsif message&.msg_target&.is_clearstream?
-      if message&.clearstream_msg.nil?
-        clearstream_error_msg = 'message_has_been_queued'
-      end
-    else
-      raise InvalidMessageError.new('invalid_message__missing_target')
-    end
-    {sendgrid_error_msg: sendgrid_error_msg, clearstream_error_msg: clearstream_error_msg}
-  end
-
-  def message_and_status(id)
-    message = Message.find(id)
-    {
-        message: message,
-        status: {
-            sendgrid_msg_status: message&.sendgrid_msg&.status ||
-                check_for_missing_status(message)[:sendgrid_error_msg],
-            clearstream_msg_status: message&.clearstream_msg&.status ||
-                check_for_missing_status(message)[:clearstream_error_msg]
-        }
-    }
-  end
-
-  def invalid_message_and_status(id)
-    invalid_message = InvalidMessage.find(id)
-    if invalid_message&.target&.is_sendgrid?
-      sendgrid_msg_status = {
-          errors: invalid_message.error_ary
-      }
-      clearstream_msg_status = nil
-    elsif invalid_message&.target&.is_clearstream?
-      sendgrid_msg_status = nil
-      clearstream_msg_status = nil # TODO: implement me
-    else
-      sendgrid_msg_status = nil
-      clearstream_msg_status = nil
-      log_error("Invalid target for invalid_message (#{invalid_message})")
-    end
-    {
-        message: invalid_message,
-        status: {
-            sendgrid_msg_status: sendgrid_msg_status,
-            clearstream_msg_status: clearstream_msg_status
-        }
-    }
-  end
-
-  def status
-    message_and_status = message_and_status(params[:id]&.to_i)
-    message_and_status = invalid_message_and_status(params[:id]&.to_i)  if message_and_status[:message].nil?
-
-    render json: {
-      sendgrid_msg_status: message_and_status[:status][:sendgrid_msg_status],
-      clearstream_msg_status: message_and_status[:status][:clearstream_msg_status]
-    }
-  end
 
   def index
     render_response @manager.messages
@@ -88,6 +25,19 @@ class Api::V1::MessagesController < Api::V1::ApiBaseController
         end
       end
     end
+  end
+
+  def status
+    message_and_status = Message.message_and_status(params[:id]&.to_i)
+
+    if message_and_status[:message].nil?
+      message_and_status = InvalidMessage.invalid_message_and_status(params[:id]&.to_i)
+    end
+
+    render json: {
+      sendgrid_msg_status: message_and_status[:status][:sendgrid_msg_status],
+      clearstream_msg_status: message_and_status[:status][:clearstream_msg_status]
+    }
   end
 
   private
@@ -163,7 +113,7 @@ class Api::V1::MessagesController < Api::V1::ApiBaseController
   def render_success_status(message_id)
     message = Message.find(message_id)
     msg = "We got the message. Go here (#{api_v1_message_status_url(message)}) for details on it later."
-    render_success_msg(msg, {message_id: message.id})
+    render_success_msg(msg, message_id: message.id)
   end
 
   def set_team_name

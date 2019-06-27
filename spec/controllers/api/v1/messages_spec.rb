@@ -2,31 +2,31 @@
 
 require 'rails_helper'
 
-# rubocop:disable all
 RSpec.describe 'Messages API', type: :request do
   before do
     setup_data
   end
 
   describe 'GET /api/v1/messages/:id/status' do
-
     context 'when it is authorized' do
-      let!(:message) {
-        Message.find(1)
-      }
+      let!(:message) do
+        create(:message,
+               msg_target: MsgTarget.find_by(name: 'Sendgrid'),
+               clearstream_msg: create(:clearstream_msg, status: nil),
+               sendgrid_msg: create(:sendgrid_msg, status: 'delivered'))
+      end
 
       it 'returns status code 200' do
         get "/api/v1/messages/#{message.id}/status", headers: valid_headers
         expect(response.status).to eq 200
-        expect(response.parsed_body).to eq ({"clearstream_msg_status"=>nil, "sendgrid_msg_status"=>"delivered"})
+        expect(response.parsed_body).to eq('clearstream_msg_status' => nil, 'sendgrid_msg_status' => 'delivered')
       end
     end
   end
 
   describe 'POST /api/v1/messages' do
-
-    let(:manager) do Manager.first; end
-    let(:receiver) do Receiver.first; end
+    let(:manager) { Manager.first; }
+    let(:receiver) { Receiver.first; }
 
     let(:valid_attributes) do
       {
@@ -45,9 +45,9 @@ RSpec.describe 'Messages API', type: :request do
 
     context 'when it is authorized' do
       it 'returns status code 200' do
-        stub_request(:any, /api.getclearstream.com/).
-          to_return(body: get_clearstream_response_data('post_message'),
-                    status: 200)
+        stub_request(:any, /api.getclearstream.com/)
+          .to_return(body: get_clearstream_response_data('post_message'),
+                     status: 200)
         post '/api/v1/messages', headers: valid_headers, params: valid_attributes.to_json
         expect(response.status).to eq 200
         expect(response.parsed_body['data']['message']).to include('We got the message. Go here').and include('/api/v1/message_status/')
@@ -56,9 +56,9 @@ RSpec.describe 'Messages API', type: :request do
 
     context 'when it is not authorized' do
       it 'returns 401 with an error in the body' do
-        stub_request(:any, /api.getclearstream.com/).
-        to_return(body: get_clearstream_response_data('invalid_auth_header'),
-                  status: 401)
+        stub_request(:any, /api.getclearstream.com/)
+          .to_return(body: get_clearstream_response_data('invalid_auth_header'),
+                     status: 401)
         post '/api/v1/messages', headers: invalid_headers, params: valid_attributes
         expect(response.status).to eq 401
         expect(response.parsed_body['error']).to eq('This API Key does not exist.')
@@ -73,9 +73,9 @@ RSpec.describe 'Messages API', type: :request do
         }
       end
       it 'returns an error saying the Team ID is not found' do
-        stub_request(:any, /api.getclearstream.com/).
-          to_return(body: get_clearstream_response_data('post_message'),
-                    status: 422)
+        stub_request(:any, /api.getclearstream.com/)
+          .to_return(body: get_clearstream_response_data('post_message'),
+                     status: 422)
         post '/api/v1/messages', headers: header_without_team_id, params: valid_attributes.to_json
         expect(response.status).to eq 422
         expect(response.parsed_body['error']['message']).to eq('Required HTTP header (X-Team-ID) is missing.')
@@ -91,9 +91,9 @@ RSpec.describe 'Messages API', type: :request do
         }
       end
       it 'returns an error saying the X-Team-ID HTTP header was NOT found' do
-        stub_request(:any, /api.getclearstream.com/).
-          to_return(body: get_clearstream_response_data('post_message'),
-                    status: 422)
+        stub_request(:any, /api.getclearstream.com/)
+          .to_return(body: get_clearstream_response_data('post_message'),
+                     status: 422)
         post '/api/v1/messages', headers: header_without_team_id, params: valid_attributes.to_json
         expect(response.status).to eq 422
         expect(response.parsed_body['error']['message']).to include('X-Team-ID HTTP header NOT found')
@@ -102,9 +102,9 @@ RSpec.describe 'Messages API', type: :request do
 
     describe 'when the preferred channel is sms' do
       it 'calls clearstream returning a status of QUEUED' do
-        stub_request(:any, /api.getclearstream.com/).
-          to_return(body: get_clearstream_response_data('get_message_status_queued'),
-                    status: 200)
+        stub_request(:any, /api.getclearstream.com/)
+          .to_return(body: get_clearstream_response_data('get_message_status_queued'),
+                     status: 200)
 
         get '/api/v1/message_status/2', headers: valid_headers, params: nil
         expect(response.status).to eq 200
@@ -143,9 +143,9 @@ RSpec.describe 'Messages API', type: :request do
       end
 
       it 'Clearstream does not process it' do
-        stub_request(:any, /api.getclearstream.com/).
-          to_return(body: get_clearstream_response_data('post_message_with_invalid_receiver_mobile_number'),
-                   status: 422)
+        stub_request(:any, /api.getclearstream.com/)
+          .to_return(body: get_clearstream_response_data('post_message_with_invalid_receiver_mobile_number'),
+                     status: 422)
         post '/api/v1/messages', headers: valid_headers, params: valid_attributes.to_json
         # Just created 3rd message.
         link_to_clearstream_invalid_mobile_number
@@ -165,16 +165,16 @@ RSpec.describe 'Messages API', type: :request do
     describe 'when the preferred channel is email' do
       def link_to_sendgrid
         sendgrid_msg = SendgridMsg.create!(sent_to_sendgrid: 2.seconds.from_now,
-                                              mail_and_response: get_sendgrid_response_data('read_mail_and_response'),
-                                              got_response_at: nil,
-                                              sendgrid_response: nil,
-                                              read_by_user_at: nil)
+                                           mail_and_response: get_sendgrid_response_data('read_mail_and_response'),
+                                           got_response_at: nil,
+                                           sendgrid_response: nil,
+                                           read_by_user_at: nil)
         msg3 = Message.find(3)
         msg3.sendgrid_msg = sendgrid_msg
         msg3.save!
       end
 
-      let(:receiver) do Receiver.find_by(first_name: 'Bob'); end
+      let(:receiver) { Receiver.find_by(first_name: 'Bob'); }
       let(:valid_attributes) do
         {
           "public_token": manager.public_token,
@@ -190,9 +190,9 @@ RSpec.describe 'Messages API', type: :request do
         }
       end
       it 'calls Sendgrid and returns a successful response and stores the message send request' do
-        stub_request(:any, /api.sendgrid.com/).
-          to_return(body: get_sendgrid_response_data('post_message'),
-                    status: 200)
+        stub_request(:any, /api.sendgrid.com/)
+          .to_return(body: get_sendgrid_response_data('post_message'),
+                     status: 200)
 
         post '/api/v1/messages', headers: valid_headers, params: valid_attributes.to_json
         # Just created 3rd message.
@@ -208,7 +208,7 @@ RSpec.describe 'Messages API', type: :request do
     end
 
     describe 'when an email with an invalid template_id is sent' do
-      let(:receiver) do Receiver.find_by(first_name: 'Bob'); end
+      let(:receiver) { Receiver.find_by(first_name: 'Bob'); }
       let(:valid_attributes) do
         {
           "public_token": manager.public_token,
@@ -225,9 +225,9 @@ RSpec.describe 'Messages API', type: :request do
         }
       end
       it 'returns status code 422' do
-        stub_request(:any, /api.sendgrid.com/).
-          to_return(body: get_sendgrid_response_data('post_message_with_invalid_template_id'),
-                    status: 422)
+        stub_request(:any, /api.sendgrid.com/)
+          .to_return(body: get_sendgrid_response_data('post_message_with_invalid_template_id'),
+                     status: 422)
         post '/api/v1/messages', headers: valid_headers, params: valid_attributes.to_json
         expect(response.status).to eq 422
         expect(response.parsed_body['error']['message']).to include('Invalid message')
@@ -235,7 +235,7 @@ RSpec.describe 'Messages API', type: :request do
     end
 
     describe 'when and email with 1 section is sent' do
-      let(:receiver) do Receiver.find_by(first_name: 'Bob'); end
+      let(:receiver) { Receiver.find_by(first_name: 'Bob'); }
       let(:valid_attributes) do
         {
           "public_token": manager.public_token,
@@ -251,18 +251,18 @@ RSpec.describe 'Messages API', type: :request do
         }
       end
       it 'returns status code 200' do
-        stub_request(:any, /api.sendgrid.com/).
-          to_return(body: get_sendgrid_response_data('post_message'),
-                    status: 200)
+        stub_request(:any, /api.sendgrid.com/)
+          .to_return(body: get_sendgrid_response_data('post_message'),
+                     status: 200)
         post '/api/v1/messages', headers: valid_headers, params: valid_attributes.to_json
         expect(response.status).to eq 200
-        #expect(response.parsed_body['data']['sendgrid_msg']['mail_and_response']['mail']['personalizations'][0]['dynamic_template_data']['section1']).to eq('imagine you are writing an email.')
+        # expect(response.parsed_body['data']['sendgrid_msg']['mail_and_response']['mail']['personalizations'][0]['dynamic_template_data']['section1']).to eq('imagine you are writing an email.')
         expect(response.parsed_body['data']['message']).to include('We got the message')
       end
     end
 
     describe 'when an email with 2 sections is sent' do
-      let(:receiver) do Receiver.find_by(first_name: 'Bob'); end
+      let(:receiver) { Receiver.find_by(first_name: 'Bob'); }
       let(:valid_attributes) do
         {
           "public_token": manager.public_token,
@@ -279,44 +279,44 @@ RSpec.describe 'Messages API', type: :request do
         }
       end
       it 'returns status code 200' do
-        stub_request(:any, /api.sendgrid.com/).
-          to_return(body: get_sendgrid_response_data('post_message'),
-                    status: 200)
+        stub_request(:any, /api.sendgrid.com/)
+          .to_return(body: get_sendgrid_response_data('post_message'),
+                     status: 200)
         post '/api/v1/messages', headers: valid_headers, params: valid_attributes.to_json
         expect(response.status).to eq 200
-        #expect(response.parsed_body['data']['sendgrid_msg']['mail_and_response']['mail']['personalizations'][0]['dynamic_template_data']['section2']).to eq("I think we can get her a guest shot on 'Wild Kingdom.' I just whacked her up with about 300 cc's of Thorazaine... she's gonna take a little nap now.")
+        # expect(response.parsed_body['data']['sendgrid_msg']['mail_and_response']['mail']['personalizations'][0]['dynamic_template_data']['section2']).to eq("I think we can get her a guest shot on 'Wild Kingdom.' I just whacked her up with about 300 cc's of Thorazaine... she's gonna take a little nap now.")
         expect(response.parsed_body['data']['message']).to include('We got the message')
       end
     end
 
     describe 'when an email with options is sent' do
-      let(:receiver) do Receiver.find_by(first_name: 'Bob'); end
+      let(:receiver) { Receiver.find_by(first_name: 'Bob'); }
       let(:valid_attributes) do
         {
-            "public_token": manager.public_token,
-            "receiver_sso_id": receiver.receiver_sso_id,
-            "email_subject": 'Picnic Next Saturday',
-            "email_message": {
-                "header": 'Bind',
-                "section1": "You're more like a game show host.",
-                "section2": "I think we can get her a guest shot on 'Wild Kingdom.' I just whacked her up with about 300 cc's of Thorazaine... she's gonna take a little nap now.",
-                "button": 'Action!'
-            },
-            "email_options": {
-                "cc": ["recipient1@example.com <Alice Recipient>","recipient2@example.com"],
-                "bcc": ["recipient3@example.com","recipient4@example.com <Bob Recipient>"],
-                "reply_to": "recipient5@example.com <Cindy Recipient>",
-                "send_at": 1577854800,
-                "batch_id": "YOUR_BATCH_ID"
-            },
-            "template_id": 'd-4d10bf26b57247deba602127dab1ba60',
-            "sms_message": 'Bring Dessert to the Picnic Next Saturday'
+          "public_token": manager.public_token,
+          "receiver_sso_id": receiver.receiver_sso_id,
+          "email_subject": 'Picnic Next Saturday',
+          "email_message": {
+            "header": 'Bind',
+            "section1": "You're more like a game show host.",
+            "section2": "I think we can get her a guest shot on 'Wild Kingdom.' I just whacked her up with about 300 cc's of Thorazaine... she's gonna take a little nap now.",
+            "button": 'Action!'
+          },
+          "email_options": {
+            "cc": ['recipient1@example.com <Alice Recipient>', 'recipient2@example.com'],
+            "bcc": ['recipient3@example.com', 'recipient4@example.com <Bob Recipient>'],
+            "reply_to": 'recipient5@example.com <Cindy Recipient>',
+            "send_at": 1_577_854_800,
+            "batch_id": 'YOUR_BATCH_ID'
+          },
+          "template_id": 'd-4d10bf26b57247deba602127dab1ba60',
+          "sms_message": 'Bring Dessert to the Picnic Next Saturday'
         }
       end
       it 'returns status code 200' do
-        stub_request(:any, /api.sendgrid.com/).
-            to_return(body: get_sendgrid_response_data('post_message'),
-                      status: 200)
+        stub_request(:any, /api.sendgrid.com/)
+          .to_return(body: get_sendgrid_response_data('post_message'),
+                     status: 200)
         post '/api/v1/messages', headers: valid_headers, params: valid_attributes.to_json
         expect(response.status).to eq 200
         expect(response.parsed_body['data']['message']).to include('We got the message')
@@ -324,7 +324,7 @@ RSpec.describe 'Messages API', type: :request do
     end
 
     describe 'when an email with no sections sent' do
-      let(:receiver) do Receiver.find_by(first_name: 'Bob'); end
+      let(:receiver) { Receiver.find_by(first_name: 'Bob'); }
       let(:valid_attributes) do
         {
           "public_token": manager.public_token,
@@ -339,9 +339,9 @@ RSpec.describe 'Messages API', type: :request do
         }
       end
       it 'returns status code 422' do
-        stub_request(:any, /api.sendgrid.com/).
-          to_return(body: get_sendgrid_response_data('post_message_0_sections'),
-                    status: 422)
+        stub_request(:any, /api.sendgrid.com/)
+          .to_return(body: get_sendgrid_response_data('post_message_0_sections'),
+                     status: 422)
         expect do
           post('/api/v1/messages',
                headers: valid_headers,
@@ -351,4 +351,3 @@ RSpec.describe 'Messages API', type: :request do
     end
   end
 end
-# rubocop:enable all

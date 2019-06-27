@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 class MsgTarget < ApplicationRecord
-  def is_sendgrid?
-    self.name.eql?('Sendgrid')
+  def sendgrid?
+    name.eql?('Sendgrid')
   end
 
-  def is_clearstream?
-    self.name.eql?('Clearstream')
+  def clearstream?
+    name.eql?('Clearstream')
   end
 end
