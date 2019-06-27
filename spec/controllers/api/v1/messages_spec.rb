@@ -12,11 +12,7 @@ RSpec.describe 'Messages API', type: :request do
 
     context 'when it is authorized' do
       let!(:message) {
-        create(:message,
-               msg_target: MsgTarget.find_by(name: 'Sendgrid'),
-               clearstream_msg: create(:clearstream_msg, status: nil),
-               sendgrid_msg: create(:sendgrid_msg, status: 'delivered')
-        )
+        Message.find(1)
       }
 
       it 'returns status code 200' do
