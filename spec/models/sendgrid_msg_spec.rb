@@ -8,5 +8,7 @@ RSpec.describe SendgridMsg, type: :model do
     it { is_expected.to respond_to(:mail_and_response) }
     it { is_expected.to respond_to(:got_response_at) }
     it { is_expected.to respond_to(:sendgrid_response) }
+    it { is_expected.to respond_to(:read_by_user_at) }
+    it { is_expected.to respond_to(:status) }
   end
 end

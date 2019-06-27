@@ -3,6 +3,10 @@
 require 'rails_helper'
 
 RSpec.describe ApiKey, type: :model do
+  describe 'fields' do
+    it { is_expected.to respond_to(:auth_token) }
+  end
+
   describe 'validations' do
     it { is_expected.to validate_presence_of(:manager) }
   end
