@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UpdateClearstreamMsgStatusFromWebhookWorker
   include Sidekiq::Worker
 

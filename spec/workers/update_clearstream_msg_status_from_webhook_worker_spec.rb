@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 RSpec.describe UpdateClearstreamMsgStatusFromWebhookWorker, type: :worker do
   let!(:msg) { create(:clearstream_msg) }
