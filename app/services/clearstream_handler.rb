@@ -22,6 +22,8 @@ class ClearstreamHandler < ServiceHandlerBase
     response = ClearstreamClient::MessageClient.new(data: data[:clearstream_vo],
                                                     resource: 'messages').send_message
     # Record Clearstream response
+    # FIXME: We need to get the message id from clearsteam and save it here
+    # and when we look up for the message in the webhook we look for it.
     clearstream_msg = ClearstreamMsg.create!(sent_to_clearstream: Time.now,
                                              response: response['data'] )
     clearstream_msg.got_response_at = Time.now
