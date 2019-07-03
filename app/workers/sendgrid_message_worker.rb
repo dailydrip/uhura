@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class SendSendgridMessageWorker
+class SendgridMessageWorker
   include Sidekiq::Worker
   sidekiq_options retry: false
 

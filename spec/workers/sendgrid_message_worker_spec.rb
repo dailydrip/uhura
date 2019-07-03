@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe SendSendgridMessageWorker do
+RSpec.describe SendgridMessageWorker do
   before do
     Sidekiq::Worker.clear_all
   end
@@ -76,7 +76,7 @@ RSpec.describe SendSendgridMessageWorker do
 
         expect do
           sendgrid_vo = nil
-          Sidekiq::Testing.inline! { SendSendgridMessageWorker.perform_async(sendgrid_vo) }
+          Sidekiq::Testing.inline! { SendgridMessageWorker.perform_async(sendgrid_vo) }
         end.to raise_error(NoMethodError)
       end
     end

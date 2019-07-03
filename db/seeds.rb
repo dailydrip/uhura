@@ -72,112 +72,112 @@ log! "6. Seeding MsgTarget"
 MsgTarget.create!(name: 'Sendgrid', description: 'External Email Service')
 MsgTarget.create!(name: 'Clearstream', description: 'External SMS Texting Service')
 
-log! "7. Seeding Messages"
-msg1 = Message.create!(msg_target_id: MsgTarget.find_by(name: 'Sendgrid').id,
-                       manager_id: app1.id, # <= source (an application)
-                       team_id: leadership_team.id, # <= message coming from this team
-                       receiver_id: bob.id, # <= receiver (a user)
-                       email_subject: Faker::TvShows::SiliconValley.motto,
-                       email_message:  {
-                           "header": Faker::Games::Pokemon.move.titleize,
-                           "section1": Faker::Quote.matz,
-                           "button": Faker::Verb.base.capitalize
-                       },
-                       template_id: template_a.id,
-                       sms_message:  Faker::Movie.quote)
-
-msg2 = Message.create!(msg_target_id: MsgTarget.find_by(name: 'Sendgrid').id,
-                       manager_id: app1.id,
-                       team_id: campus_pastor_team.id,
-                       receiver_id: bob.id,
-                       email_subject: Faker::TvShows::SiliconValley.motto,
-                       email_message:  {
-                           "header": Faker::Games::Pokemon.move.titleize,
-                           "section1": Faker::Quote.matz,
-                           "section2": Faker::Quote.matz,
-                           "button": Faker::Verb.base.capitalize
-                       },
-                       template_id: template_b.id,
-                       sms_message:  Faker::Movie.quote)
-
-msg3 = Message.create!(msg_target_id: MsgTarget.find_by(name: 'Clearstream').id,
-                       manager_id: app1.id,
-                       team_id: leadership_team.id,
-                       receiver_id: cindy.id,
-                       email_subject: Faker::TvShows::SiliconValley.motto,
-                       email_message:  {
-                           "header": Faker::Games::Pokemon.move.titleize,
-                           "section1": Faker::Quote.matz,
-                           "button": Faker::Verb.base.capitalize
-                       },
-                       template_id: template_a.id,
-                       sms_message:  Faker::Movie.quote)
-
-msg4 = Message.create!(msg_target_id: MsgTarget.find_by(name: 'Clearstream').id,
-                       manager_id: app2.id,
-                       team_id: leadership_team.id,
-                       receiver_id: alice.id, # <= receiver (a user)
-                       email_subject: Faker::TvShows::SiliconValley.motto,
-                       email_message:  {
-                           "header": Faker::Games::Pokemon.move.titleize,
-                           "section1": Faker::Quote.matz,
-                           "button": Faker::Verb.base.capitalize
-                       },
-                       template_id: template_a.id,
-                       sms_message:  Faker::Movie.quote)
-
-msg5 = Message.create!(msg_target_id: MsgTarget.find_by(name: 'Sendgrid').id,
-                       manager_id: app2.id,
-                       team_id: campus_pastor_team.id,
-                       receiver_id: bob.id, # <= receiver (a user)
-                       email_subject: Faker::TvShows::SiliconValley.motto,
-                       email_message:  {
-                           "header": Faker::Games::Pokemon.move.titleize,
-                           "section1": Faker::Quote.matz,
-                           "section2": Faker::Quote.matz,
-                           "section3": Faker::Quote.matz,
-                           "button": Faker::Verb.base.capitalize
-                       },
-                       template_id: template_c.id,
-                       sms_message:  Faker::Movie.quote)
-
-msg6 = Message.create!(msg_target_id: MsgTarget.find_by(name: 'Clearstream').id,
-                       manager_id: app2.id,
-                       team_id: leadership_team.id,
-                       receiver_id: cindy.id, # <= receiver (a user)
-                       email_subject: Faker::TvShows::SiliconValley.motto,
-                       email_message:  {
-                           "header": Faker::Games::Pokemon.move.titleize,
-                           "section1": Faker::Quote.matz,
-                           "button": Faker::Verb.base.capitalize
-                       },
-                       template_id: template_a.id,
-                       sms_message:  Faker::Movie.quote)
-
-log! "8. Seeding SendgridMsg and ClearstreamMsg"
-sg1 = SendgridMsg.create!(sent_to_sendgrid: Time.now, read_by_user_at: 1.day.from_now)
-msg1.sendgrid_msg = sg1
-msg1.save!
-
-sg2 = SendgridMsg.create!(sent_to_sendgrid: 1.minute.from_now, read_by_user_at: 2.days.from_now)
-msg2.sendgrid_msg = sg2
-msg2.save!
-
-cs1 = ClearstreamMsg.create!(sent_to_clearstream: 2.minutes.from_now)
-msg3.clearstream_msg = cs1
-msg3.save!
-
-cs2 = ClearstreamMsg.create!(sent_to_clearstream: 4.minutes.from_now)
-msg4.clearstream_msg = cs2
-msg4.save!
-
-sg3 = SendgridMsg.create!(sent_to_sendgrid: 5.minutes.from_now, read_by_user_at: 3.days.from_now)
-msg5.sendgrid_msg = sg3
-msg5.save!
-
-cs3 = ClearstreamMsg.create!(sent_to_clearstream: 7.minutes.from_now)
-msg6.clearstream_msg = cs3
-msg6.save!
+# log! "7. Seeding Messages"
+# msg1 = Message.create!(msg_target_id: MsgTarget.find_by(name: 'Sendgrid').id,
+#                        manager_id: app1.id, # <= source (an application)
+#                        team_id: leadership_team.id, # <= message coming from this team
+#                        receiver_id: bob.id, # <= receiver (a user)
+#                        email_subject: Faker::TvShows::SiliconValley.motto,
+#                        email_message:  {
+#                            "header": Faker::Games::Pokemon.move.titleize,
+#                            "section1": Faker::Quote.matz,
+#                            "button": Faker::Verb.base.capitalize
+#                        },
+#                        template_id: template_a.id,
+#                        sms_message:  Faker::Movie.quote)
+#
+# msg2 = Message.create!(msg_target_id: MsgTarget.find_by(name: 'Sendgrid').id,
+#                        manager_id: app1.id,
+#                        team_id: campus_pastor_team.id,
+#                        receiver_id: bob.id,
+#                        email_subject: Faker::TvShows::SiliconValley.motto,
+#                        email_message:  {
+#                            "header": Faker::Games::Pokemon.move.titleize,
+#                            "section1": Faker::Quote.matz,
+#                            "section2": Faker::Quote.matz,
+#                            "button": Faker::Verb.base.capitalize
+#                        },
+#                        template_id: template_b.id,
+#                        sms_message:  Faker::Movie.quote)
+#
+# msg3 = Message.create!(msg_target_id: MsgTarget.find_by(name: 'Clearstream').id,
+#                        manager_id: app1.id,
+#                        team_id: leadership_team.id,
+#                        receiver_id: cindy.id,
+#                        email_subject: Faker::TvShows::SiliconValley.motto,
+#                        email_message:  {
+#                            "header": Faker::Games::Pokemon.move.titleize,
+#                            "section1": Faker::Quote.matz,
+#                            "button": Faker::Verb.base.capitalize
+#                        },
+#                        template_id: template_a.id,
+#                        sms_message:  Faker::Movie.quote)
+#
+# msg4 = Message.create!(msg_target_id: MsgTarget.find_by(name: 'Clearstream').id,
+#                        manager_id: app2.id,
+#                        team_id: leadership_team.id,
+#                        receiver_id: alice.id, # <= receiver (a user)
+#                        email_subject: Faker::TvShows::SiliconValley.motto,
+#                        email_message:  {
+#                            "header": Faker::Games::Pokemon.move.titleize,
+#                            "section1": Faker::Quote.matz,
+#                            "button": Faker::Verb.base.capitalize
+#                        },
+#                        template_id: template_a.id,
+#                        sms_message:  Faker::Movie.quote)
+#
+# msg5 = Message.create!(msg_target_id: MsgTarget.find_by(name: 'Sendgrid').id,
+#                        manager_id: app2.id,
+#                        team_id: campus_pastor_team.id,
+#                        receiver_id: bob.id, # <= receiver (a user)
+#                        email_subject: Faker::TvShows::SiliconValley.motto,
+#                        email_message:  {
+#                            "header": Faker::Games::Pokemon.move.titleize,
+#                            "section1": Faker::Quote.matz,
+#                            "section2": Faker::Quote.matz,
+#                            "section3": Faker::Quote.matz,
+#                            "button": Faker::Verb.base.capitalize
+#                        },
+#                        template_id: template_c.id,
+#                        sms_message:  Faker::Movie.quote)
+#
+# msg6 = Message.create!(msg_target_id: MsgTarget.find_by(name: 'Clearstream').id,
+#                        manager_id: app2.id,
+#                        team_id: leadership_team.id,
+#                        receiver_id: cindy.id, # <= receiver (a user)
+#                        email_subject: Faker::TvShows::SiliconValley.motto,
+#                        email_message:  {
+#                            "header": Faker::Games::Pokemon.move.titleize,
+#                            "section1": Faker::Quote.matz,
+#                            "button": Faker::Verb.base.capitalize
+#                        },
+#                        template_id: template_a.id,
+#                        sms_message:  Faker::Movie.quote)
+#
+# log! "8. Seeding SendgridMsg and ClearstreamMsg"
+# sg1 = SendgridMsg.create!(sent_to_sendgrid: Time.now, read_by_user_at: 1.day.from_now)
+# msg1.sendgrid_msg = sg1
+# msg1.save!
+#
+# sg2 = SendgridMsg.create!(sent_to_sendgrid: 1.minute.from_now, read_by_user_at: 2.days.from_now)
+# msg2.sendgrid_msg = sg2
+# msg2.save!
+#
+# cs1 = ClearstreamMsg.create!(sent_to_clearstream: 2.minutes.from_now)
+# msg3.clearstream_msg = cs1
+# msg3.save!
+#
+# cs2 = ClearstreamMsg.create!(sent_to_clearstream: 4.minutes.from_now)
+# msg4.clearstream_msg = cs2
+# msg4.save!
+#
+# sg3 = SendgridMsg.create!(sent_to_sendgrid: 5.minutes.from_now, read_by_user_at: 3.days.from_now)
+# msg5.sendgrid_msg = sg3
+# msg5.save!
+#
+# cs3 = ClearstreamMsg.create!(sent_to_clearstream: 7.minutes.from_now)
+# msg6.clearstream_msg = cs3
+# msg6.save!
 
 log! 'Seeding Done!'
 log! "public_token: #{Manager.first.public_token}"

@@ -5,6 +5,7 @@ class CreateClearstreamMsgs < ActiveRecord::Migration[6.0]
       t.json :response
       t.datetime :got_response_at
       t.text :status
+      t.integer :clearstream_id
 
       t.timestamps
     end

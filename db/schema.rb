@@ -31,6 +31,7 @@ ActiveRecord::Schema.define(version: 2019_05_12_215905) do
     t.json "response"
     t.datetime "got_response_at"
     t.text "status"
+    t.integer "clearstream_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
