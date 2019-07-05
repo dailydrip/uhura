@@ -12,8 +12,8 @@ class ClearstreamHandler < ServiceHandlerBase
         message_id: message_vo.message_id
     ).get
 
-    ClearstreamHandler.send_msg(clearstream_vo) # <= Uncomment to test synchronously
-    #ClearstreamMessageWorker.perform_async(clearstream_vo)
+    # ClearstreamHandler.send_msg(clearstream_vo) # <= Uncomment to test synchronously
+    ClearstreamMessageWorker.perform_async(clearstream_vo)
 
     msg = "Asynchronously sent SMS: (#{message_vo.team_name}:#{message_vo.email_subject}) "
     msg += "from (#{message_vo.manager_name}) to (#{message_vo.mobile_number})"
@@ -21,8 +21,6 @@ class ClearstreamHandler < ServiceHandlerBase
     return ReturnVo.new(value: return_accepted("clearstream_msg": msg), error: nil)
 
   rescue StandardError => e
-    puts '>> StandardError:'
-    puts e.to_s
     err_msg = self.get_err_msg(e)
     # Log Clearstream subscription warnings if necessary. Note Uhura does not submit create_subscriber requests.
     if err_msg&.include?('supplied subscribers is invalid') # "At least one of the supplied subscribers is invalid."

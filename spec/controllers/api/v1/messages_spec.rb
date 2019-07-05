@@ -193,7 +193,6 @@ RSpec.describe 'Messages API', type: :request do
         stub_request(:any, /api.sendgrid.com/)
           .to_return(body: get_sendgrid_response_data('post_message'),
                      status: 200)
-
         post '/api/v1/messages', headers: valid_headers, params: valid_attributes.to_json
         # Just created 3rd message.
         link_to_sendgrid

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class SendgridHandler < ServiceHandlerBase
-
   def self.send(message_vo)
     template_data = message_vo.email_message
     template_data['email_subject'] = message_vo.email_subject
@@ -9,7 +8,7 @@ class SendgridHandler < ServiceHandlerBase
     sendgrid_vo = create_sendgrid_msg(message_vo, template_data)
 
     SendgridHandler.send_msg(sendgrid_vo) # <= Uncomment to test synchronously
-    #SendSendgridMessageWorker.perform_async(sendgrid_vo)
+    # SendSendgridMessageWorker.perform_async(sendgrid_vo)
 
     msg = "Asynchronously sent Email: (#{message_vo.team_name}:#{message_vo.email_subject}) "
     msg += "from (#{message_vo.manager_name}) to (#{message_vo.email} <#{message_vo.first} #{message_vo.last}>)"
@@ -41,8 +40,9 @@ class SendgridHandler < ServiceHandlerBase
   def self.handle_sendgrid_msg_error(err_msg, sendgrid_vo, message_vo)
     # A error occurs while processing the request. Record ERROR status.
     sendgrid_msg = SendgridMsg.create!(
-        mail_and_response: { mail: sendgrid_vo[:mail].to_json, response: { error: err_msg } },
-        status: 'ERROR'
+      mail_and_response: { mail: sendgrid_vo[:mail].to_json,
+                           response: { error: err_msg } },
+      status: 'ERROR'
     )
     # Link sendgrid_msg to message
     message = Message.find(message_vo.message_id)

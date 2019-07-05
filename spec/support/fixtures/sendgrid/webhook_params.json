@@ -1,0 +1,58 @@
+{
+  "_json": [
+    {
+      "email": "cindy@example.com",
+      "event": "processed",
+      "sg_event_id": "cHJvY2Vzc2VkLTExMDMwNTgyLUVOLXJJVk12UWlLSFFXYkhULUY0ZFEtMA",
+      "sg_message_id": "EN-rIVMvQiKHQWbHT-F4dQ.filter0082p3las1-14721-5D18BC22-34.0",
+      "sg_template_id": "d-05d33214e6994b01b577602036bfa9f5",
+      "sg_template_name": "Untitled_11560898350188",
+      "smtp-id": "\u003cEN-rIVMvQiKHQWbHT-F4dQ@ismtpd0019p1iad2.sendgrid.net\u003e",
+      "timestamp": 1561902115,
+      "uhura_msg_id": "e7664350-e791-4c4f-a78e-d68f1f924c2b"
+    },
+    {
+      "email": "cindy@example.com",
+      "event": "delivered",
+      "ip": "167.89.106.62",
+      "response": "250 2.0.0 Ok: queued as 7ED587A7",
+      "sg_event_id": "ZGVsaXZlcmVkLTAtMTEwMzA1ODItRU4tcklWTXZRaUtIUVdiSFQtRjRkUS0w",
+      "sg_message_id": "EN-rIVMvQiKHQWbHT-F4dQ.filter0082p3las1-14721-5D18BC22-34.0",
+      "sg_template_id": "d-05d33214e6994b01b577602036bfa9f5",
+      "sg_template_name": "Untitled_11560898350188",
+      "smtp-id": "\u003cEN-rIVMvQiKHQWbHT-F4dQ@ismtpd0019p1iad2.sendgrid.net\u003e",
+      "timestamp": 1561902119,
+      "tls": 1,
+      "uhura_msg_id": "e7664350-e791-4c4f-a78e-d68f1f924c2b"
+    }
+  ],
+  "web_hook": {
+    "_json": [
+      {
+        "email": "cindy@example.com",
+        "event": "processed",
+        "sg_event_id": "cHJvY2Vzc2VkLTExMDMwNTgyLUVOLXJJVk12UWlLSFFXYkhULUY0ZFEtMA",
+        "sg_message_id": "EN-rIVMvQiKHQWbHT-F4dQ.filter0082p3las1-14721-5D18BC22-34.0",
+        "sg_template_id": "d-05d33214e6994b01b577602036bfa9f5",
+        "sg_template_name": "Untitled_11560898350188",
+        "smtp-id": "\u003cEN-rIVMvQiKHQWbHT-F4dQ@ismtpd0019p1iad2.sendgrid.net\u003e",
+        "timestamp": 1561902115,
+        "uhura_msg_id": "e7664350-e791-4c4f-a78e-d68f1f924c2b"
+      },
+      {
+        "email": "cindy@example.com",
+        "event": "delivered",
+        "ip": "167.89.106.62",
+        "response": "250 2.0.0 Ok: queued as 7ED587A7",
+        "sg_event_id": "ZGVsaXZlcmVkLTAtMTEwMzA1ODItRU4tcklWTXZRaUtIUVdiSFQtRjRkUS0w",
+        "sg_message_id": "EN-rIVMvQiKHQWbHT-F4dQ.filter0082p3las1-14721-5D18BC22-34.0",
+        "sg_template_id": "d-05d33214e6994b01b577602036bfa9f5",
+        "sg_template_name": "Untitled_11560898350188",
+        "smtp-id": "\u003cEN-rIVMvQiKHQWbHT-F4dQ@ismtpd0019p1iad2.sendgrid.net\u003e",
+        "timestamp": 1561902119,
+        "tls": 1,
+        "uhura_msg_id": "e7664350-e791-4c4f-a78e-d68f1f924c2b"
+      }
+    ]
+  }
+}

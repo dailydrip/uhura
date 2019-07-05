@@ -44,43 +44,17 @@ RSpec.describe 'Web Hooks', type: :request do
 
   context 'when CLEARSTREAM' do
     let(:clearstream_data) do
-      {
-        "created_at": '2019-01-01T10:02:00Z',
-        "event": 'message.report',
-        "data": {
-          "message": {
-            "id": 1_249_380,
-            "status": 'SENT',
-            "sent_at": '2019-01-01T09:30:00Z',
-            "completed_at": '2019-01-01T09:32:00Z',
-            "text": {
-              "full": 'Blue Sushi: We have a really great weekend coming up! Stay tuned!',
-              "header": 'Blue Sushi',
-              "body": 'We have a really great weekend coming up! Stay tuned!'
-            },
-            "lists": [
-              {
-                "id": 193_029,
-                "name": 'Master List'
-              }
-            ],
-            "subscribers": [],
-            "stats": {
-              "recipients": 5300,
-              "failures": 15,
-              "replies": 22,
-              "opt_outs": 19
-            }
-          }
-        }
-      }
+      get_clearstream_response_data('webhook_body')
     end
 
-    describe 'POST /api/v1/web_hooks/sendgrid' do
+    describe 'POST /api/v1/web_hooks/clearstream' do
       it 'returns status code 200' do
-        create(:clearstream_msg, id: '1249380')
-        post '/api/v1/web_hooks/clearstream', params: clearstream_data.to_json, headers: { "Content-Type": 'application/json' }
+        create(:clearstream_msg, clearstream_id: 128_582)
+        get_clearstream_response_data
+          .to_return(body: get_clearstream_response_data('webhook_params'),
+                     status: 200)
 
+        post '/api/v1/web_hooks/clearstream', params: clearstream_data, headers: { "Content-Type": 'application/json' }
         expect(response.status).to eq 204
         expect(ClearstreamMsg.first.status).to eq 'SENT'
       end
