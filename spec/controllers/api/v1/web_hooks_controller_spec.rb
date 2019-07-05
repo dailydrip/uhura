@@ -50,7 +50,7 @@ RSpec.describe 'Web Hooks', type: :request do
     describe 'POST /api/v1/web_hooks/clearstream' do
       it 'returns status code 200' do
         create(:clearstream_msg, clearstream_id: 128_582)
-        get_clearstream_response_data
+        stub_request(:any, /api.getclearstream.com/)
           .to_return(body: get_clearstream_response_data('webhook_params'),
                      status: 200)
 
