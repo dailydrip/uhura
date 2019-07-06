@@ -43,10 +43,11 @@ class Api::V1::MessagesController < Api::V1::ApiBaseController
   private
 
   def render_message_director_error(message_vo)
+    errors = message_vo.errors.messages[:value] if message_vo&.errors&.messages
     invalid_message = InvalidMessage.create!(
       message_vo.invalid_message_attrs.merge(
         message_params: message_params_vo.message_params,
-        message_attrs: message_vo.to_hash.merge(errors: message_vo&.errors&.messages[:value])
+        message_attrs: message_vo.to_hash.merge(errors: errors)
       )
     )
     render_error_status(invalid_message.id)
