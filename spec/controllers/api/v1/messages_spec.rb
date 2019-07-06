@@ -326,26 +326,53 @@ RSpec.describe 'Messages API', type: :request do
       let(:receiver) { Receiver.find_by(first_name: 'Bob'); }
       let(:valid_attributes) do
         {
-          "public_token": manager.public_token,
-          "receiver_sso_id": receiver.receiver_sso_id,
-          "email_subject": 'Picnic Saturday',
-          "email_message": {
-            "header": 'Dragon Rage',
-            "button": 'Count me in!'
-          },
-          "template_id": 'd-f986df533e514f978f4460bedca50db0',
-          "sms_message": 'Bring Drinks to the Picnic this Saturday'
+            "public_token": manager.public_token,
+            "receiver_sso_id": receiver.receiver_sso_id,
+            "email_subject": 'Picnic Saturday',
+            "email_message": {
+                "header": 'Dragon Rage',
+                "button": 'Count me in!'
+            },
+            "template_id": 'd-f986df533e514f978f4460bedca50db0',
+            "sms_message": 'Bring Drinks to the Picnic this Saturday'
         }
       end
       it 'returns status code 422' do
         stub_request(:any, /api.sendgrid.com/)
-          .to_return(body: get_sendgrid_response_data('post_message_0_sections'),
-                     status: 422)
+            .to_return(body: get_sendgrid_response_data('post_message_0_sections'),
+                       status: 422)
         expect do
           post('/api/v1/messages',
                headers: valid_headers,
                params: valid_attributes.to_json).to raise_error(MessageParamsVo::InvalidMessageError, /invalid message_params_vo/)
         end
+      end
+    end
+  end
+
+  describe 'when an email with an invalid template_id is sent' do
+    let(:receiver) { Receiver.find_by(first_name: 'Bob'); }
+    let(:valid_attributes) do
+      {
+          "public_token": manager.public_token,
+          "receiver_sso_id": receiver.receiver_sso_id,
+          "email_subject": 'Picnic Saturday',
+          "email_message": {
+              "header": 'Dragon Rage',
+              "button": 'Count me in!'
+          },
+          "template_id": 'XXX-f986df533e514f978f4460bedca50db0',
+          "sms_message": 'Bring Drinks to the Picnic this Saturday'
+      }
+    end
+    it 'returns status code 422' do
+      stub_request(:any, /api.sendgrid.com/)
+          .to_return(body: get_sendgrid_response_data('invalid_template_id'),
+                     status: 422)
+      expect do
+        post('/api/v1/messages',
+             headers: valid_headers,
+             params: valid_attributes.to_json).to raise_error(MessageParamsVo::InvalidMessageError, /invalid message_params_vo/)
       end
     end
   end
