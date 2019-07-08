@@ -8,7 +8,7 @@ class SendgridHandler < ServiceHandlerBase
     sendgrid_vo = create_sendgrid_msg(message_vo, template_data)
 
     # SendgridHandler.send_msg(sendgrid_vo) # <= Uncomment to test synchronously
-    SendSendgridMessageWorker.perform_async(sendgrid_vo)
+    SendgridMessageWorker.perform_async(sendgrid_vo)
 
     msg = "Asynchronously sent Email: (#{message_vo.team_name}:#{message_vo.email_subject}) "
     msg += "from (#{message_vo.manager_name}) to (#{message_vo.email} <#{message_vo.first} #{message_vo.last}>)"
@@ -51,7 +51,7 @@ class SendgridHandler < ServiceHandlerBase
     ReturnVo.new_err(err_msg)
   end
 
-  # Called from SendSendgridMessageWorker
+  # Called from SendgridMessageWorker
   def self.send_msg(sendgrid_vo)
     sendgrid_vo = deep_symbolize_keys_if_needed(sendgrid_vo)
     message_id = sendgrid_vo[:message_id]
