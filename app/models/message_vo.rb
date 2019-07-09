@@ -106,7 +106,7 @@ class MessageVo
   end
 
   def template_found
-    sendgrid_template = Template.find(template_id)
+    sendgrid_template = Template.find_by(id: template_id)
     if sendgrid_template.nil?
       msg = "Template ID (#{template_id}) not found. If it is valid, add it via the Admin application."
       log_error(msg)

@@ -35,7 +35,7 @@ RSpec.describe ClearstreamMessageWorker do
           .to_raise(ClearstreamClient::BaseClient::APIError)
 
         expect do
-          Sidekiq::Testing.inline! { ClearstreamMessageWorker.perform_async(clearstream_vo) }
+          ClearstreamMessageWorker.perform_async(clearstream_vo)
         end.to raise_error(ClearstreamClient::BaseClient::APIError)
       end
     end

@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'sidekiq/testing/inline'
 require 'webmock/rspec'
 WebMock.disable_net_connect!(allow_localhost: true)
 FIXTURE_DIR = "#{__dir__}/support/fixtures"

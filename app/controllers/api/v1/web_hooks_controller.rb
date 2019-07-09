@@ -14,6 +14,7 @@ class Api::V1::WebHooksController < ApplicationController
     end
   end
 
+  # TODO: Lex - Remove before Uhura goes live
   def perform_sync_sendgrid_task(message_id, status)
     sendgrid_msg = SendgridMsg.find(message_id)
     if sendgrid_msg
@@ -31,6 +32,7 @@ class Api::V1::WebHooksController < ApplicationController
     UpdateClearstreamMsgStatusFromWebhookWorker.perform_async(clearstream_id, status)
   end
 
+  # TODO: Lex - Remove before Uhura goes live
   def perform_sync_clearstream_task(clearstream_id, status)
     clearstream_msg = ClearstreamMsg.find_by(clearstream_id: clearstream_id)
     if clearstream_msg

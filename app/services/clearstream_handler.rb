@@ -63,7 +63,7 @@ class ClearstreamHandler < ServiceHandlerBase
     ReturnVo.new_err(err_msg)
   end
 
-  # Called from SendSendgridMessageWorker
+  # Called from ClearstreamMessageWorker
   def self.send_msg(data)
     # Request Clearstream client to send message
     response = ClearstreamClient::MessageClient.new(data: data,

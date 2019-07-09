@@ -14,11 +14,11 @@ class Api::V1::MessagesController < Api::V1::ApiBaseController
       render_error_msg(err)
     else
       message_vo = MessageVo.new(message_params_vo, manager_team_vo)
-      if !message_vo.errors.blank?
+      if !message_vo.valid?
         render_message_director_error(message_vo)
       else
         return_vo = MessageDirector.send(message_vo)
-        if return_vo.error?
+        if return_vo&.error?
           render_message_director_error(message_vo)
         else
           render_success_status(message_vo.message_id)
@@ -43,10 +43,11 @@ class Api::V1::MessagesController < Api::V1::ApiBaseController
   private
 
   def render_message_director_error(message_vo)
+    errors = message_vo.errors.messages[:value] if message_vo&.errors&.messages
     invalid_message = InvalidMessage.create!(
       message_vo.invalid_message_attrs.merge(
         message_params: message_params_vo.message_params,
-        message_attrs: message_vo.to_hash
+        message_attrs: message_vo.to_hash.merge(errors: errors)
       )
     )
     render_error_status(invalid_message.id)
