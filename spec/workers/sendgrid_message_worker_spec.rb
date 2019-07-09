@@ -76,7 +76,7 @@ RSpec.describe SendgridMessageWorker do
 
         expect do
           sendgrid_vo = nil
-          Sidekiq::Testing.inline! { SendgridMessageWorker.perform_async(sendgrid_vo) }
+          SendgridMessageWorker.perform_async(sendgrid_vo)
         end.to raise_error(NoMethodError)
       end
     end
