@@ -12,7 +12,6 @@ class ClearstreamHandler < ServiceHandlerBase
         message_id: message_vo.message_id
     ).get
 
-    # ClearstreamHandler.send_msg(clearstream_vo) # <= Uncomment to test synchronously
     ClearstreamMessageWorker.perform_async(clearstream_vo)
 
     msg = "Asynchronously sent SMS: (#{message_vo.team_name}:#{message_vo.email_subject}) "
