@@ -3,7 +3,7 @@
 class SendgridHandler < ServiceHandlerBase
   def self.send(message_vo)
     template_data = message_vo.email_message
-    template_data['email_subject'] = message_vo.email_subject
+    template_data['subject'] = message_vo.email_subject # Must use 'subject' for Sendgrid template
 
     sendgrid_vo = create_sendgrid_msg(message_vo, template_data)
 
