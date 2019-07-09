@@ -7,7 +7,6 @@ class SendgridHandler < ServiceHandlerBase
 
     sendgrid_vo = create_sendgrid_msg(message_vo, template_data)
 
-    # SendgridHandler.send_msg(sendgrid_vo) # <= Uncomment to test synchronously
     SendgridMessageWorker.perform_async(sendgrid_vo)
 
     msg = "Asynchronously sent Email: (#{message_vo.team_name}:#{message_vo.email_subject}) "
