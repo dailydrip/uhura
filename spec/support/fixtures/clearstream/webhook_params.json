@@ -1,0 +1,21 @@
+{
+  "id": 128695,
+  "status": "SENT",
+  "sent_at": "2019-07-03T15:31:11+00:00",
+  "completed_at": "2019-07-03T15:31:12+00:00",
+  "text": {
+    "full": "Leadership Team: Come in now for 50% off all rolls!",
+    "header": "Leadership Team",
+    "body": "Come in now for 50% off all rolls!"
+  },
+  "lists": [],
+  "subscribers": [
+    "+17707651573"
+  ],
+  "stats": {
+    "recipients": 1,
+    "failures": 0,
+    "replies": 0,
+    "opt_outs": 0
+  }
+}

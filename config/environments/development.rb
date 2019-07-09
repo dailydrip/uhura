@@ -79,4 +79,7 @@ class Object
       self.public_methods.sort - Object.new.public_methods
     end
   end
+  def interesting_methods_filter(where)
+    self.interesting_methods.select {|i| i.to_s =~ /#{where}/ }
+  end
 end

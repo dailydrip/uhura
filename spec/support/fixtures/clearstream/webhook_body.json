@@ -1,0 +1,56 @@
+{
+  "created_at": "2019-07-03T02:28:01+00:00",
+  "event": "message.report",
+  "data": {
+    "message": {
+      "id": 128582,
+      "status": "SENT",
+      "sent_at": "2019-07-03T01:56:49+00:00",
+      "completed_at": "2019-07-03T01:56:50+00:00",
+      "text": {
+        "full": "Leadership Team: Come in now for 50% off all rolls!",
+        "header": "Leadership Team",
+        "body": "Come in now for 50% off all rolls!"
+      },
+      "lists": [],
+      "subscribers": [
+        "+17707651573"
+      ],
+      "stats": {
+        "recipients": 1,
+        "failures": 0,
+        "replies": 0,
+        "opt_outs": 0
+      }
+    }
+  },
+  "controller": "api/v1/web_hooks",
+  "action": "clearstream",
+  "web_hook": {
+    "created_at": "2019-07-03T02:28:01+00:00",
+    "event": "message.report",
+    "data": {
+      "message": {
+        "id": 128582,
+        "status": "SENT",
+        "sent_at": "2019-07-03T01:56:49+00:00",
+        "completed_at": "2019-07-03T01:56:50+00:00",
+        "text": {
+          "full": "Leadership Team: Come in now for 50% off all rolls!",
+          "header": "Leadership Team",
+          "body": "Come in now for 50% off all rolls!"
+        },
+        "lists": [],
+        "subscribers": [
+          "+17707651573"
+        ],
+        "stats": {
+          "recipients": 1,
+          "failures": 0,
+          "replies": 0,
+          "opt_outs": 0
+        }
+      }
+    }
+  }
+}

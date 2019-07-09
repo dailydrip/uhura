@@ -36,7 +36,5 @@ yarn-debug.log*
 /.RubyMine
 /.env
 /.idea
-/.java
+/*.java
 *.vmoptions
-*.DS_Store
-*.rdb
