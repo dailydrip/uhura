@@ -112,6 +112,15 @@ ActiveRecord::Schema.define(version: 2019_05_12_215905) do
     t.index ["receiver_sso_id"], name: "index_receivers_on_receiver_sso_id", unique: true
   end
 
+  create_table "sendgrid_msg_events", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "sendgrid_msg_id"
+    t.string "status"
+    t.json "event_details"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["sendgrid_msg_id"], name: "index_sendgrid_msg_events_on_sendgrid_msg_id"
+  end
+
   create_table "sendgrid_msgs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "sent_to_sendgrid"
     t.json "mail_and_response"
@@ -169,4 +178,5 @@ ActiveRecord::Schema.define(version: 2019_05_12_215905) do
   add_foreign_key "messages", "sendgrid_msgs"
   add_foreign_key "messages", "teams"
   add_foreign_key "messages", "templates"
+  add_foreign_key "sendgrid_msg_events", "sendgrid_msgs"
 end

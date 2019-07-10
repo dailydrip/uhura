@@ -6,7 +6,7 @@ class CreateSendgridMsgs < ActiveRecord::Migration[6.0]
       t.datetime :got_response_at
       t.text :sendgrid_response
       t.datetime :read_by_user_at
-      t.text :status # <= Added in anticipation of async sending of email
+      t.text :status
 
       t.timestamps
     end
