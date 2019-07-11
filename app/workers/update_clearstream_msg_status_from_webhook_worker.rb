@@ -12,12 +12,11 @@ class UpdateClearstreamMsgStatusFromWebhookWorker
       clearstream_msg.save!
       clearstream_msg_event = ClearstreamMsgEvent.create(clearstream_msg_id: clearstream_msg.id,
                                                          status: status,
-                                                         event_details: event)
-      if clearstream_msg_event.nil?
-        log_error("Unable to create ClearstreamMsgEvent for event: #{event}")
-      end
+                                                         event: event)
+
+      log_error("Unable to create ClearstreamMsgEvent for event: #{event}") if clearstream_msg_event.nil?
     else
-      log_error("ClearstreamMsg.find_by(clearstream_id: #{message_id}) not found. Unable to save status (#{status}) or create ClearstreamMsgEvent.")
+      log_error("ClearstreamMsg.find_by(clearstream_id: #{message_id}) not found. Unable to save status (#{status})")
     end
   end
 end

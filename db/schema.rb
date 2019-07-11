@@ -29,7 +29,7 @@ ActiveRecord::Schema.define(version: 2019_05_12_215905) do
   create_table "clearstream_msg_events", force: :cascade do |t|
     t.uuid "clearstream_msg_id"
     t.string "status"
-    t.json "event_details"
+    t.json "event"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["clearstream_msg_id"], name: "index_clearstream_msg_events_on_clearstream_msg_id"
@@ -124,7 +124,7 @@ ActiveRecord::Schema.define(version: 2019_05_12_215905) do
   create_table "sendgrid_msg_events", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "sendgrid_msg_id"
     t.string "status"
-    t.json "event_details"
+    t.json "event"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["sendgrid_msg_id"], name: "index_sendgrid_msg_events_on_sendgrid_msg_id"
