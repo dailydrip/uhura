@@ -5,12 +5,7 @@ class ClearstreamHandler < ServiceHandlerBase
 
   def self.send(message_vo)
     # Populate attributes required for request
-    clearstream_vo = ClearstreamSmsVo.new(
-        receiver_sso_id: message_vo.receiver_sso_id,
-        team_name: message_vo.team_name,
-        sms_message: message_vo.sms_message,
-        message_id: message_vo.message_id
-    ).get
+    clearstream_vo = create_clearstream_msg(message_vo)
 
     ClearstreamMessageWorker.perform_async(clearstream_vo)
 
@@ -30,7 +25,6 @@ class ClearstreamHandler < ServiceHandlerBase
           "assumed_meaning": "This receiver w/ mobile_number (#{message_vo.mobile_number}) not registered in Clearstream",
           "action": "Research whether receiver_sso_id (#{message_vo.receiver_sso_id}) is valid."
       }
-      log_warn(action_msg)
       err_msg = {
           "msg": err_msg,
           "action_required:": action_msg
@@ -41,14 +35,26 @@ class ClearstreamHandler < ServiceHandlerBase
           "error_from_clearstream": err_msg,
           "action": "Research status of Clearstream subscription for receiver_sso_id (#{message_vo.receiver_sso_id})"
       }
-      log_warn(action_msg)
       err_msg = {
           "msg": err_msg,
           "action_required:": action_msg
       }
     end
+    handle_clearstream_msg_error(err_msg, clearstream_vo, message_vo)
+  end
+
+  def self.create_clearstream_msg(message_vo)
+    ClearstreamSmsVo.new(
+        receiver_sso_id: message_vo.receiver_sso_id,
+        team_name: message_vo.team_name,
+        sms_message: message_vo.sms_message,
+        message_id: message_vo.message_id
+    ).vo
+  end
+
+  def self.handle_clearstream_msg_error(err_msg, clearstream_vo, message_vo)
     log_error(err_msg)
-    # A error occurs while processing the request. Record ERROR status.
+    # An error occurs while processing the request. Record ERROR status.
     clearstream_msg = ClearstreamMsg.create!(
         response: {
             error: err_msg
@@ -65,7 +71,7 @@ class ClearstreamHandler < ServiceHandlerBase
   # Called from ClearstreamMessageWorker
   def self.send_msg(data)
     # Request Clearstream client to send message
-    response = ClearstreamClient::MessageClient.new(data: data,
+    response = ClearstreamClient::MessageClient.new(data: data[:clearstream_vo],
                                                     resource: 'messages').send_message
     # Record Clearstream response
     clearstream_msg = ClearstreamMsg.create!(sent_to_clearstream: Time.now,

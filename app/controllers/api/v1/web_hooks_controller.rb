@@ -12,8 +12,7 @@ class Api::V1::WebHooksController < ApplicationController
   end
 
   def clearstream
-    status = params[:data][:message][:status]
-    clearstream_id = params[:data][:message][:id]
-    UpdateClearstreamMsgStatusFromWebhookWorker.perform_async(clearstream_id, status)
+    message_hash = JSON.parse(params[:data][:message].to_json)
+    UpdateClearstreamMsgStatusFromWebhookWorker.perform_async(message_hash)
   end
 end

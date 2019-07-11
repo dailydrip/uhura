@@ -19,6 +19,7 @@ class Api::V1::MessagesController < Api::V1::ApiBaseController
       else
         return_vo = MessageDirector.send(message_vo)
         if return_vo&.error?
+          message_vo.errors.messages[:value] = return_vo.error
           render_message_director_error(message_vo)
         else
           render_success_status(message_vo.message_id)

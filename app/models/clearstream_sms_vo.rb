@@ -77,7 +77,7 @@ class ClearstreamSmsVo
     sms_message
   end
 
-  def get
+  def vo
     raise Invalid, errors.full_messages unless valid?
 
     { resource: 'messages',
