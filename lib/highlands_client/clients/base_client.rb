@@ -15,7 +15,7 @@ module HighlandsClient
 
     def search_by_email(email)
       # Build and send request
-      response = connection.get do |req|
+      response = connection.vo do |req|
         req.url "#{CS_BASE_URL}/#{@resource}/?email=#{email}"
       end
       raise APIError, response.body unless response.success?

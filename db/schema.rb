@@ -26,7 +26,16 @@ ActiveRecord::Schema.define(version: 2019_05_12_215905) do
     t.index ["manager_id"], name: "index_api_keys_on_manager_id"
   end
 
-  create_table "clearstream_msgs", force: :cascade do |t|
+  create_table "clearstream_msg_events", force: :cascade do |t|
+    t.uuid "clearstream_msg_id"
+    t.string "status"
+    t.json "event"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["clearstream_msg_id"], name: "index_clearstream_msg_events_on_clearstream_msg_id"
+  end
+
+  create_table "clearstream_msgs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "sent_to_clearstream"
     t.json "response"
     t.datetime "got_response_at"
@@ -71,7 +80,7 @@ ActiveRecord::Schema.define(version: 2019_05_12_215905) do
   create_table "messages", force: :cascade do |t|
     t.bigint "msg_target_id"
     t.uuid "sendgrid_msg_id"
-    t.bigint "clearstream_msg_id"
+    t.uuid "clearstream_msg_id"
     t.bigint "manager_id", null: false
     t.bigint "receiver_id", null: false
     t.bigint "team_id", null: false
@@ -110,6 +119,15 @@ ActiveRecord::Schema.define(version: 2019_05_12_215905) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["email"], name: "index_receivers_on_email", unique: true
     t.index ["receiver_sso_id"], name: "index_receivers_on_receiver_sso_id", unique: true
+  end
+
+  create_table "sendgrid_msg_events", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "sendgrid_msg_id"
+    t.string "status"
+    t.json "event"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["sendgrid_msg_id"], name: "index_sendgrid_msg_events_on_sendgrid_msg_id"
   end
 
   create_table "sendgrid_msgs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -162,6 +180,7 @@ ActiveRecord::Schema.define(version: 2019_05_12_215905) do
   end
 
   add_foreign_key "api_keys", "managers"
+  add_foreign_key "clearstream_msg_events", "clearstream_msgs"
   add_foreign_key "messages", "clearstream_msgs"
   add_foreign_key "messages", "managers"
   add_foreign_key "messages", "msg_targets"
@@ -169,4 +188,5 @@ ActiveRecord::Schema.define(version: 2019_05_12_215905) do
   add_foreign_key "messages", "sendgrid_msgs"
   add_foreign_key "messages", "teams"
   add_foreign_key "messages", "templates"
+  add_foreign_key "sendgrid_msg_events", "sendgrid_msgs"
 end

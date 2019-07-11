@@ -37,6 +37,7 @@ class SendgridHandler < ServiceHandlerBase
   end
 
   def self.handle_sendgrid_msg_error(err_msg, sendgrid_vo, message_vo)
+    log_error(err_msg)
     # A error occurs while processing the request. Record ERROR status.
     sendgrid_msg = SendgridMsg.create!(
       mail_and_response: { mail: sendgrid_vo[:mail].to_json,

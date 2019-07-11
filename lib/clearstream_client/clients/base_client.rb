@@ -14,7 +14,7 @@ module ClearstreamClient
     end
 
     def index
-      response = connection.get do |req|
+      response = connection.vo do |req|
         req.url "#{CS_BASE_URL}/#{@resource}"
       end
 
@@ -30,7 +30,7 @@ module ClearstreamClient
 
     def show(id)
       # Build and send request
-      response = connection.get do |req|
+      response = connection.vo do |req|
         req.url "#{CS_BASE_URL}/#{@resource}/#{id}"
       end
       raise APIError, response.body unless response.success?

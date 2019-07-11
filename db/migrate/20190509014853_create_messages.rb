@@ -3,7 +3,7 @@ class CreateMessages < ActiveRecord::Migration[6.0]
     create_table :messages do |t|
       t.references :msg_target, null: true, foreign_key: true
       t.references :sendgrid_msg, null: true, type: :uuid, foreign_key: true
-      t.references :clearstream_msg, null: true, foreign_key: true
+      t.references :clearstream_msg, null: true, type: :uuid, foreign_key: true
       t.references :manager, null: false, foreign_key: true
       t.references :receiver, null: false, foreign_key: true
       t.references :team, null: false, foreign_key: true
