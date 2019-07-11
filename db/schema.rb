@@ -121,7 +121,7 @@ ActiveRecord::Schema.define(version: 2019_05_12_215905) do
     t.index ["receiver_sso_id"], name: "index_receivers_on_receiver_sso_id", unique: true
   end
 
-  create_table "sendgrid_msg_events", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "sendgrid_msg_events", force: :cascade do |t|
     t.uuid "sendgrid_msg_id"
     t.string "status"
     t.json "event"
