@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class SendgridMsg < ApplicationRecord
+  has_many :sendgrid_msg_events
+
   def message
     Message.find_by(sendgrid_msg_id: id)
   end

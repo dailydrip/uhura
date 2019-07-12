@@ -10,11 +10,12 @@ class ClearstreamMsgDashboard < Administrate::BaseDashboard
   # which determines how the attribute is displayed
   # on pages throughout the dashboard.
   ATTRIBUTE_TYPES = {
-    id: Field::Number,
+    id: Field::String.with_options(searchable: false),
     sent_to_clearstream: Field::DateTime,
     response: Field::String.with_options(searchable: false),
     got_response_at: Field::DateTime,
     status: Field::Text,
+    clearstream_msg_events: Field::NestedHasMany.with_options(skip: :clearstream_msg),
     created_at: Field::DateTime,
     updated_at: Field::DateTime
   }.freeze
@@ -39,6 +40,7 @@ class ClearstreamMsgDashboard < Administrate::BaseDashboard
     response
     got_response_at
     status
+    clearstream_msg_events
     created_at
     updated_at
   ].freeze

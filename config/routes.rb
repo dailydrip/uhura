@@ -9,9 +9,11 @@ Rails.application.routes.draw do
   namespace :site_admin, path: '/admin' do
       resources :api_keys
       resources :clearstream_msgs
+      resources :clearstream_msg_events
       resources :managers
       resources :messages
       resources :sendgrid_msgs
+      resources :sendgrid_msg_events
       resources :teams
       resources :templates
       resources :receivers
