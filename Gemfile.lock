@@ -86,6 +86,9 @@ GEM
       zeitwerk (~> 2.1, >= 2.1.4)
     addressable (2.6.0)
       public_suffix (>= 2.0.2, < 4.0)
+    administrate-field-nested_has_many (1.1.0)
+      administrate (> 0.8, < 1)
+      cocoon (~> 1.2, >= 1.2.11)
     ast (2.4.0)
     autoprefixer-rails (9.5.1.1)
       execjs
@@ -107,6 +110,7 @@ GEM
     chartkick (3.2.0)
     childprocess (1.0.1)
       rake (< 13.0)
+    cocoon (1.2.14)
     coercible (1.0.0)
       descendants_tracker (~> 0.0.1)
     concurrent-ruby (1.1.5)
@@ -385,6 +389,7 @@ PLATFORMS
 
 DEPENDENCIES
   administrate!
+  administrate-field-nested_has_many
   awesome_print
   byebug
   capybara (>= 2.15)

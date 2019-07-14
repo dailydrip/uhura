@@ -37,6 +37,7 @@ gem "haml-rails" #, "~> 2.0"
 gem 'font-awesome-sass', '~> 5.6', '>= 5.6.1'
 #gem 'administrate', github: 'thoughtbot/administrate'
 gem 'administrate', github: 'l3x/administrate'
+gem 'administrate-field-nested_has_many'
 gem 'slim'
 
 group :development, :test do

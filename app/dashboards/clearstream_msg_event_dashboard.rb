@@ -2,7 +2,7 @@
 
 require 'administrate/base_dashboard'
 
-class SendgridMsgDashboard < Administrate::BaseDashboard
+class ClearstreamMsgEventDashboard < Administrate::BaseDashboard
   # ATTRIBUTE_TYPES
   # a hash that describes the type of each of the model's fields.
   #
@@ -10,13 +10,10 @@ class SendgridMsgDashboard < Administrate::BaseDashboard
   # which determines how the attribute is displayed
   # on pages throughout the dashboard.
   ATTRIBUTE_TYPES = {
-    id: Field::String.with_options(searchable: false),
-    sent_to_sendgrid: Field::DateTime,
-    mail_and_response: Field::String.with_options(searchable: false),
-    got_response_at: Field::DateTime,
-    sendgrid_response: Field::Text,
-    read_by_user_at: Field::DateTime,
-    sendgrid_msg_events: Field::NestedHasMany.with_options(skip: :sendgrid_msg),
+    clearstream_msg: Field::BelongsTo,
+    id: Field::Number,
+    status: Field::String,
+    event: Field::String.with_options(searchable: false),
     created_at: Field::DateTime,
     updated_at: Field::DateTime
   }.freeze
@@ -27,22 +24,19 @@ class SendgridMsgDashboard < Administrate::BaseDashboard
   # By default, it's limited to four items to reduce clutter on index pages.
   # Feel free to add, remove, or rearrange items.
   COLLECTION_ATTRIBUTES = %i[
+    clearstream_msg
     id
-    sent_to_sendgrid
-    mail_and_response
-    got_response_at
+    status
+    event
   ].freeze
 
   # SHOW_PAGE_ATTRIBUTES
   # an array of attributes that will be displayed on the model's show page.
   SHOW_PAGE_ATTRIBUTES = %i[
+    clearstream_msg
     id
-    sent_to_sendgrid
-    mail_and_response
-    got_response_at
-    sendgrid_response
-    read_by_user_at
-    sendgrid_msg_events
+    status
+    event
     created_at
     updated_at
   ].freeze
@@ -51,17 +45,15 @@ class SendgridMsgDashboard < Administrate::BaseDashboard
   # an array of attributes that will be displayed
   # on the model's form (`new` and `edit`) pages.
   FORM_ATTRIBUTES = %i[
-    sent_to_sendgrid
-    mail_and_response
-    got_response_at
-    sendgrid_response
-    read_by_user_at
+    clearstream_msg
+    status
+    event
   ].freeze
 
-  # Overwrite this method to customize how sendgrid msgs are displayed
+  # Overwrite this method to customize how clearstream msg events are displayed
   # across all pages of the admin dashboard.
   #
-  # def display_resource(sendgrid_msg)
-  #   "SendgridMsg ##{sendgrid_msg.id}"
+  # def display_resource(clearstream_msg_event)
+  #   "ClearstreamMsgEvent ##{clearstream_msg_event.id}"
   # end
 end
