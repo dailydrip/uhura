@@ -41,6 +41,8 @@ gem 'administrate-field-nested_has_many'
 gem 'slim'
 gem 'systemu'
 gem 'logdna'
+gem 'lograge'
+gem 'logstash-event'
 
 group :development, :test do
   gem 'faker'
