@@ -6,19 +6,19 @@ def log(msg)
 end
 
 def log_info(msg)
-  Rails.logger.info msg
+  APP_LOGGER.info msg
 end
 
 def log_error(msg)
-  Rails.logger.error msg
+  APP_LOGGER.error msg
 end
 
 def log_warn(msg)
-  Rails.logger.warn msg
+  APP_LOGGER.warn msg
 end
 
 def log_debug(msg)
-  Rails.logger.debug msg
+  APP_LOGGER.debug msg
 end
 
 # Example: log_secure! "Authorization Bearer token: #{Manager.first.api_key.auth_token}"

@@ -39,6 +39,8 @@ gem 'font-awesome-sass', '~> 5.6', '>= 5.6.1'
 gem 'administrate', github: 'l3x/administrate'
 gem 'administrate-field-nested_has_many'
 gem 'slim'
+gem 'systemu'
+gem 'logdna'
 
 group :development, :test do
   gem 'faker'
