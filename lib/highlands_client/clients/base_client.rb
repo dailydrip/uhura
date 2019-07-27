@@ -15,11 +15,20 @@ module HighlandsClient
 
     def search_by_email(email)
       # Build and send request
-      response = connection.vo do |req|
+      response = connection.get do |req|
         req.url "#{CS_BASE_URL}/#{@resource}/?email=#{email}"
       end
-      raise APIError, response.body unless response.success?
-      raise APIError, response.body if response.status.eql?(204) # No Content
+      raise APIError, response.body unless response.status.eql?(200)
+
+      JSONConverter.to_hash(response.body)
+    end
+
+    def user_preferences(sso_id)
+      # Build and send request
+      response = connection.get do |req|
+        req.url "#{CS_BASE_URL}/#{@resource}/?id=#{sso_id}&token=#{ENV['SSO_TOKEN']}"
+      end
+      raise APIError, response.body unless response.status.eql?(200)
 
       JSONConverter.to_hash(response.body)
     end

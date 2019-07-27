@@ -62,6 +62,33 @@ class Highlands
   end
 
 
+  def get_user_preferences(data)
+    data = data[:highlands_data]
+    response = HighlandsClient::MessageClient.new(data: data,
+                                                  resource: data[:resource]).get_user_preferences(data[:preferences])
+
+    preferred_communications = response['data']['communications']['communication'].select{ |item| item['preferred'] == 'true' }
+    mobile_communications = preferred_communications.select{ |item| item['communicationType']['name'] == 'Mobile'}
+    email_communications = preferred_communications.select{ |item| item['communicationGeneralType'] == 'Email'}
+    mobile_phones = mobile_communications.map{|item| item['communicationValue']}
+    emails = email_communications.map{|item| item['communicationValue']}
+
+    if !err.nil?
+      msg = 'GET highlands user Error'
+      return ReturnVo.new(value: nil, error: return_error(msg, :unprocessable_entity))
+    else
+      preferred_communications = {
+          communications: {
+              mobile_phones: mobile_phones,
+              emails: emails
+          }
+      }
+      return ReturnVo.new(value: return_accepted(preferred_communications: preferred_communications), error: nil)
+    end
+
+  end
+
+
   def self.get_user_by_email(email)
     # Populate and sanitize data
     data = {

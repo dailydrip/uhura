@@ -4,6 +4,7 @@ module HighlandsClient
   # rubocop:disable all
   class MessageClient < BaseClient
     alias get_user search_by_email
+    alias get_receiver user_preferences
 
     def self.create_subscriber(data)
       new_subscriber_data = {

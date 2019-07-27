@@ -47,6 +47,9 @@ class MessageVo
                 :lists, # <<
                 :errors
 
+  alias_attribute :first_name, :first
+  alias_attribute :last_name, :last
+
   def initialize(message_params_vo, manager_team_vo)
     raise InvalidMessageError, 'invalid message_params_vo' unless message_params_vo.valid?
     raise InvalidManagerTeamError, 'invalid manager_team_vo' unless manager_team_vo.valid?
@@ -59,10 +62,21 @@ class MessageVo
     # Valid input. Now, perform lookups to fill in missing data prior to processing request.
     assign_attributes(message_params_vo.my_attrs.merge(manager_team_vo.my_attrs))
 
-    receiver = Receiver.find_by(receiver_sso_id: @receiver_sso_id)
+    # receiver = Receiver.find_by(receiver_sso_id: @receiver_sso_id)
+    # Call https://sso.highlandsapp.com/api/v1/user_preferences?id=63501603&token=346aba8a-da63-464d-b4b2-2bdcdc3a31b1
 
-    handle_when_no_receiver if receiver.nil?
-    handle_when_receiver(receiver) if receiver.present?
+    ret = get_receiver({
+                           highlands_data: {
+                               resource: 'user_preferences',
+                               id: @receiver_sso_id,
+                           }
+                       })
+    if !ret.error.nil?
+      errors.add(:value, ret.error)
+      return
+    end
+
+    handle_when_receiver(ret.value[:data])
 
     team = Team.find_by(name: team_name)
     self.team_id = team.id if team
@@ -70,13 +84,6 @@ class MessageVo
     template = Template.find_by(template_id: template_id) # convert string template_id to template.id integer
     self.sendgrid_template_id = template_id
     self.template_id = template.id if template
-  end
-
-  def handle_when_no_receiver
-    errors.add(:value, 'BLOCKER: We need a Highlands API to take an sso_id and return user attributes')
-    # Highlands.get_user_by_email(message_vo.email) returns what we need, but we don't have an email to pass it.
-    # user = Highlands.get_user_by_sso_id(@receiver_sso_id)
-    # Assign user attributes to message_vo
   end
 
   def handle_when_receiver(receiver)
@@ -91,8 +98,21 @@ class MessageVo
     handle_msg_target(receiver)
   end
 
+  def convert_preferences(preferences)
+    {
+        email: !preferences[0][:email].blank?,
+        sms: !preferences[0][:phone_number].blank?
+    }
+    if !preferences[0][:email].blank?
+      self.email = preferences[0][:email]
+    end
+    if !preferences[0][:phone_number].blank?
+      self.mobile_number = preferences[0][:phone_number]
+    end
+  end
+
   def handle_msg_target(receiver)
-    @receiver_preferences = receiver.preferences
+    @receiver_preferences = convert_preferences(receiver.preferences)
     msg_target = MsgTarget.find_by(name: receiver.preferences['email'] ? 'Sendgrid' : 'Clearstream')
     self.msg_target_id = msg_target.id if msg_target
   end
@@ -128,10 +148,73 @@ class MessageVo
     }
   end
 
+  def user_attributes
+    {
+        receiver_sso_id: @receiver_sso_id,
+        email: @email,
+        mobile_number: @mobile_number,
+        first_name: @first_name,
+        last_name: @last_name,
+        preferences: self.convert_preferences(@preferences)
+    }
+  end
+
   def to_hash
     Hash[instance_variables.map do |name|
       # Strip "@"  Example: {"@first": "Cindy"} => {"first": "Cindy"}
       [name[1..-1], instance_variable_get(name)] unless name.eql?('@errors')
     end ]
+  end
+
+  private
+
+  def get_receiver(data)
+    data = data[:highlands_data]
+    response = HighlandsClient::MessageClient.new(data: data,
+                                                  resource: data[:resource]).get_receiver(data[:id])
+    if response.nil?
+      return ReturnVo.new(value: nil, error: return_error('get_user_preferences not found', :unprocessable_entity))
+    else
+      user = response
+      user['preferences'] = convert_preferences(response['preferences'])
+      user['mobile_number'] = response['phone_number']
+      user.delete('phone_number')
+      user['receiver_sso_id'] = response['user_id']
+      user.delete('user_id')
+      receiver = Receiver.new(user)
+      return ReturnVo.new(value: nil, error: return_error('Invalid user', :unprocessable_entity)) unless receiver.valid?
+
+      existing_receiver = Receiver.find_by(receiver_sso_id: receiver.receiver_sso_id)
+      if existing_receiver
+        if !existing_receiver.user_attributes.eql?(receiver.user_attributes)
+          existing_receiver = Receiver.update!(receiver.user_attributes)
+          log_warn("Old receiver attributes (#{existing_receiver.user_attributes}) => New attributes (#{receiver.user_attributes})")
+        end
+        receiver = existing_receiver # Gets the id attribute
+      else
+        # Create new user record
+        receiver.save!
+      end
+      return ReturnVo.new(value: return_accepted(receiver), error: nil)
+    end
+  end
+
+  # FROM
+  #     "preferences": [
+  #       {
+  #         "email": "user.name@example.com",
+  #         "phone_number": "999-999-9999"
+  #       }
+  #     ]
+  # TO  {email: false, sms: false}
+  def convert_preferences(preferences)
+    if preferences[0].blank?
+      return {email: false, sms: false}
+    else
+      {
+          email: !preferences[0][:email].blank?,
+          sms: !preferences[0][:phone_number].blank?
+      }
+    end
   end
 end
