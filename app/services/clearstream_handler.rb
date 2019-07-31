@@ -70,6 +70,7 @@ class ClearstreamHandler < ServiceHandlerBase
 
   # Called from ClearstreamMessageWorker
   def self.send_msg(data)
+    message_id = data[:clearstream_vo]['message_id']
     # Request Clearstream client to send message
     response = ClearstreamClient::MessageClient.new(data: data[:clearstream_vo],
                                                     resource: 'messages').send_message
@@ -80,7 +81,7 @@ class ClearstreamHandler < ServiceHandlerBase
     clearstream_msg.status = response['data']['status']
     clearstream_msg.clearstream_id = response['data']['id'] # <= Use clearstream_id as correlation id in webhook
 
-    if clearstream_msg.save! && link_clearstream_msg_to_message(data[:message_id], clearstream_msg.id)
+    if clearstream_msg.save! && link_clearstream_msg_to_message(message_id, clearstream_msg.id)
       return ReturnVo.new_value({clearstream_msg: clearstream_msg})
     else
       return ReturnVo.new_err(clearstream_msg.errors || "Error for clearstream_id (#{clearstream_id})")

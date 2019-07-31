@@ -20,7 +20,6 @@ class MessageVo
   validates :last, presence: true
   validates :email, presence: true
   validates :lists, presence: true # <<
-  validate :receiver_preferences
   validate :template_found
 
   attr_accessor :public_token,
@@ -39,12 +38,12 @@ class MessageVo
                 :sendgrid_template_id,
                 :sms_message,
                 :message_id,
-                :msg_target_id,
                 :mobile_number, # Required by ClearstreamClient::MessageClient.create_subscriber >>
                 :first,
                 :last,
                 :email,
                 :lists, # <<
+                :preferences,
                 :errors
 
   alias_attribute :first_name, :first
@@ -95,7 +94,9 @@ class MessageVo
     self.last = receiver.last_name
     self.email = receiver.email
     self.lists = AppCfg['CLEARSTREAM_DEFAULT_LIST_ID']
-    handle_msg_target(receiver)
+    self.preferences = receiver.preferences
+# TODO: replace all msg_target refs with Message. msg_target_id | sendgrid_msg_
+#    handle_msg_target(receiver)
   end
 
   def convert_preferences(preferences)
@@ -111,19 +112,18 @@ class MessageVo
     end
   end
 
-  def handle_msg_target(receiver)
-    @receiver_preferences = convert_preferences(receiver.preferences)
-    msg_target = MsgTarget.find_by(name: receiver.preferences['email'] ? 'Sendgrid' : 'Clearstream')
-    self.msg_target_id = msg_target.id if msg_target
-  end
+  # def handle_msg_target(receiver)
+  #   @receiver_preferences = convert_preferences(receiver.preferences)
+  #   if @receiver_preferences[:email]
+  #     msg_target = MsgTarget.find_by(name: 'Sendgrid')
+  #   end
+  #   if @receiver_preferences[:sms]
+  #     msg_target = MsgTarget.find_by(name: 'Clearstream')
+  #   end
+  #
+  #   self.msg_target_id = msg_target.id if msg_target
+  # end
 
-  def receiver_preferences
-    if msg_target_id.nil?
-      msg = "Invalid receiver.preferences (#{@receiver_preferences}). Unable to determine message target (Email/SMS)."
-      log_error(msg)
-      errors.add(:value, msg)
-    end
-  end
 
   def template_found
     sendgrid_template = Template.find_by(id: template_id)
@@ -136,7 +136,7 @@ class MessageVo
 
   def invalid_message_attrs
     {
-      msg_target_id: @msg_target_id,
+      # msg_target_id: @msg_target_id,
       manager_id: @manager_id,
       receiver_id: @receiver_id,
       team_id: @team_id,
@@ -174,20 +174,28 @@ class MessageVo
                                                   resource: data[:resource]).get_receiver(data[:id])
     if response.nil?
       return ReturnVo.new(value: nil, error: return_error('get_user_preferences not found', :unprocessable_entity))
+    elsif response[:error] && response[:error][:message]
+      return ReturnVo.new(value: nil, error: return_error(JSON.parse(response[:error][:message])['error'], :unprocessable_entity))
     else
       user = response
-      user['preferences'] = convert_preferences(response['preferences'])
-      user['mobile_number'] = response['phone_number']
+      user_preferences = convert_preferences(response['preferences'])
+      user['mobile_number'] = response['preferences'][0]['phone_number'].tr('^0-9', '') if user_preferences[:sms]
       user.delete('phone_number')
+      user['email'] = response['preferences'][0]['email'] if user_preferences[:email]
+      user['preferences'] = user_preferences
       user['receiver_sso_id'] = response['user_id']
       user.delete('user_id')
       receiver = Receiver.new(user)
+      #TODO: remove this temp code:
+      receiver.email = 'cindy.smyth@protonmail.com'
+      receiver.mobile_number = '7707651573‬'
       return ReturnVo.new(value: nil, error: return_error('Invalid user', :unprocessable_entity)) unless receiver.valid?
 
       existing_receiver = Receiver.find_by(receiver_sso_id: receiver.receiver_sso_id)
       if existing_receiver
         if !existing_receiver.user_attributes.eql?(receiver.user_attributes)
-          existing_receiver = Receiver.update!(receiver.user_attributes)
+          existing_receiver.attributes = receiver.user_attributes
+          existing_receiver.save!
           log_warn("Old receiver attributes (#{existing_receiver.user_attributes}) => New attributes (#{receiver.user_attributes})")
         end
         receiver = existing_receiver # Gets the id attribute
@@ -209,11 +217,12 @@ class MessageVo
   # TO  {email: false, sms: false}
   def convert_preferences(preferences)
     if preferences[0].blank?
+      log_warn("Empty preferences, i.e., no message target, for receiver_sso_id (#{self.receiver_sso_id})")
       return {email: false, sms: false}
     else
       {
-          email: !preferences[0][:email].blank?,
-          sms: !preferences[0][:phone_number].blank?
+          email: !preferences[0]['email'].blank?,
+          sms: !preferences[0]['phone_number'].blank?
       }
     end
   end
