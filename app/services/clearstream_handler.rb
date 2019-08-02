@@ -6,9 +6,7 @@ class ClearstreamHandler < ServiceHandlerBase
   def self.send(message_vo)
     # Populate attributes required for request
     clearstream_vo = create_clearstream_msg(message_vo)
-
     ClearstreamMessageWorker.perform_async(clearstream_vo)
-
     msg = "Asynchronously sent SMS: (#{message_vo.team_name}:#{message_vo.email_subject}) "
     msg += "from (#{message_vo.manager_name}) to (#{message_vo.mobile_number})"
     log_info(msg)
@@ -52,6 +50,7 @@ class ClearstreamHandler < ServiceHandlerBase
     ).vo
   end
 
+  #TODO: check for error!
   def self.handle_clearstream_msg_error(err_msg, clearstream_vo, message_vo)
     log_error(err_msg)
     # An error occurs while processing the request. Record ERROR status.

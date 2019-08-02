@@ -24,7 +24,7 @@ RSpec.describe MessageParamsVo, type: :model do
     def message_params(new_params = {})
       {
         public_token: '82a1782d202d49efef87',
-        receiver_sso_id: '88543890',
+        receiver_sso_id: 88543890,
         email_subject: 'Picnic Saturday',
         email_message: {
           header: 'Rock Slide',

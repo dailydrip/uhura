@@ -3,7 +3,7 @@
     "value": {
       "status": 202,
       "data": {
-        "sendgrid_msg": "Asynchronously sent Email: (Leadership Team:Picnic Saturday) from (Sample - App 1) to (bob@example.com <Bob Example>)"
+        "sendgrid_msg": "Asynchronously sent email: (Leadership Team:Picnic Saturday) from (Sample - App 1) to (bob@example.com <Bob Example>)"
       },
       "error": null
     },

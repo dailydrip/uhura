@@ -44,7 +44,7 @@ template_c = Template.create!(name: 'template_with_3_sections', template_id: 'd-
 log! "5. Seeding Users"
 # Receivers is a temporary table.  When we get the data from Highlands SSO we'll remove the receivers table.
 alice = Receiver.create!(
-  receiver_sso_id: '34430309',
+  receiver_sso_id: 34430309,
   email: 'alice@aol.com',
   mobile_number: '9999999999',
   first_name: 'Alice',
@@ -52,7 +52,7 @@ alice = Receiver.create!(
   preferences: {email: false, sms: true}
 )
 bob = Receiver.create!(
-  receiver_sso_id: '55357499',
+  receiver_sso_id: 55357499,
   email: 'bob.replace.me@gmail.com',
   mobile_number: Faker::PhoneNumber.cell_phone,
   first_name: 'Bob',
@@ -60,7 +60,7 @@ bob = Receiver.create!(
   preferences: {email: true, sms: false}
 )
 cindy = Receiver.create!(
-  receiver_sso_id: '55357450', # <= used in test queries
+  receiver_sso_id: 55357450, # <= used in test queries
   email: 'cindy@yahoo.com',
   mobile_number: '?+!42',  # <= invalid mobile_number!
   first_name: 'Cindy',
@@ -73,8 +73,7 @@ MsgTarget.create!(name: 'Sendgrid', description: 'External Email Service')
 MsgTarget.create!(name: 'Clearstream', description: 'External SMS Texting Service')
 
 # log! "7. Seeding Messages"
-# msg1 = Message.create!(msg_target_id: MsgTarget.find_by(name: 'Sendgrid').id,
-#                        manager_id: app1.id, # <= source (an application)
+# msg1 = Message.create!(manager_id: app1.id, # <= source (an application)
 #                        team_id: leadership_team.id, # <= message coming from this team
 #                        receiver_id: bob.id, # <= receiver (a user)
 #                        email_subject: Faker::TvShows::SiliconValley.motto,
@@ -86,8 +85,7 @@ MsgTarget.create!(name: 'Clearstream', description: 'External SMS Texting Servic
 #                        template_id: template_a.id,
 #                        sms_message:  Faker::Movie.quote)
 #
-# msg2 = Message.create!(msg_target_id: MsgTarget.find_by(name: 'Sendgrid').id,
-#                        manager_id: app1.id,
+# msg2 = Message.create!(manager_id: app1.id,
 #                        team_id: campus_pastor_team.id,
 #                        receiver_id: bob.id,
 #                        email_subject: Faker::TvShows::SiliconValley.motto,
@@ -100,8 +98,7 @@ MsgTarget.create!(name: 'Clearstream', description: 'External SMS Texting Servic
 #                        template_id: template_b.id,
 #                        sms_message:  Faker::Movie.quote)
 #
-# msg3 = Message.create!(msg_target_id: MsgTarget.find_by(name: 'Clearstream').id,
-#                        manager_id: app1.id,
+# msg3 = Message.create!(manager_id: app1.id,
 #                        team_id: leadership_team.id,
 #                        receiver_id: cindy.id,
 #                        email_subject: Faker::TvShows::SiliconValley.motto,
@@ -113,8 +110,7 @@ MsgTarget.create!(name: 'Clearstream', description: 'External SMS Texting Servic
 #                        template_id: template_a.id,
 #                        sms_message:  Faker::Movie.quote)
 #
-# msg4 = Message.create!(msg_target_id: MsgTarget.find_by(name: 'Clearstream').id,
-#                        manager_id: app2.id,
+# msg4 = Message.create!(manager_id: app2.id,
 #                        team_id: leadership_team.id,
 #                        receiver_id: alice.id, # <= receiver (a user)
 #                        email_subject: Faker::TvShows::SiliconValley.motto,
@@ -126,8 +122,7 @@ MsgTarget.create!(name: 'Clearstream', description: 'External SMS Texting Servic
 #                        template_id: template_a.id,
 #                        sms_message:  Faker::Movie.quote)
 #
-# msg5 = Message.create!(msg_target_id: MsgTarget.find_by(name: 'Sendgrid').id,
-#                        manager_id: app2.id,
+# msg5 = Message.create!(manager_id: app2.id,
 #                        team_id: campus_pastor_team.id,
 #                        receiver_id: bob.id, # <= receiver (a user)
 #                        email_subject: Faker::TvShows::SiliconValley.motto,
@@ -141,8 +136,7 @@ MsgTarget.create!(name: 'Clearstream', description: 'External SMS Texting Servic
 #                        template_id: template_c.id,
 #                        sms_message:  Faker::Movie.quote)
 #
-# msg6 = Message.create!(msg_target_id: MsgTarget.find_by(name: 'Clearstream').id,
-#                        manager_id: app2.id,
+# msg6 = Message.create!(manager_id: app2.id,
 #                        team_id: leadership_team.id,
 #                        receiver_id: cindy.id, # <= receiver (a user)
 #                        email_subject: Faker::TvShows::SiliconValley.motto,

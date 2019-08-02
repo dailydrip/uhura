@@ -6,7 +6,7 @@ class MessageParamsVo < BaseClass
   include ActiveModel::Validations
 
   validates :public_token, presence: true
-  validates :receiver_sso_id, format: { with: /\A\d+\z/, message: 'integers only' }
+  validates :receiver_sso_id, :numericality => {:only_integer => true}
   validates :email_subject, presence: true
   validates :email_message, presence: true
   validate :email_message_sections

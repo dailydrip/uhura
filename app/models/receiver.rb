@@ -2,7 +2,7 @@
 
 class Receiver < ApplicationRecord
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
-  validates :receiver_sso_id, presence: true
+  validates :receiver_sso_id, :numericality => {:only_integer => true}
   validates :first_name, presence: true
   validates :last_name, presence: true
   validates :email, presence: true

@@ -25,12 +25,56 @@ module HighlandsClient
 
     def user_preferences(sso_id)
       # Build and send request
+      # TODO: uncomment and remove stub response
       response = connection.get do |req|
-        req.url "#{CS_BASE_URL}/#{@resource}?id=#{sso_id}&token=#{ENV['SSO_TOKEN']}"
+        req.url "#{CS_BASE_URL}/#{@resource}?id=#{sso_id}"
       end
       return error_msg(response.body) unless response.status.eql?(200)
 
       JSONConverter.to_hash(response.body)
+
+      # BOTH
+      # JSON.parse({
+      #                "user_id": 63501603,
+      #                "first_name": "Charles",
+      #                "last_name": "Jarrett",
+      #                "email": "charles.jarrett@live.com",
+      #                "phone_number": "205-613-2729",
+      #                "preferences": [
+      #                    {
+      #                        "email": "charles.jarrett@live.com",
+      #                        "phone_number": "205-613-2729"
+      #                    }
+      #                ]
+      #            }.to_json)
+
+      # SMS
+      # JSON.parse({
+      #                "user_id": 63501603,
+      #                "first_name": "Charles",
+      #                "last_name": "Jarrett",
+      #                "email": "charles.jarrett@live.com",
+      #                "phone_number": "205-613-2729",
+      #                "preferences": [
+      #                    {
+      #                        "phone_number": "205-613-2729"
+      #                    }
+      #                ]
+      #            }.to_json)
+
+      # EMAIL
+      # JSON.parse({
+      #                "user_id": 55357499,
+      #                "email": "bob.replace.me@gmail.com",
+      #                "mobile_number": "5555555555",
+      #                "first_name": "Bob",
+      #                "last_name": "Brown",
+      #                "preferences": [
+      #                    {
+      #                        "email": "charles.jarrett@live.com"
+      #                    }
+      #                ]
+      #            }.to_json)
     end
 
     private

@@ -11,7 +11,7 @@ class MessageDirector
       # Message request has been fully validated and populated.
       message_vo.message_id = ret.value.id # Set message_id. Used to link SendgridMsg to Message later.
     end
-
+    # Send messages based on user preferences:
     ret_sendgrid = SendgridHandler.send(message_vo) if message_vo.preferences['email']
     ret_clearstream = ClearstreamHandler.send(message_vo) if message_vo.preferences['sms']
     {sendgrid: ret_sendgrid, clearstream: ret_clearstream}
