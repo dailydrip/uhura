@@ -40,8 +40,10 @@ class SendgridHandler < ServiceHandlerBase
     log_error(err_msg)
     # A error occurs while processing the request. Record ERROR status.
     sendgrid_msg = SendgridMsg.create!(
-      mail_and_response: { mail: sendgrid_vo[:mail].to_json,
-                           response: { error: err_msg } },
+      mail_and_response: {
+        mail: sendgrid_vo[:mail].to_json,
+        response: { error: err_msg }
+      },
       status: 'ERROR'
     )
     # Link sendgrid_msg to message
@@ -61,12 +63,10 @@ class SendgridHandler < ServiceHandlerBase
   end
 
   def self.deep_symbolize_keys_if_needed(sendgrid_vo)
-    if sendgrid_vo[:mail_vo].blank?
-      log_warn('Sidekiq performs a deep_stringify_keys on the hash; reverse that with deep_symbolize_keys.')
-      sendgrid_vo.deep_symbolize_keys
-    else
-      sendgrid_vo
-    end
+    return sendgrid_vo if sendgrid_vo[:mail_vo].present?
+
+    log_warn('Sidekiq performs a deep_stringify_keys on the hash; reverse that with deep_symbolize_keys.')
+    sendgrid_vo.deep_symbolize_keys
   end
 
   def self.send_email_and_update_sendgrid_msg(mail_obj, sendgrid_vo)
@@ -80,10 +80,15 @@ class SendgridHandler < ServiceHandlerBase
     # body attribute will be populated if there's an error.
     # An empty body from Sendgrid could indicate a message "Not Delivered" status from Sendgrid or success
     sendgrid_msg = SendgridMsg.find_by(id: uhura_msg_id)
-    sendgrid_msg.update!(sent_to_sendgrid: sent_to_sendgrid_at,
-                         mail_and_response: { mail: mail.to_json, response: response },
-                         got_response_at: Time.current,
-                         sendgrid_response: response[:status_code] || response['status_code'])
+    sendgrid_msg.update!(
+      sent_to_sendgrid: sent_to_sendgrid_at,
+      mail_and_response: {
+        mail: mail.to_json,
+        response: response
+      },
+      got_response_at: Time.current,
+      sendgrid_response: response[:status_code] || response['status_code']
+    )
     sendgrid_msg
   end
 

@@ -26,6 +26,9 @@ class MessageParamsVo < BaseClass
     super(args[0])
   end
 
+  # FIXME: We should not hardcode the section names.
+  # Ideally, we would look up the sections at the sendgrid api
+  # by the template id and raise if any of them are missing.
   def email_message_sections
     if email_message
       if @email_message[:section1].blank?

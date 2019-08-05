@@ -6,7 +6,6 @@ class ClearstreamSmsVo
   include ActiveModel::Validations
 
   attr_accessor :receiver_email,
-                # :sms_message,  # <= defined below
                 :mobile_number,
                 :first_name,
                 :last_name,
@@ -62,10 +61,6 @@ class ClearstreamSmsVo
 
   attr_reader :receiver_sso_id
 
-  # "sms_message": {
-  #     "header": "Blue Sushi 2",
-  #     "body": "Come in now for 60% off all rolls!"
-  # }
   def sms_message=(sms_message)
     @sms_message = sms_message
     # Following required by https://api.getclearstream.com/v1/messages
@@ -80,7 +75,8 @@ class ClearstreamSmsVo
   def vo
     raise Invalid, errors.full_messages unless valid?
 
-    { resource: 'messages',
+    {
+      resource: 'messages',
       message_id: @message_id,
       mobile_number: @mobile_number,
       message_header: @message_header,
@@ -88,7 +84,8 @@ class ClearstreamSmsVo
       subscribers: @subscribers,
       schedule: @schedule,
       send_to_fb: @send_to_fb,
-      send_to_tw: @send_to_tw }
+      send_to_tw: @send_to_tw
+    }
   end
 
   def sent_for_processing_msg

@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 module HighlandsClient
-  # rubocop:disable all
   class MessageClient < BaseClient
     alias get_user search_by_email
     alias get_receiver user_preferences
 
+    # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     def self.create_subscriber(data)
       new_subscriber_data = {
         'mobile_number': data.mobile_number,
@@ -34,5 +34,6 @@ module HighlandsClient
         return ReturnVo.new(value: nil, error: return_error(msg, :unprocessable_entity))
       end
     end
+    # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
   end
 end

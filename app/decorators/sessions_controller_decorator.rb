@@ -11,7 +11,7 @@ HighlandsAuth::SessionsController.class_eval do
     email = params[:user][:username]
     user = User.find_by(email: email)
     if user
-      # Does something
+      # if you want to do something after finding the user, do it here
     else
       User.create(email: email)
     end

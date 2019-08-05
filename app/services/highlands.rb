@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Highlands
-  # rubocop:disable all
   def self.link_highlands_msg_to_message(message_id, highlands_msg_id)
     highlands_msg = HighlandsMsg.find_by(id: highlands_msg_id)
     if highlands_msg.nil?
@@ -17,65 +16,90 @@ class Highlands
     message.save!
   end
 
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def get_user(data)
     data = data[:highlands_data]
-    response = HighlandsClient::MessageClient.new(data: data,
-                                                  resource: data[:resource]).get_user(data[:email])
+    response = HighlandsClient::MessageClient.new(
+      data: data,
+      resource: data[:resource]
+    ).get_user(data[:email])
 
-    preferred_communications = response['data']['communications']['communication'].select{ |item| item['preferred'] == 'true' }
-    mobile_communications = preferred_communications.select{ |item| item['communicationType']['name'] == 'Mobile'}
-    email_communications = preferred_communications.select{ |item| item['communicationGeneralType'] == 'Email'}
-    mobile_phones = mobile_communications.map{|item| item['communicationValue']}
-    emails = email_communications.map{|item| item['communicationValue']}
+    preferred_communications =
+      response['data']['communications']['communication']
+      .select { |item| item['preferred'] == 'true' }
+    mobile_communications =
+      preferred_communications
+      .select { |item| item['communicationType']['name'] == 'Mobile' }
+    email_communications =
+      preferred_communications
+      .select { |item| item['communicationGeneralType'] == 'Email' }
+    mobile_phones =
+      mobile_communications
+      .map { |item| item['communicationValue'] }
+    emails =
+      email_communications
+      .map { |item| item['communicationValue'] }
 
-    if !err.nil?
-      msg = 'GET highlands user Error'
-      return ReturnVo.new(value: nil, error: return_error(msg, :unprocessable_entity))
-    else
-      preferred_communications = {
-          communications: {
+    if err.blank?
+      return ReturnVo.new(
+        value: return_accepted(
+          preferred_communications: {
+            communications: {
               mobile_phones: mobile_phones,
               emails: emails
+            }
           }
-      }
-      return ReturnVo.new(value: return_accepted(preferred_communications: preferred_communications), error: nil)
+        ),
+        error: nil
+      )
+    else
+      msg = 'GET highlands user Error'
+      return ReturnVo.new(value: nil, error: return_error(msg, :unprocessable_entity))
     end
-
   end
-
 
   def get_user_preferences(data)
     data = data[:highlands_data]
-    response = HighlandsClient::MessageClient.new(data: data,
-                                                  resource: data[:resource]).get_user_preferences(data[:preferences])
+    response = HighlandsClient::MessageClient.new(
+      data: data,
+      resource: data[:resource]
+    ).get_user_preferences(data[:preferences])
 
-    preferred_communications = response['data']['communications']['communication'].select{ |item| item['preferred'] == 'true' }
-    mobile_communications = preferred_communications.select{ |item| item['communicationType']['name'] == 'Mobile'}
-    email_communications = preferred_communications.select{ |item| item['communicationGeneralType'] == 'Email'}
-    mobile_phones = mobile_communications.map{|item| item['communicationValue']}
-    emails = email_communications.map{|item| item['communicationValue']}
+    preferred_communications =
+      response['data']['communications']['communication']
+      .select { |item| item['preferred'] == 'true' }
+    mobile_communications =
+      preferred_communications
+      .select { |item| item['communicationType']['name'] == 'Mobile' }
+    email_communications =
+      preferred_communications
+      .select { |item| item['communicationGeneralType'] == 'Email' }
+    mobile_phones =
+      mobile_communications
+      .map { |item| item['communicationValue'] }
+    emails =
+      email_communications
+      .map { |item| item['communicationValue'] }
 
-    if !err.nil?
+    if err.present?
       msg = 'GET highlands user Error'
       return ReturnVo.new(value: nil, error: return_error(msg, :unprocessable_entity))
     else
       preferred_communications = {
-          communications: {
-              mobile_phones: mobile_phones,
-              emails: emails
-          }
+        communications: {
+          mobile_phones: mobile_phones,
+          emails: emails
+        }
       }
       return ReturnVo.new(value: return_accepted(preferred_communications: preferred_communications), error: nil)
     end
-
   end
-
 
   def self.get_user_by_email(email)
     # Populate and sanitize data
     data = {
-            resource: 'search_by_email',
-            email: email,
+      resource: 'search_by_email',
+      email: email
     }
     get_user(highlands_data: data)
   rescue StandardError => e
@@ -110,5 +134,5 @@ class Highlands
     # Handle error in caller
     ReturnVo.new(value: nil, error: return_error(err_msg, :unprocessable_entity))
   end
-  # rubocop:enable all
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 end

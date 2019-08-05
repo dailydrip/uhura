@@ -15,7 +15,7 @@ class InvalidMessage < ApplicationRecord
     invalid_message = InvalidMessage.find(id)
     if sendgrid_target?(invalid_message)
       sendgrid_msg_status = {
-        errors: invalid_message.error_ary
+        errors: invalid_message.error_array
       }
       clearstream_msg_status = nil
     elsif clearstream_target?(invalid_message)
@@ -43,7 +43,7 @@ class InvalidMessage < ApplicationRecord
     invalid_message.receiver_id.user_preferences[:sms] if invalid_message&.receiver_id&.user_preferences
   end
 
-  def error_ary
+  def error_array
     message_attrs['errors']['value']
   end
 end

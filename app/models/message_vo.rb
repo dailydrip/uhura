@@ -11,7 +11,6 @@ class MessageVo
   validates :manager_email, presence: true
   validates :manager_name, presence: true
   validates :team_name, presence: true
-  # validates :receiver_sso_id, format: { with: /\A\d+\z/, message: 'integers only' }
   validates :receiver_sso_id, numericality: { only_integer: true }
   validates :email_subject, presence: true
   validates :email_message, presence: true
@@ -142,6 +141,11 @@ class MessageVo
   end
 
   def to_hash
+    # FIXME: I don't like us mapping over any instance variables to do this,
+    # I'd prefer if we could be explicit about the to_hash. also, `to_h` is the
+    # right name for a method that does this in ruby If we add an instance
+    # variable in the future it could break something elsewhere and it'd be a
+    # bear to track it to here
     Hash[instance_variables.map do |name|
       # Strip "@"  Example: {"@first": "Cindy"} => {"first": "Cindy"}
       [name[1..-1], instance_variable_get(name)] unless name.eql?('@errors')
