@@ -7,16 +7,13 @@ require 'rspec/rails'
 require 'database_cleaner'
 require 'slim'
 require 'faker'
-# rubocop:disable Rails/FilePath
 Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 Dir[Rails.root.join('spec/api/**/*.rb')].each { |f| require f }
-# rubocop:enable Rails/FilePath
 ActiveRecord::Migration.maintain_test_schema!
 
 RSpec.configure do |config|
   config.use_transactional_fixtures = false
   config.include FactoryBot::Syntax::Methods
-  # config.include Devise::Test::ControllerHelpers, type: :controller
   config.before(:suite) do
     DatabaseCleaner.clean_with(:truncation)
   end
@@ -39,12 +36,6 @@ RSpec.configure do |config|
     DatabaseCleaner.clean
   end
   config.infer_spec_type_from_file_location!
-
-  # # Filter lines from Rails gems in backtraces.
-  # config.filter_rails_from_backtrace!
-  # # arbitrary gems may also be filtered via:
-  # # config.filter_gems_from_backtrace("gem name")
-  # #
 
   # Include spec/support helpers
   config.include RequestSpecHelper

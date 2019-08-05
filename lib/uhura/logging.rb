@@ -37,7 +37,6 @@ def log_secure(msg)
 end
 
 # Send msg to Rails logger and console, used only by rake db:seed
-# rubocop:disable Rails/Output
 def log!(msg)
   log_info(msg)
   puts(msg)
@@ -57,4 +56,3 @@ def log_secure!(msg)
   log_secure(msg)
   puts(msg)
 end
-# rubocop:enable Rails/Output
