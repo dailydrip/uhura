@@ -82,10 +82,13 @@ class SendgridHandler < ServiceHandlerBase
     sendgrid_msg = SendgridMsg.find_by(id: uhura_msg_id)
     sendgrid_msg.update!(
       sent_to_sendgrid: sent_to_sendgrid_at,
-                         mail_and_response: { mail: mail.to_json, response: response },
-                         got_response_at: Time.current,
-                         sendgrid_response: response[:status_code] || response['status_code']
-                         )
+      mail_and_response: {
+        mail: mail.to_json,
+        response: response
+      },
+      got_response_at: Time.current,
+      sendgrid_response: response[:status_code] || response['status_code']
+    )
     sendgrid_msg
   end
 

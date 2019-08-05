@@ -84,7 +84,7 @@ class ClearstreamSmsVo
       subscribers: @subscribers,
       schedule: @schedule,
       send_to_fb: @send_to_fb,
-      send_to_tw: @send_to_tw 
+      send_to_tw: @send_to_tw
     }
   end
 

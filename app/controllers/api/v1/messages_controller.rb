@@ -9,7 +9,7 @@ class Api::V1::MessagesController < Api::V1::ApiBaseController
   end
 
   def create
-    if err = validate_params
+    if (err = validate_params)
       render_error_msg(err)
     else
       message_vo = MessageVo.new(message_params_vo, manager_team_vo)
