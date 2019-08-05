@@ -40,7 +40,7 @@ class Highlands
       email_communications
       .map { |item| item['communicationValue'] }
 
-    if err.nil?
+    if err.blank?
       return ReturnVo.new(
         value: return_accepted(
           preferred_communications: {
@@ -81,7 +81,7 @@ class Highlands
       email_communications
       .map { |item| item['communicationValue'] }
 
-    if !err.nil?
+    if err.present?
       msg = 'GET highlands user Error'
       return ReturnVo.new(value: nil, error: return_error(msg, :unprocessable_entity))
     else

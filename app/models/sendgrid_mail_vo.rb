@@ -85,29 +85,30 @@ class SendgridMailVo
   def self.extract_cc(personalization, value)
     # ["recipient1@example.com <Alice Recipient>","recipient2@example.com"]
     value.each do |i|
-      cc_maybe_name_ary = i.strip.gsub('  ', ' ').split(' ')
-      cc = cc_maybe_name_ary[0]
-      cc_name = cc_maybe_name_ary[1..-1].join(' ')[1..-2] if cc_maybe_name_ary.size > 1
+      cc_maybe_name_array = i.strip.gsub('  ', ' ').split(' ')
+      cc = cc_maybe_name_array[0]
+      cc_name = cc_maybe_name_array[1..-1].join(' ')[1..-2] if cc_maybe_name_array.size > 1
       personalization.add_cc(Email.new(email: cc, name: cc_name))
     end
     personalization
   end
 
+  # FIXME: We use this same code three times, can we reuse this instead?
   def self.extract_bcc(personalization, value)
     # ["recipient3@example.com","recipient4@example.com <Bob Recipient>"]
     value.each do |i|
-      bcc_maybe_name_ary = i.strip.gsub('  ', ' ').split(' ')
-      bcc = bcc_maybe_name_ary[0]
-      bcc_name = bcc_maybe_name_ary[1..-1].join(' ')[1..-2] if bcc_maybe_name_ary.size > 1
+      bcc_maybe_name_array = i.strip.gsub('  ', ' ').split(' ')
+      bcc = bcc_maybe_name_array[0]
+      bcc_name = bcc_maybe_name_array[1..-1].join(' ')[1..-2] if bcc_maybe_name_array.size > 1
       personalization.add_bcc(Email.new(email: bcc, name: bcc_name))
     end
     personalization
   end
 
   def self.extract_reply_to(value)
-    reply_to_maybe_name_ary = value.strip.gsub('  ', ' ').split(' ')
-    reply_to = reply_to_maybe_name_ary[0]
-    reply_to_name = reply_to_maybe_name_ary[1..-1].join(' ')[1..-2] if reply_to_maybe_name_ary.size > 1
+    reply_to_maybe_name_array = value.strip.gsub('  ', ' ').split(' ')
+    reply_to = reply_to_maybe_name_array[0]
+    reply_to_name = reply_to_maybe_name_array[1..-1].join(' ')[1..-2] if reply_to_maybe_name_array.size > 1
     Email.new(email: reply_to, name: reply_to_name)
   end
 
@@ -147,6 +148,9 @@ class SendgridMailVo
     personalization
   end
 
+  # FIXME: Why are we restricting this to keys that include section? There's no
+  # reason the variables in a template on sendgrid have to include section in
+  # their names, right?
   def text_content
     content = []
     content << @dynamic_template_data['header']

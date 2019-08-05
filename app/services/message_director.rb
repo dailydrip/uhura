@@ -5,7 +5,7 @@
 class MessageDirector
   def self.send(message_vo)
     ret = create_message(message_vo)
-    return ret unless ret.error.nil?
+    return ret if ret.error.present?
 
     # Message request has been fully validated and populated.
     message_vo.message_id = ret.value.id # Set message_id. Used to link SendgridMsg to Message later.

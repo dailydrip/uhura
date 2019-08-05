@@ -9,8 +9,7 @@ class Api::V1::MessagesController < Api::V1::ApiBaseController
   end
 
   def create
-    err = validate_params
-    if !err.nil?
+    if err = validate_params
       render_error_msg(err)
     else
       message_vo = MessageVo.new(message_params_vo, manager_team_vo)
@@ -25,11 +24,9 @@ class Api::V1::MessagesController < Api::V1::ApiBaseController
   end
 
   def status
-    message_and_status = Message.message_and_status(params[:id]&.to_i)
-
-    if message_and_status[:message].nil?
-      message_and_status = InvalidMessage.invalid_message_and_status(params[:id]&.to_i)
-    end
+    message_and_status =
+      Message.message_and_status(params[:id]&.to_i) ||
+      InvalidMessage.invalid_message_and_status(params[:id]&.to_i)
 
     render json: {
       sendgrid_msg_status: message_and_status[:status][:sendgrid_msg_status],
@@ -59,10 +56,10 @@ class Api::V1::MessagesController < Api::V1::ApiBaseController
 
   def validate_params
     err = validate_message_params(message_params_vo)
-    return err[:error] unless err.nil?
+    return err[:error] if err.present?
 
     err = validate_manager_team_params(manager_team_vo)
-    return err[:error] unless err.nil?
+    return err[:error] if err.present?
   end
 
   def validate_message_params(message_params_vo)
@@ -125,7 +122,7 @@ class Api::V1::MessagesController < Api::V1::ApiBaseController
     return if params[:action]&.eql?('status')
 
     x_team_id = request.headers['X-Team-ID']
-    if x_team_id.nil? || x_team_id.strip.size.eql?(0)
+    if x_team_id.blank?
       err_msg = 'Required HTTP header (X-Team-ID) is missing.'
     else
       team = Team.find_by(id: x_team_id)

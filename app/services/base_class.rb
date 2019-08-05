@@ -15,6 +15,7 @@ class BaseClass
     self.class.attributes
   end
 
+  # FIXME: Explain this to me at least, if we need it. It feels really weird.
   def my_attrs
     self.my_attributes = {} if my_attributes.nil?
     attributes.reject { |attr| attr == :validation_context }.each do |i|

@@ -11,9 +11,11 @@ class UpdateSendgridMsgStatusFromWebhookWorker
       sendgrid_msg.status = status
       sendgrid_msg.read_by_user_at = Time.at(event['timestamp']).in_time_zone
       sendgrid_msg.save!
-      SendgridMsgEvent.create!(sendgrid_msg_id: message_id,
+      SendgridMsgEvent.create!(
+        sendgrid_msg_id: message_id,
                                status: status,
-                               event: event)
+                               event: event
+                               )
     else
       log_error("SendgridMsg.find(#{message_id}) not found. Unable to save status or create SendgridMsgEvent.")
     end

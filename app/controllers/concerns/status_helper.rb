@@ -2,11 +2,7 @@
 
 module StatusHelper
   def error?(data)
-    if data.respond_to?(:error) && data.error.present? || data.respond_to?(:errors) && data.errors.present?
-      true
-    else
-      false
-    end
+    data.respond_to?(:error) && data.error.present? || data.respond_to?(:errors) && data.errors.present?
   end
 
   def render_response(data)

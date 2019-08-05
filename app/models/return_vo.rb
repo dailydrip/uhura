@@ -10,6 +10,7 @@ class ReturnVo
 
   validate :concistency_check
 
+  # FIXME: Maybe nothing to fix here, but why is this ActiveModel.initialize instead of just initialize?
   def ActiveModel.initialize(*args)
     super
     validate!
@@ -22,7 +23,7 @@ class ReturnVo
   end
 
   def error?
-    !@error.nil?
+    @error.present?
   end
 
   def status
@@ -41,11 +42,11 @@ class ReturnVo
   private
 
   def concistency_check
-    if error.nil? && value.nil?
+    if error.blank? && value.blank?
       errors.add(:value, 'cannot be nil when error is nil')
       errors.add(:error, 'cannot be nil when value is nil')
     end
-    if !error.nil? && !value.nil?
+    if error.present? && value.present?
       errors.add(:value, 'cannot be populated when error is populated')
       errors.add(:error, 'cannot be populated when value is populated')
     end

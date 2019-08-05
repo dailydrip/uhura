@@ -11,7 +11,7 @@ class Api::V1::ApiBaseController < ApplicationController
     session[:public_token] = params[:public_token] if params[:public_token]
     @manager = Manager.find_by(public_token: session[:public_token]) if session[:public_token]
     if @manager.nil?
-      msg = "Manager with public_token (#{params[:public_token]}) NOT found!"
+      msg = "Manager with public_token (#{params[:public_token]}) not found"
       log_error(msg)
       render json: return_error(msg), status: :unprocessable_entity
     end
