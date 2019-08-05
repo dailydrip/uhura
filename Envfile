@@ -28,11 +28,6 @@ variable :NUMBER_OF_SLOW_TESTS_TO_DISPLAY, :Integer, default: 3
 #               3rd Party Services
 #-----------------------------------------------
 
-# Github Access
-variable :GITHUB_KEY, :String
-variable :GITHUB_SECRET, :String
-variable :GITHUB_TOKEN, :String
-
 # Sendgrid Access
 variable :SENDGRID_API_KEY, :String
 
