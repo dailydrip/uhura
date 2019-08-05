@@ -2,7 +2,6 @@
 
 FactoryBot.define do
   factory :message do
-    msg_target { create(:msg_target) }
     sendgrid_msg { create(:sendgrid_msg) }
     clearstream_msg { create(:clearstream_msg) }
     manager { create(:manager) }

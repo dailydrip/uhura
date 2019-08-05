@@ -1,0 +1,12 @@
+{
+  "user_id": 55357499,
+  "first_name": "Bob",
+  "last_name": "Brown",
+  "email": "bob.replace.me@gmail.com",
+  "phone_number": "9986089786",
+  "preferences": [
+    {
+      "email": "bob.replace.me@gmail.com"
+    }
+  ]
+}

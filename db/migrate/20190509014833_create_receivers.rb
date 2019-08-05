@@ -2,7 +2,7 @@
 class CreateReceivers < ActiveRecord::Migration[6.0]
   def change
     create_table :receivers do |t|
-      t.string :receiver_sso_id # Highlands SSO ID
+      t.bigint :receiver_sso_id # Highlands SSO ID
       t.string :email
       t.string :mobile_number
       t.string :first_name

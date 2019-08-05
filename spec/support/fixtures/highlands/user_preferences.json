@@ -1,0 +1,13 @@
+{
+  "user_id": 63501603,
+  "first_name": "Charles",
+  "last_name": "Jarrett",
+  "email": "charles.jarrett@live.com",
+  "phone_number": "205-613-2729",
+  "preferences": [
+    {
+      "email": "charles.jarrett@live.com",
+      "phone_number": "205-613-2729"
+    }
+  ]
+}

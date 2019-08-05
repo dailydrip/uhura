@@ -33,7 +33,7 @@ yarn-debug.log*
 .yarn-integrity
 
 /personal
-/.RubyMine
+/.RubyMine*
 /.env
 /.idea
 /*.java

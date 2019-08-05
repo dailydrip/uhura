@@ -20,7 +20,7 @@ RSpec.describe SendgridMessageWorker do
             {
               "to": [
                 {
-                  "email": 'bob.p.k.brown@gmail.com',
+                  "email": 'bob.replace.me@gmail.com',
                   "name": 'Bob Brown'
                 }
               ],

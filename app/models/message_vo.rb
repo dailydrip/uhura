@@ -11,16 +11,18 @@ class MessageVo
   validates :manager_email, presence: true
   validates :manager_name, presence: true
   validates :team_name, presence: true
-  validates :receiver_sso_id, format: { with: /\A\d+\z/, message: 'integers only' }
+  # validates :receiver_sso_id, format: { with: /\A\d+\z/, message: 'integers only' }
+  validates :receiver_sso_id, numericality: { only_integer: true }
   validates :email_subject, presence: true
   validates :email_message, presence: true
   validates :template_id, presence: true
-  validates :mobile_number, presence: true # Required by ClearstreamClient::MessageClient.create_subscriber >>
+  # Required by ClearstreamClient::MessageClient.create_subscriber >>
+  validates :mobile_number, format: { with: /\+?([\d|\(][\h|\(\d{3}\)|\.|\-|\d]{4,}\d)/,
+                                      message: 'invalid mobile number' }
   validates :first, presence: true
   validates :last, presence: true
   validates :email, presence: true
   validates :lists, presence: true # <<
-  validate :receiver_preferences
   validate :template_found
 
   attr_accessor :public_token,
@@ -39,13 +41,16 @@ class MessageVo
                 :sendgrid_template_id,
                 :sms_message,
                 :message_id,
-                :msg_target_id,
                 :mobile_number, # Required by ClearstreamClient::MessageClient.create_subscriber >>
                 :first,
                 :last,
                 :email,
                 :lists, # <<
+                :preferences,
                 :errors
+
+  alias_attribute :first_name, :first
+  alias_attribute :last_name, :last
 
   def initialize(message_params_vo, manager_team_vo)
     raise InvalidMessageError, 'invalid message_params_vo' unless message_params_vo.valid?
@@ -59,27 +64,22 @@ class MessageVo
     # Valid input. Now, perform lookups to fill in missing data prior to processing request.
     assign_attributes(message_params_vo.my_attrs.merge(manager_team_vo.my_attrs))
 
-    receiver = Receiver.find_by(receiver_sso_id: @receiver_sso_id)
-
-    handle_when_no_receiver if receiver.nil?
-    handle_when_receiver(receiver) if receiver.present?
-
-    team = Team.find_by(name: team_name)
-    self.team_id = team.id if team
-    self.team_name = team.name if team
-    template = Template.find_by(template_id: template_id) # convert string template_id to template.id integer
-    self.sendgrid_template_id = template_id
-    self.template_id = template.id if template
+    ret = Receiver.from_user_preferences(
+      highlands_data: {
+        resource: 'user_preferences',
+        id: @receiver_sso_id
+      }
+    )
+    unless ret.error.nil?
+      errors.add(:value, ret.error)
+      return
+    end
+    receiver_attributes(ret.value[:data])
+    team_attributes(team_name)
+    template_attributes(template_id)
   end
 
-  def handle_when_no_receiver
-    errors.add(:value, 'BLOCKER: We need a Highlands API to take an sso_id and return user attributes')
-    # Highlands.get_user_by_email(message_vo.email) returns what we need, but we don't have an email to pass it.
-    # user = Highlands.get_user_by_sso_id(@receiver_sso_id)
-    # Assign user attributes to message_vo
-  end
-
-  def handle_when_receiver(receiver)
+  def receiver_attributes(receiver)
     # Receiver already exists
     self.receiver_id = receiver.id # Required by  Message.create!
     # Following message_vo attributes required by ClearstreamClient::MessageClient.create_subscriber
@@ -88,21 +88,24 @@ class MessageVo
     self.last = receiver.last_name
     self.email = receiver.email
     self.lists = AppCfg['CLEARSTREAM_DEFAULT_LIST_ID']
-    handle_msg_target(receiver)
+    self.preferences = receiver.preferences
   end
 
-  def handle_msg_target(receiver)
-    @receiver_preferences = receiver.preferences
-    msg_target = MsgTarget.find_by(name: receiver.preferences['email'] ? 'Sendgrid' : 'Clearstream')
-    self.msg_target_id = msg_target.id if msg_target
+  def team_attributes(team_name)
+    team = Team.find_by(name: team_name)
+    self.team_id = team.id if team
+    self.team_name = team.name if team
   end
 
-  def receiver_preferences
-    if msg_target_id.nil?
-      msg = "Invalid receiver.preferences (#{@receiver_preferences}). Unable to determine message target (Email/SMS)."
-      log_error(msg)
-      errors.add(:value, msg)
-    end
+  def template_attributes(template_id)
+    template = Template.find_by(template_id: template_id) # convert string template_id to template.id integer
+    self.sendgrid_template_id = template_id
+    self.template_id = template.id if template
+  end
+
+  def convert_preferences(preferences)
+    self.email = preferences[0][:email] if preferences[0][:email].present?
+    self.mobile_number = preferences[0][:phone_number] if preferences[0][:phone_number].present?
   end
 
   def template_found
@@ -116,7 +119,6 @@ class MessageVo
 
   def invalid_message_attrs
     {
-      msg_target_id: @msg_target_id,
       manager_id: @manager_id,
       receiver_id: @receiver_id,
       team_id: @team_id,
@@ -125,6 +127,17 @@ class MessageVo
       email_options: @email_options,
       template_id: @template_id,
       sms_message: @sms_message
+    }
+  end
+
+  def user_attributes
+    {
+      receiver_sso_id: @receiver_sso_id,
+      email: @email,
+      mobile_number: @mobile_number,
+      first_name: @first_name,
+      last_name: @last_name,
+      preferences: convert_preferences(@preferences)
     }
   end
 

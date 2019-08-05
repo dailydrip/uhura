@@ -6,9 +6,7 @@ class ClearstreamHandler < ServiceHandlerBase
   def self.send(message_vo)
     # Populate attributes required for request
     clearstream_vo = create_clearstream_msg(message_vo)
-
     ClearstreamMessageWorker.perform_async(clearstream_vo)
-
     msg = "Asynchronously sent SMS: (#{message_vo.team_name}:#{message_vo.email_subject}) "
     msg += "from (#{message_vo.manager_name}) to (#{message_vo.mobile_number})"
     log_info(msg)
@@ -70,17 +68,18 @@ class ClearstreamHandler < ServiceHandlerBase
 
   # Called from ClearstreamMessageWorker
   def self.send_msg(data)
+    message_id = data[:clearstream_vo]['message_id']
     # Request Clearstream client to send message
     response = ClearstreamClient::MessageClient.new(data: data[:clearstream_vo],
                                                     resource: 'messages').send_message
     # Record Clearstream response
-    clearstream_msg = ClearstreamMsg.create!(sent_to_clearstream: Time.now,
+    clearstream_msg = ClearstreamMsg.create!(sent_to_clearstream: Time.current,
                                              response: response['data'] )
-    clearstream_msg.got_response_at = Time.now
+    clearstream_msg.got_response_at = Time.current
     clearstream_msg.status = response['data']['status']
     clearstream_msg.clearstream_id = response['data']['id'] # <= Use clearstream_id as correlation id in webhook
 
-    if clearstream_msg.save! && link_clearstream_msg_to_message(data[:message_id], clearstream_msg.id)
+    if clearstream_msg.save! && link_clearstream_msg_to_message(message_id, clearstream_msg.id)
       return ReturnVo.new_value({clearstream_msg: clearstream_msg})
     else
       return ReturnVo.new_err(clearstream_msg.errors || "Error for clearstream_id (#{clearstream_id})")

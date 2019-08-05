@@ -17,28 +17,37 @@ class Highlands
     message.save!
   end
 
-  # def self.get_user(data)
-  #   response = HighlandsClient::MessageClient.new(data: data[:highlands_data],
-  #                                                   resource: 'messages').send_message
-  #
-  #   highlands_msg = HighlandsMsg.create!(sent_to_highlands: Time.now,
-  #                                            response: { response: response['data'] })
-  #
-  #   highlands_msg.got_response_at = Time.now
-  #   highlands_msg.status = response['data']['status']
-  #
-  #   if highlands_msg.save! && link_highlands_msg_to_message(data[:message_id], highlands_msg.id)
-  #     return ReturnVo.new(value: return_accepted("highlands_msg": highlands_msg), error: nil)
-  #   else
-  #     err = highlands_msg.errors || "Error for highlands_id (#{highlands_id})"
-  #     return ReturnVo.new(value: nil, error: return_error(err, :unprocessable_entity))
-  #   end
-  # end
-
   def get_user(data)
     data = data[:highlands_data]
     response = HighlandsClient::MessageClient.new(data: data,
                                                   resource: data[:resource]).get_user(data[:email])
+
+    preferred_communications = response['data']['communications']['communication'].select{ |item| item['preferred'] == 'true' }
+    mobile_communications = preferred_communications.select{ |item| item['communicationType']['name'] == 'Mobile'}
+    email_communications = preferred_communications.select{ |item| item['communicationGeneralType'] == 'Email'}
+    mobile_phones = mobile_communications.map{|item| item['communicationValue']}
+    emails = email_communications.map{|item| item['communicationValue']}
+
+    if !err.nil?
+      msg = 'GET highlands user Error'
+      return ReturnVo.new(value: nil, error: return_error(msg, :unprocessable_entity))
+    else
+      preferred_communications = {
+          communications: {
+              mobile_phones: mobile_phones,
+              emails: emails
+          }
+      }
+      return ReturnVo.new(value: return_accepted(preferred_communications: preferred_communications), error: nil)
+    end
+
+  end
+
+
+  def get_user_preferences(data)
+    data = data[:highlands_data]
+    response = HighlandsClient::MessageClient.new(data: data,
+                                                  resource: data[:resource]).get_user_preferences(data[:preferences])
 
     preferred_communications = response['data']['communications']['communication'].select{ |item| item['preferred'] == 'true' }
     mobile_communications = preferred_communications.select{ |item| item['communicationType']['name'] == 'Mobile'}

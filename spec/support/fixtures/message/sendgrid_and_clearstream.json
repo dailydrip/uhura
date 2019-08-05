@@ -1,0 +1,22 @@
+{
+  "sendgrid_msg": {
+    "value": {
+      "status": 202,
+      "data": {
+        "sendgrid_msg": "Asynchronously sent email: (Leadership Team:Picnic Saturday) from (Sample - App 1) to (bob@example.com <Bob Example>)"
+      },
+      "error": null
+    },
+    "error": null
+  },
+  "clearstream_msg": {
+    "value": {
+      "status": 202,
+      "data": {
+        "clearstream_msg": "Asynchronously sent SMS: (Leadership Team:Picnic Saturday) from (Sample - App 1) to (7707651573‬)"
+      },
+      "error": null
+    },
+    "error": null
+  }
+}

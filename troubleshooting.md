@@ -270,6 +270,102 @@ ret is created in MessageDirector.create_message(message_vo):
     end
 ```
 
+## <UPDATE>  Message API  </UPDATE >
+A single call to the messages api can now call both Sendgrid (Email) and Clearstream (SMS).
+
+### Response for message to receiver, whose preferences indicate they only want to get Email messages:
+```
+{
+    "sendgrid_msg": {
+        "value": {
+            "status": 202,
+            "data": {
+                "sendgrid_msg": "Asynchronously sent email: (Leadership Team:Picnic Saturday) from (Sample - App 1) to (bob@example.com <Bob Example>)"
+            },
+            "error": null
+        },
+        "error": null
+    },
+    "clearstream_msg": null
+}
+```
+
+### Response for message to receiver, whose preferences indicate they only want to get SMS messages:
+```
+{
+    "sendgrid_msg": null,
+    "clearstream_msg": {
+        "value": {
+            "status": 202,
+            "data": {
+                "clearstream_msg": "Asynchronously sent SMS: (Leadership Team:Picnic Saturday) from (Sample - App 1) to (9999999999)"
+            },
+            "error": null
+        },
+        "error": null
+    }
+}
+```
+
+### Response for message to receiver, whose preferences indicate they want both Email messages and SMS messagess:
+```
+{
+    "sendgrid_msg": {
+        "value": {
+            "status": 202,
+            "data": {
+                "sendgrid_msg": "Asynchronously sent email: (Leadership Team:Picnic Saturday) from (Sample - App 1) to (bob@example.com <Bob Example>)"
+            },
+            "error": null
+        },
+        "error": null
+    },
+    "clearstream_msg": {
+        "value": {
+            "status": 202,
+            "data": {
+                "clearstream_msg": "Asynchronously sent SMS: (Leadership Team:Picnic Saturday) from (Sample - App 1) to (9999999999)"
+            },
+            "error": null
+        },
+        "error": null
+    }
+}
+```
+
+
+### Response for message to receiver, whose preferences indicate they want both Email messages and SMS messagess (with invalid SMS):
+```
+{
+    "sendgrid_msg": {
+        "value": {
+            "status": 202,
+            "data": {
+                "sendgrid_msg": "Asynchronously sent email: (Leadership Team:Picnic Saturday) from (Sample - App 1) to (cindy.smyth@protonmail.com <Charles Jarrett>)"
+            },
+            "error": null
+        },
+        "error": null
+    },
+    "clearstream_msg": {
+        "value": null,
+        "error": {
+            "status": 422,
+            "data": null,
+            "error": {
+                "msg": "At least one of the supplied subscribers is invalid.",
+                "action_required:": {
+                    "error_from_clearstream": "At least one of the supplied subscribers is invalid.",
+                    "assumed_meaning": "This receiver w/ mobile_number (999-999-ABC!) not registered in Clearstream",
+                    "action": "Research whether receiver_sso_id (99999999) is valid."
+                }
+            }
+        }
+    }
+}
+```
+
+
 
 ## Message Table
 The messages table has a msg_target_id to indicate 1=sendgrid or 2=clearstream

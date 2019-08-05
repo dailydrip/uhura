@@ -4,7 +4,6 @@ require 'rails_helper'
 
 RSpec.describe Message, type: :model do
   describe 'Associations' do
-    it { is_expected.to belong_to(:msg_target) }
     it { is_expected.to belong_to(:sendgrid_msg).optional }
     it { is_expected.to belong_to(:clearstream_msg).optional }
     it { is_expected.to belong_to(:manager) }
@@ -21,43 +20,25 @@ RSpec.describe Message, type: :model do
   end
 
   describe '.message_and_status' do
-    context 'when we dot not have a target' do
+    context 'with a valid message' do
       let!(:message) { create(:message) }
-      it 'raises an error if we dont have a target' do
-        expect do
-          Message.message_and_status(message.id)
-        end.to raise_error(Message::InvalidMessageError, /invalid_message__missing_target/)
-      end
-    end
 
-    context 'when we dot have a target' do
-      let!(:message) { create(:message, msg_target: create(:msg_target, name: 'Sendgrid')) }
-      it 'raises an error if we dont have a target' do
-        result = Message.message_and_status(message.id)
-
-        expect(result[:message].id).to eq message.id
-        expect(result[:status]).to eq(sendgrid_msg_status: nil, clearstream_msg_status: nil)
+      it 'has valid attributes' do
+        message_and_status = Message.message_and_status(message.id)
+        expect(message_and_status[:message]).to_not be_nil
+        expect(message_and_status[:status][:sendgrid_msg_status]).to eq('accepted_by_sendgrid')
+        expect(message_and_status[:status][:clearstream_msg_status]).to eq('QUEUED')
       end
     end
   end
 
-  describe '.check_for_missing_status' do
-    context 'when we dot not have a target' do
+  describe '.status' do
+    context 'with a valid message' do
       let!(:message) { create(:message) }
 
-      it 'raises an error if we dont have a target' do
-        expect do
-          Message.check_for_missing_status(message)
-        end.to raise_error(Message::InvalidMessageError, /invalid_message__missing_target/)
-      end
-    end
-
-    context 'when we dot not have a target' do
-      let!(:message) { create(:message, msg_target: create(:msg_target, name: 'Sendgrid')) }
-
-      it 'raises an error if we dont have a target' do
-        result = Message.check_for_missing_status(message)
-        expect(result).to eq(sendgrid_error_msg: nil, clearstream_error_msg: nil)
+      it 'has valid attributes' do
+        expect(message.status[:sendgrid]).to eq('accepted_by_sendgrid')
+        expect(message.status[:clearstream]).to eq('QUEUED')
       end
     end
   end

@@ -14,7 +14,7 @@ RSpec.describe MessageVo, type: :model do
   let(:message_params_vo) do
     MessageParamsVo.new(
       public_token: '82a1782d202d49efef87',
-      receiver_sso_id: '88543890',
+      receiver_sso_id: 88_543_890,
       email_subject: 'Picnic Saturday',
       email_message: email_message,
       template_id: 'd-f986df533e514f978f4460bedca50db0',
@@ -25,7 +25,7 @@ RSpec.describe MessageVo, type: :model do
   let(:bogus_message_params_vo) do
     MessageParamsVo.new(
       public_token: nil,
-      receiver_sso_id: '88543890',
+      receiver_sso_id: 88_543_890,
       email_subject: 'Picnic Saturday',
       email_message: email_message,
       template_id: 'd-f986df533e514f978f4460bedca50db0',
@@ -52,6 +52,12 @@ RSpec.describe MessageVo, type: :model do
   end
 
   describe 'fields' do
+    before :each do
+      stub_request(:any, /sso.highlandsapp.com/)
+        .to_return(body: get_highlands_response_data('alice_user_preferences'),
+                   status: 200)
+    end
+
     let(:email_message) do
       {
         header: 'Rock Slide',
@@ -63,7 +69,7 @@ RSpec.describe MessageVo, type: :model do
     let(:message_params_vo) do
       MessageParamsVo.new(
         public_token: '82a1782d202d49efef87',
-        receiver_sso_id: '88543890',
+        receiver_sso_id: 88_543_890,
         email_subject: 'Picnic Saturday',
         email_message: email_message,
         template_id: 'd-f986df533e514f978f4460bedca50db0',
@@ -95,19 +101,17 @@ RSpec.describe MessageVo, type: :model do
     it { is_expected.to respond_to(:last) }
     it { is_expected.to respond_to(:email) }
     it { is_expected.to respond_to(:lists) }
-    it { is_expected.to respond_to(:receiver_preferences) }
+    it { is_expected.to respond_to(:preferences) }
     it { is_expected.to respond_to(:template_found) }
   end
 
-  describe '#handle_when_no_receiver' do
-    it 'adds error on errors' do
-      message_vo = MessageVo.new(message_params_vo, manager_team_vo)
-      returned = message_vo.handle_when_no_receiver
-      expect(returned[0]).to eq('BLOCKER: We need a Highlands API to take an sso_id and return user attributes')
-    end
-  end
-
   describe 'initialization' do
+    before :each do
+      stub_request(:any, /sso.highlandsapp.com/)
+        .to_return(body: get_highlands_response_data('alice_user_preferences'),
+                   status: 200)
+    end
+
     it 'must have valid message_params_vo' do
       expect do
         MessageVo.new(bogus_message_params_vo, manager_team_vo)
@@ -121,20 +125,31 @@ RSpec.describe MessageVo, type: :model do
     end
 
     it 'has the receiver information' do
-      create(:msg_target, name: 'Clearstream')
-      Template.create!(name: 'Sample Template A', template_id: 'd-f986df533e514f978f4460bedca50db0', sample_template_data: {
-                         "header": Faker::Games::Pokemon.move.titleize,
-                         "section1": Faker::Quote.matz,
-                         "button": Faker::Verb.base.capitalize
-                       })
-      create(:receiver, receiver_sso_id: '88543890', email: 'example@example.com')
+      Template.create!(
+        name: 'Sample Template A',
+        template_id: 'd-f986df533e514f978f4460bedca50db0',
+        sample_template_data:
+          {
+            "header": Faker::Games::Pokemon.move.titleize,
+            "section1": Faker::Quote.matz,
+            "button": Faker::Verb.base.capitalize
+          }
+      )
+      create(:receiver, receiver_sso_id: 88_543_890, email: 'example@example.com')
       message_vo = MessageVo.new(message_params_vo, manager_team_vo)
-      expect(message_vo.receiver_id).to eq 1
-      expect(message_vo.email).to eq 'example@example.com'
+      # Note that the 2nd receiver is created typ the get_highlands_response_data('alice_user_preferences') stub
+      expect(message_vo.receiver_id).to eq 2
+      expect(message_vo.email).to eq 'alice@aol.com'
     end
   end
 
   describe 'validations' do
+    before :each do
+      stub_request(:any, /sso.highlandsapp.com/)
+        .to_return(body: get_highlands_response_data('alice_user_preferences'),
+                   status: 200)
+    end
+
     context 'when both sets of parameter value inputs are valid' do
       it 'does not raise any exception' do
         expect do
@@ -149,7 +164,7 @@ RSpec.describe MessageVo, type: :model do
         expect(message_vo.email_subject).to eq 'Picnic Saturday'
         expect(message_vo.public_token).to eq '82a1782d202d49efef87'
         expect(message_vo.manager_email).to eq 'app1@highlands.org'
-        expect(message_vo.receiver_sso_id).to eq '88543890'
+        expect(message_vo.receiver_sso_id).to eq 88_543_890
       end
     end
   end

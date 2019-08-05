@@ -19,3 +19,7 @@ if ENV['UHURA_LOGGER'].eql?('LOGDNA')
 else
   APP_LOGGER = Rails.logger
 end
+
+# Global Constants
+EMAIL_KEY = 'email'
+SMS_KEY = 'sms'
