@@ -544,6 +544,21 @@ The message BODY below is sent to a SendGrid template (d-2a5278f48f0c41b992509f4
 }
 ```
 
+# Logger
+
+Given that we can send Rails output logs to external services, we have enabled integration with the LogDNA service.
+
+To enable log statements to be sent to LogDNA set the following environment variables:
+```sh
+export UHURA_LOGGER='LOGDNA'
+export LOG_ENDPOINT='https://logs.logdna.com/logs/ingest'
+```
+
+By default, Uhura will format Rails server log output in the Logstash (JSON) format.  Example:
+```sh
+{"method":"POST","path":"/api/v1/web_hooks/sendgrid","format":"html","controller":"Api::V1::WebHooksController","action":"sendgrid","status":204,"duration":10830.82,"view":0.0,"db":40.17,"@timestamp":"2019-07-19T01:56:14.264Z","@version":"1","message":"[204] POST /api/v1/web_hooks/sendgrid (Api::V1::WebHooksController#sendgrid)"}
+```
+
 # Admin App
 
 We used the Administrate gem (https://github.com/thoughtbot/administrate) to help use build the /admin application.
