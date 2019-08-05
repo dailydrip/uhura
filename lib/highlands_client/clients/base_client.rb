@@ -15,11 +15,20 @@ module HighlandsClient
 
     def search_by_email(email)
       # Build and send request
-      response = connection.vo do |req|
+      response = connection.get do |req|
         req.url "#{CS_BASE_URL}/#{@resource}/?email=#{email}"
       end
-      raise APIError, response.body unless response.success?
-      raise APIError, response.body if response.status.eql?(204) # No Content
+      render_error_msg(response.body) unless response.status.eql?(200)
+
+      JSONConverter.to_hash(response.body)
+    end
+
+    def user_preferences(sso_id)
+      # Build and send request
+      response = connection.get do |req|
+        req.url "#{CS_BASE_URL}/#{@resource}?id=#{sso_id}"
+      end
+      return error_hash(response.body) unless response.status.eql?(200)
 
       JSONConverter.to_hash(response.body)
     end
@@ -38,6 +47,15 @@ module HighlandsClient
         builder.request :json
         builder.adapter :typhoeus # typphous is much faster than net_http
       end
+    end
+
+    def error_hash(msg, status = 422)
+      status = Rack::Utils::SYMBOL_TO_STATUS_CODE[status] if status.is_a? Symbol
+      {
+        status: status,
+        data: nil,
+        error: msg
+      }
     end
   end
 end

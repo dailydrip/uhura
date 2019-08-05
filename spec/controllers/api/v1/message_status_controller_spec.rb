@@ -11,24 +11,36 @@ RSpec.describe 'MessageStatus API', type: :request do
     let(:manager) { Manager.first }
     let(:receiver) { Receiver.first }
 
-    context 'when it is authorized' do
-      it 'returns status code 200' do
-        get '/api/v1/message_status/1', headers: valid_headers, params: nil
-        expect(response.status).to eq 200
-        expect(response.parsed_body['data']['sent_to_sendgrid']).to_not be_nil
-        expect(response.parsed_body['data']['mail_and_response']).to_not be_nil
-        expect(response.parsed_body['data']['mail_and_response']['mail']).to_not be_nil
-        expect(response.parsed_body['data']['mail_and_response']['response']).to_not be_nil
-      end
-    end
-
     context 'when it is NOT authorized' do
       it 'returns status code 200' do
         get '/api/v1/message_status/1', headers: {}, params: nil
-        expect(response.status).to eq 401
+        expect(response.status).to eq(401)
         expect(response.parsed_body).to eq('status' => 422,
                                            'data' => nil,
                                            'error' => 'This API Key does not exist.')
+      end
+    end
+
+    context 'when it is authorized' do
+      it 'returns status code 200' do
+        get '/api/v1/message_status/1', headers: valid_headers, params: nil
+        expect(response.status).to eq(200)
+      end
+    end
+
+    context 'when it is authorized and receiver prefers email but not sms' do
+      it 'returns accepted_by_sendgrid and nil for clearstream' do
+        get '/api/v1/message_status/1', headers: valid_headers, params: nil
+        expect(response.parsed_body['message_status']['sendgrid']).to eq('accepted_by_sendgrid')
+        expect(response.parsed_body['message_status']['clearstream']).to eq(nil)
+      end
+    end
+
+    context 'when it is authorized and receiver prefers sms but not email' do
+      it 'returns accepted_by_sendgrid and nil for clearstream' do
+        get '/api/v1/message_status/2', headers: valid_headers, params: nil
+        expect(response.parsed_body['message_status']['sendgrid']).to eq(nil)
+        expect(response.parsed_body['message_status']['clearstream']).to eq('QUEUED')
       end
     end
   end

@@ -1,0 +1,12 @@
+{
+  "user_id": 34430309,
+  "first_name": "Alice",
+  "last_name": "Green",
+  "email": "alice@aol.com",
+  "phone_number": "9999999999",
+  "preferences": [
+    {
+      "phone_number": "205-613-2729"
+    }
+  ]
+}

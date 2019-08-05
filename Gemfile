@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.6.1'
+ruby '2.6.3'
 
 gem 'rails', '~> 6.0.0.rc1'   # You can bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'pg', '>= 0.18', '< 2.0'  # Use postgresql as the database for Active Record
@@ -49,7 +49,8 @@ group :development, :test do
   # https://github.com/liufengyun/hashdiff/issues/45#issuecomment-499566400
   gem 'hashdiff', ['>= 1.0.0.beta1', '< 2.0.0']
   gem 'awesome_print'
-  gem 'rubocop', require: false
+  # gem 'rubocop', '0.71.0', require: false
+  gem 'rubocop-rails'
   gem 'rubocop-performance'
   gem 'hirb'
 end

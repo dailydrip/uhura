@@ -9,7 +9,7 @@ class SendgridHandler < ServiceHandlerBase
 
     SendgridMessageWorker.perform_async(sendgrid_vo)
 
-    msg = "Asynchronously sent Email: (#{message_vo.team_name}:#{message_vo.email_subject}) "
+    msg = "Asynchronously sent email: (#{message_vo.team_name}:#{message_vo.email_subject}) "
     msg += "from (#{message_vo.manager_name}) to (#{message_vo.email} <#{message_vo.first} #{message_vo.last}>)"
     log_info(msg)
     ReturnVo.new(value: return_accepted(sendgrid_msg: msg), error: nil)
@@ -56,9 +56,7 @@ class SendgridHandler < ServiceHandlerBase
     sendgrid_vo = deep_symbolize_keys_if_needed(sendgrid_vo)
     message_id = sendgrid_vo[:message_id]
     mail_obj = SendgridMailVo.mail(sendgrid_vo[:mail_vo])
-
     sendgrid_msg = send_email_and_update_sendgrid_msg(mail_obj, sendgrid_vo)
-
     save_and_link_message(sendgrid_msg, message_id)
   end
 
@@ -73,7 +71,7 @@ class SendgridHandler < ServiceHandlerBase
 
   def self.send_email_and_update_sendgrid_msg(mail_obj, sendgrid_vo)
     # Request Clearstream client to send message
-    sent_to_sendgrid_at = Time.now
+    sent_to_sendgrid_at = Time.current
     response_and_mail = SendgridMailer.new.send_email(mail_obj)
     response = response_and_mail[:response]
     mail = response_and_mail[:mail]
@@ -84,8 +82,8 @@ class SendgridHandler < ServiceHandlerBase
     sendgrid_msg = SendgridMsg.find_by(id: uhura_msg_id)
     sendgrid_msg.update!(sent_to_sendgrid: sent_to_sendgrid_at,
                          mail_and_response: { mail: mail.to_json, response: response },
-                         got_response_at: Time.now,
-                         sendgrid_response: response[:status_code])
+                         got_response_at: Time.current,
+                         sendgrid_response: response[:status_code] || response['status_code'])
     sendgrid_msg
   end
 

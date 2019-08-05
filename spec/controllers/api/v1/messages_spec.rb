@@ -11,7 +11,6 @@ RSpec.describe 'Messages API', type: :request do
     context 'when it is authorized' do
       let!(:message) do
         create(:message,
-               msg_target: MsgTarget.find_by(name: 'Sendgrid'),
                clearstream_msg: create(:clearstream_msg, status: nil),
                sendgrid_msg: create(:sendgrid_msg, status: 'delivered'))
       end
@@ -26,7 +25,7 @@ RSpec.describe 'Messages API', type: :request do
 
   describe 'POST /api/v1/messages' do
     let(:manager) { Manager.first; }
-    let(:receiver) { Receiver.first; }
+    let(:receiver) { Receiver.find_by(first_name: 'Alice'); }
 
     let(:valid_attributes) do
       {
@@ -43,17 +42,6 @@ RSpec.describe 'Messages API', type: :request do
       }
     end
 
-    context 'when it is authorized' do
-      it 'returns status code 200' do
-        stub_request(:any, /api.getclearstream.com/)
-          .to_return(body: get_clearstream_response_data('post_message'),
-                     status: 200)
-        post '/api/v1/messages', headers: valid_headers, params: valid_attributes.to_json
-        expect(response.status).to eq 200
-        expect(response.parsed_body['data']['message']).to include('We got the message. Go here').and include('/api/v1/message_status/')
-      end
-    end
-
     context 'when it is not authorized' do
       it 'returns 401 with an error in the body' do
         stub_request(:any, /api.getclearstream.com/)
@@ -62,6 +50,36 @@ RSpec.describe 'Messages API', type: :request do
         post '/api/v1/messages', headers: invalid_headers, params: valid_attributes
         expect(response.status).to eq 401
         expect(response.parsed_body['error']).to eq('This API Key does not exist.')
+      end
+    end
+
+    context 'when it is authorized' do
+      it 'returns status code 200' do
+        stub_request(:any, /api.getclearstream.com/)
+          .to_return(body: get_clearstream_response_data('post_message'),
+                     status: 200)
+
+        stub_request(:any, /sso.highlandsapp.com/)
+          .to_return(body: get_highlands_response_data('alice_user_preferences'),
+                     status: 200)
+
+        post '/api/v1/messages', headers: valid_headers, params: valid_attributes.to_json
+        expect(response.status).to eq 200
+      end
+    end
+
+    context 'when receiver prefers sms messages' do
+      it 'indicates that an SMS message was sent' do
+        stub_request(:any, /api.getclearstream.com/)
+          .to_return(body: get_clearstream_response_data('post_message'),
+                     status: 200)
+
+        stub_request(:any, /sso.highlandsapp.com/)
+          .to_return(body: get_highlands_response_data('alice_user_preferences'),
+                     status: 200)
+
+        post '/api/v1/messages', headers: valid_headers, params: valid_attributes.to_json
+        expect(response.parsed_body['clearstream_msg']['value']['data']['clearstream_msg']).to include('Asynchronously sent SMS')
       end
     end
 
@@ -106,25 +124,31 @@ RSpec.describe 'Messages API', type: :request do
           .to_return(body: get_clearstream_response_data('get_message_status_queued'),
                      status: 200)
 
+        stub_request(:any, /sso.highlandsapp.com/)
+          .to_return(body: get_highlands_response_data('alice_user_preferences'),
+                     status: 200)
+
         get '/api/v1/message_status/2', headers: valid_headers, params: nil
         expect(response.status).to eq 200
-        expect(response.parsed_body['data']['status']).to eq('QUEUED')
+        expect(response.parsed_body['message_status']['clearstream']).to eq('QUEUED')
       end
     end
 
     describe 'when the sms receiver has an invalid mobile_number' do
       def link_to_clearstream_invalid_mobile_number
-        clearstream_msg = ClearstreamMsg.create!(sent_to_clearstream: 2.minutes.from_now,
-                                                 response: get_clearstream_response_data('read_invalid_subscriber'),
-                                                 got_response_at: 2.seconds.from_now,
-                                                 status: 'ERROR')
+        clearstream_msg = ClearstreamMsg.create!(
+          sent_to_clearstream: 2.minutes.from_now,
+          response: get_clearstream_response_data('read_invalid_subscriber'),
+          got_response_at: 2.seconds.from_now,
+          status: 'ERROR'
+        )
         msg3 = Message.find(3)
         msg3.clearstream_msg = clearstream_msg
         msg3.save!
       end
 
       let(:valid_attributes) do
-        receiver = Receiver.first
+        receiver = Receiver.find_by(first_name: 'Alice')
         receiver.mobile_number = '?+!42'
         receiver.save!
         manager = Manager.first
@@ -146,19 +170,22 @@ RSpec.describe 'Messages API', type: :request do
         stub_request(:any, /api.getclearstream.com/)
           .to_return(body: get_clearstream_response_data('post_message_with_invalid_receiver_mobile_number'),
                      status: 422)
+
+        stub_request(:any, /sso.highlandsapp.com/)
+          .to_return(body: get_highlands_response_data('alice_user_preferences'),
+                     status: 200)
+
         post '/api/v1/messages', headers: valid_headers, params: valid_attributes.to_json
         # Just created 3rd message.
         link_to_clearstream_invalid_mobile_number
-        expect(Message.last.target[:sent_to_clearstream]).to_not be_nil
-        expect(JSON.parse(Message.last.target[:response])['error']['message']).to eq('At least one of the supplied subscribers is invalid.')
-        expect(Message.last.target[:status]).to eq('ERROR')
+        expect(Message.last.clearstream_msg[:sent_to_clearstream]).to_not be_nil
+        expect(JSON.parse(Message.last.clearstream_msg['response'])['error']['message']).to eq('At least one of the supplied subscribers is invalid.')
+        expect(Message.last.status[:clearstream]).to eq('ERROR')
         # Verify message_status data:
         get "/api/v1/message_status/#{Message.find(3).id}", headers: valid_headers, params: nil
         expect(response.status).to eq 200
-        expect(JSON.parse(response.parsed_body['data']['response'])['error']).to_not be_nil
-        expect(JSON.parse(response.parsed_body['data']['response'])['error']['message']).to eq('At least one of the supplied subscribers is invalid.')
-        expect(JSON.parse(response.parsed_body['data']['response'])['error']['http_code']).to eq(422)
-        expect(JSON.parse(response.parsed_body['data']['response'])['error']['fields']['subscribers']).to_not be_nil
+        expect(response.parsed_body['message_status']['sendgrid']).to be_nil
+        expect(response.parsed_body['message_status']['clearstream']).to eq('ERROR')
       end
     end
 
@@ -193,16 +220,20 @@ RSpec.describe 'Messages API', type: :request do
         stub_request(:any, /api.sendgrid.com/)
           .to_return(body: get_sendgrid_response_data('post_message'),
                      status: 200)
+
+        stub_request(:any, /sso.highlandsapp.com/)
+          .to_return(body: get_highlands_response_data('bob_user_preferences'),
+                     status: 200)
+
         post '/api/v1/messages', headers: valid_headers, params: valid_attributes.to_json
         # Just created 3rd message.
+        expect(response.parsed_body['sendgrid_msg']['value']['status']).to eq(202)
         link_to_sendgrid
-        expect(response.parsed_body['status']).to eq 200
-        expect(Message.last.target[:sent_to_sendgrid]).to_not be_nil
-        expect(JSON.parse(Message.last.target[:mail_and_response])['response']['status_code']).to eq('202')
+        expect(Message.last.sendgrid_msg.sent_to_sendgrid).to_not be_nil
         # Created new MesssageStatus
         get "/api/v1/message_status/#{Message.find(3).id}", headers: valid_headers, params: nil
-        expect(response.status).to eq 200
-        expect(JSON.parse(response.parsed_body['data']['mail_and_response'])['response']['status_code']).to eq('202')
+        expect(response.status).to eq(200)
+        expect(response.parsed_body['message_status']['sendgrid']).to eq('202')
       end
     end
 
@@ -227,6 +258,11 @@ RSpec.describe 'Messages API', type: :request do
         stub_request(:any, /api.sendgrid.com/)
           .to_return(body: get_sendgrid_response_data('post_message_with_invalid_template_id'),
                      status: 422)
+
+        stub_request(:any, /sso.highlandsapp.com/)
+          .to_return(body: get_highlands_response_data('bob_user_preferences'),
+                     status: 200)
+
         post '/api/v1/messages', headers: valid_headers, params: valid_attributes.to_json
         expect(response.status).to eq 422
         expect(response.parsed_body['error']['message']).to include('Invalid message')
@@ -253,10 +289,14 @@ RSpec.describe 'Messages API', type: :request do
         stub_request(:any, /api.sendgrid.com/)
           .to_return(body: get_sendgrid_response_data('post_message'),
                      status: 200)
+
+        stub_request(:any, /sso.highlandsapp.com/)
+          .to_return(body: get_highlands_response_data('bob_user_preferences'),
+                     status: 200)
+
         post '/api/v1/messages', headers: valid_headers, params: valid_attributes.to_json
         expect(response.status).to eq 200
-        # expect(response.parsed_body['data']['sendgrid_msg']['mail_and_response']['mail']['personalizations'][0]['dynamic_template_data']['section1']).to eq('imagine you are writing an email.')
-        expect(response.parsed_body['data']['message']).to include('We got the message')
+        expect(response.parsed_body['sendgrid_msg']['value']['data']['sendgrid_msg']).to include('Asynchronously sent email')
       end
     end
 
@@ -281,10 +321,14 @@ RSpec.describe 'Messages API', type: :request do
         stub_request(:any, /api.sendgrid.com/)
           .to_return(body: get_sendgrid_response_data('post_message'),
                      status: 200)
+
+        stub_request(:any, /sso.highlandsapp.com/)
+          .to_return(body: get_highlands_response_data('bob_user_preferences'),
+                     status: 200)
+
         post '/api/v1/messages', headers: valid_headers, params: valid_attributes.to_json
         expect(response.status).to eq 200
-        # expect(response.parsed_body['data']['sendgrid_msg']['mail_and_response']['mail']['personalizations'][0]['dynamic_template_data']['section2']).to eq("I think we can get her a guest shot on 'Wild Kingdom.' I just whacked her up with about 300 cc's of Thorazaine... she's gonna take a little nap now.")
-        expect(response.parsed_body['data']['message']).to include('We got the message')
+        expect(response.parsed_body['sendgrid_msg']['value']['data']['sendgrid_msg']).to include('Asynchronously sent email')
       end
     end
 
@@ -316,9 +360,14 @@ RSpec.describe 'Messages API', type: :request do
         stub_request(:any, /api.sendgrid.com/)
           .to_return(body: get_sendgrid_response_data('post_message'),
                      status: 200)
+
+        stub_request(:any, /sso.highlandsapp.com/)
+          .to_return(body: get_highlands_response_data('bob_user_preferences'),
+                     status: 200)
+
         post '/api/v1/messages', headers: valid_headers, params: valid_attributes.to_json
         expect(response.status).to eq 200
-        expect(response.parsed_body['data']['message']).to include('We got the message')
+        expect(response.parsed_body['sendgrid_msg']['value']['data']['sendgrid_msg']).to include('Asynchronously sent email')
       end
     end
 
@@ -341,6 +390,10 @@ RSpec.describe 'Messages API', type: :request do
         stub_request(:any, /api.sendgrid.com/)
           .to_return(body: get_sendgrid_response_data('post_message_0_sections'),
                      status: 422)
+
+        stub_request(:any, /sso.highlandsapp.com/)
+          .to_return(body: get_highlands_response_data('bob_user_preferences'),
+                     status: 200)
         expect do
           post('/api/v1/messages',
                headers: valid_headers,
@@ -365,10 +418,15 @@ RSpec.describe 'Messages API', type: :request do
         "sms_message": 'Bring Drinks to the Picnic this Saturday'
       }
     end
+
     it 'returns status code 422' do
       stub_request(:any, /api.sendgrid.com/)
         .to_return(body: get_sendgrid_response_data('invalid_template_id'),
                    status: 422)
+
+      stub_request(:any, /sso.highlandsapp.com/)
+        .to_return(body: get_highlands_response_data('bob_user_preferences'),
+                   status: 200)
       expect do
         post('/api/v1/messages',
              headers: valid_headers,

@@ -33,7 +33,7 @@ def setup_data
   })
   # Alice prefers SMS
   alice = Receiver.create!(
-      receiver_sso_id: '34430309',
+      receiver_sso_id: 34430309,
       email: 'alice@aol.com',
       mobile_number: '9999999999',
       first_name: 'Alice',
@@ -42,16 +42,15 @@ def setup_data
   )
   # Bob prefers Email
   bob = Receiver.create!(
-      receiver_sso_id: '55357499',
-      email: 'bob@gmail.com',
+      receiver_sso_id: 55357499,
+      email: 'bob.replace.me@gmail.com',
       mobile_number: '5555555555',
       first_name: 'Bob',
       last_name: 'Brown',
       preferences: { email: true, sms: false }
   )
 
-  msg1 = Message.create!(msg_target_id: MsgTarget.find_by(name: 'Sendgrid').id,
-                         manager_id: app1.id, # <= source (an application)
+  msg1 = Message.create!(manager_id: app1.id, # <= source (an application)
                          team_id: leadership_team.id, # <= message coming from this team
                          receiver_id: bob.id, # <= receiver (a user)
                          email_subject: Faker::TvShows::SiliconValley.motto,
@@ -63,8 +62,7 @@ def setup_data
                          template_id: template_a.id,
                          sms_message:  Faker::Movie.quote)
 
-  msg2 = Message.create!(msg_target_id: MsgTarget.find_by(name: 'Clearstream').id,
-                         manager_id: app1.id,
+  msg2 = Message.create!(manager_id: app1.id,
                          team_id: leadership_team.id,
                          receiver_id: alice.id,
                          email_subject: Faker::TvShows::SiliconValley.motto,
@@ -76,7 +74,7 @@ def setup_data
                          template_id: template_a.id,
                          sms_message:  Faker::Movie.quote)
 
-  sendgrid_msg = SendgridMsg.create!(sent_to_sendgrid: Time.now,
+  sendgrid_msg = SendgridMsg.create!(sent_to_sendgrid: Time.current,
                             mail_and_response: {
                                 "mail": {
                                     "from": {
@@ -107,7 +105,7 @@ def setup_data
                                 }
                             },
                             got_response_at: nil,
-                            sendgrid_response: nil,
+                            sendgrid_response: '202',
                             read_by_user_at: 1.day.from_now)
   msg1.sendgrid_msg = sendgrid_msg
   msg1.save!

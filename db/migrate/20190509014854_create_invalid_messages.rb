@@ -1,7 +1,6 @@
 class CreateInvalidMessages < ActiveRecord::Migration[6.0]
   def change
     create_table :invalid_messages do |t|
-      t.references :msg_target, null: true
       t.references :manager, null: true
       t.references :receiver, null: true
       t.references :team, null: true

@@ -46,7 +46,6 @@ ActiveRecord::Schema.define(version: 2019_05_12_215905) do
   end
 
   create_table "invalid_messages", force: :cascade do |t|
-    t.bigint "msg_target_id"
     t.bigint "manager_id"
     t.bigint "receiver_id"
     t.bigint "team_id"
@@ -60,7 +59,6 @@ ActiveRecord::Schema.define(version: 2019_05_12_215905) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["manager_id"], name: "index_invalid_messages_on_manager_id"
-    t.index ["msg_target_id"], name: "index_invalid_messages_on_msg_target_id"
     t.index ["receiver_id"], name: "index_invalid_messages_on_receiver_id"
     t.index ["team_id"], name: "index_invalid_messages_on_team_id"
     t.index ["template_id"], name: "index_invalid_messages_on_template_id"
@@ -78,7 +76,6 @@ ActiveRecord::Schema.define(version: 2019_05_12_215905) do
   end
 
   create_table "messages", force: :cascade do |t|
-    t.bigint "msg_target_id"
     t.uuid "sendgrid_msg_id"
     t.uuid "clearstream_msg_id"
     t.bigint "manager_id", null: false
@@ -93,7 +90,6 @@ ActiveRecord::Schema.define(version: 2019_05_12_215905) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["clearstream_msg_id"], name: "index_messages_on_clearstream_msg_id"
     t.index ["manager_id"], name: "index_messages_on_manager_id"
-    t.index ["msg_target_id"], name: "index_messages_on_msg_target_id"
     t.index ["receiver_id"], name: "index_messages_on_receiver_id"
     t.index ["sendgrid_msg_id"], name: "index_messages_on_sendgrid_msg_id"
     t.index ["team_id"], name: "index_messages_on_team_id"
@@ -109,7 +105,7 @@ ActiveRecord::Schema.define(version: 2019_05_12_215905) do
   end
 
   create_table "receivers", force: :cascade do |t|
-    t.string "receiver_sso_id"
+    t.bigint "receiver_sso_id"
     t.string "email"
     t.string "mobile_number"
     t.string "first_name"
@@ -183,7 +179,6 @@ ActiveRecord::Schema.define(version: 2019_05_12_215905) do
   add_foreign_key "clearstream_msg_events", "clearstream_msgs"
   add_foreign_key "messages", "clearstream_msgs"
   add_foreign_key "messages", "managers"
-  add_foreign_key "messages", "msg_targets"
   add_foreign_key "messages", "receivers"
   add_foreign_key "messages", "sendgrid_msgs"
   add_foreign_key "messages", "teams"
