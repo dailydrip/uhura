@@ -1,4 +1,8 @@
+# frozen_string_literal: true
+
 class Array
+  # rubocop:disable Style/RedundantSelf
+
   # [1, [2], [[3]], [[[4, 5], 6],7]].squash
   # [
   #     [0] "1",
@@ -12,4 +16,5 @@ class Array
   def squash
     self.reject(&:blank?).flatten.join('ƶ').split('ƶ')
   end
+  # rubocop:enable Style/RedundantSelf
 end

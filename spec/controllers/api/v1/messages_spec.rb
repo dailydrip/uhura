@@ -45,8 +45,8 @@ RSpec.describe 'Messages API', type: :request do
     context 'when it is not authorized' do
       it 'returns 401 with an error in the body' do
         stub_request(:any, /api.getclearstream.com/)
-            .to_return(body: get_clearstream_response_data('invalid_auth_header'),
-                       status: 401)
+          .to_return(body: get_clearstream_response_data('invalid_auth_header'),
+                     status: 401)
         post '/api/v1/messages', headers: invalid_headers, params: valid_attributes
         expect(response.status).to eq 401
         expect(response.parsed_body['error']).to eq('This API Key does not exist.')
@@ -56,12 +56,12 @@ RSpec.describe 'Messages API', type: :request do
     context 'when it is authorized' do
       it 'returns status code 200' do
         stub_request(:any, /api.getclearstream.com/)
-            .to_return(body: get_clearstream_response_data('post_message'),
-                       status: 200)
+          .to_return(body: get_clearstream_response_data('post_message'),
+                     status: 200)
 
         stub_request(:any, /sso.highlandsapp.com/)
-            .to_return(body: get_highlands_response_data('alice_user_preferences'),
-                       status: 200)
+          .to_return(body: get_highlands_response_data('alice_user_preferences'),
+                     status: 200)
 
         post '/api/v1/messages', headers: valid_headers, params: valid_attributes.to_json
         expect(response.status).to eq 200
@@ -71,12 +71,12 @@ RSpec.describe 'Messages API', type: :request do
     context 'when receiver prefers sms messages' do
       it 'indicates that an SMS message was sent' do
         stub_request(:any, /api.getclearstream.com/)
-            .to_return(body: get_clearstream_response_data('post_message'),
-                       status: 200)
+          .to_return(body: get_clearstream_response_data('post_message'),
+                     status: 200)
 
         stub_request(:any, /sso.highlandsapp.com/)
-            .to_return(body: get_highlands_response_data('alice_user_preferences'),
-                       status: 200)
+          .to_return(body: get_highlands_response_data('alice_user_preferences'),
+                     status: 200)
 
         post '/api/v1/messages', headers: valid_headers, params: valid_attributes.to_json
         expect(response.parsed_body['clearstream_msg']['value']['data']['clearstream_msg']).to include('Asynchronously sent SMS')
@@ -125,8 +125,8 @@ RSpec.describe 'Messages API', type: :request do
                      status: 200)
 
         stub_request(:any, /sso.highlandsapp.com/)
-            .to_return(body: get_highlands_response_data('alice_user_preferences'),
-                       status: 200)
+          .to_return(body: get_highlands_response_data('alice_user_preferences'),
+                     status: 200)
 
         get '/api/v1/message_status/2', headers: valid_headers, params: nil
         expect(response.status).to eq 200
@@ -136,10 +136,12 @@ RSpec.describe 'Messages API', type: :request do
 
     describe 'when the sms receiver has an invalid mobile_number' do
       def link_to_clearstream_invalid_mobile_number
-        clearstream_msg = ClearstreamMsg.create!(sent_to_clearstream: 2.minutes.from_now,
-                                                 response: get_clearstream_response_data('read_invalid_subscriber'),
-                                                 got_response_at: 2.seconds.from_now,
-                                                 status: 'ERROR')
+        clearstream_msg = ClearstreamMsg.create!(
+          sent_to_clearstream: 2.minutes.from_now,
+          response: get_clearstream_response_data('read_invalid_subscriber'),
+          got_response_at: 2.seconds.from_now,
+          status: 'ERROR'
+        )
         msg3 = Message.find(3)
         msg3.clearstream_msg = clearstream_msg
         msg3.save!
@@ -170,8 +172,8 @@ RSpec.describe 'Messages API', type: :request do
                      status: 422)
 
         stub_request(:any, /sso.highlandsapp.com/)
-            .to_return(body: get_highlands_response_data('alice_user_preferences'),
-                       status: 200)
+          .to_return(body: get_highlands_response_data('alice_user_preferences'),
+                     status: 200)
 
         post '/api/v1/messages', headers: valid_headers, params: valid_attributes.to_json
         # Just created 3rd message.
@@ -220,8 +222,8 @@ RSpec.describe 'Messages API', type: :request do
                      status: 200)
 
         stub_request(:any, /sso.highlandsapp.com/)
-            .to_return(body: get_highlands_response_data('bob_user_preferences'),
-                       status: 200)
+          .to_return(body: get_highlands_response_data('bob_user_preferences'),
+                     status: 200)
 
         post '/api/v1/messages', headers: valid_headers, params: valid_attributes.to_json
         # Just created 3rd message.
@@ -258,8 +260,8 @@ RSpec.describe 'Messages API', type: :request do
                      status: 422)
 
         stub_request(:any, /sso.highlandsapp.com/)
-            .to_return(body: get_highlands_response_data('bob_user_preferences'),
-                       status: 200)
+          .to_return(body: get_highlands_response_data('bob_user_preferences'),
+                     status: 200)
 
         post '/api/v1/messages', headers: valid_headers, params: valid_attributes.to_json
         expect(response.status).to eq 422
@@ -289,8 +291,8 @@ RSpec.describe 'Messages API', type: :request do
                      status: 200)
 
         stub_request(:any, /sso.highlandsapp.com/)
-            .to_return(body: get_highlands_response_data('bob_user_preferences'),
-                       status: 200)
+          .to_return(body: get_highlands_response_data('bob_user_preferences'),
+                     status: 200)
 
         post '/api/v1/messages', headers: valid_headers, params: valid_attributes.to_json
         expect(response.status).to eq 200
@@ -321,8 +323,8 @@ RSpec.describe 'Messages API', type: :request do
                      status: 200)
 
         stub_request(:any, /sso.highlandsapp.com/)
-            .to_return(body: get_highlands_response_data('bob_user_preferences'),
-                       status: 200)
+          .to_return(body: get_highlands_response_data('bob_user_preferences'),
+                     status: 200)
 
         post '/api/v1/messages', headers: valid_headers, params: valid_attributes.to_json
         expect(response.status).to eq 200
@@ -360,8 +362,8 @@ RSpec.describe 'Messages API', type: :request do
                      status: 200)
 
         stub_request(:any, /sso.highlandsapp.com/)
-            .to_return(body: get_highlands_response_data('bob_user_preferences'),
-                       status: 200)
+          .to_return(body: get_highlands_response_data('bob_user_preferences'),
+                     status: 200)
 
         post '/api/v1/messages', headers: valid_headers, params: valid_attributes.to_json
         expect(response.status).to eq 200
@@ -390,8 +392,8 @@ RSpec.describe 'Messages API', type: :request do
                      status: 422)
 
         stub_request(:any, /sso.highlandsapp.com/)
-            .to_return(body: get_highlands_response_data('bob_user_preferences'),
-                       status: 200)
+          .to_return(body: get_highlands_response_data('bob_user_preferences'),
+                     status: 200)
         expect do
           post('/api/v1/messages',
                headers: valid_headers,
@@ -423,8 +425,8 @@ RSpec.describe 'Messages API', type: :request do
                    status: 422)
 
       stub_request(:any, /sso.highlandsapp.com/)
-          .to_return(body: get_highlands_response_data('bob_user_preferences'),
-                     status: 200)
+        .to_return(body: get_highlands_response_data('bob_user_preferences'),
+                   status: 200)
       expect do
         post('/api/v1/messages',
              headers: valid_headers,

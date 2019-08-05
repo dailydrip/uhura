@@ -149,7 +149,7 @@ MsgTarget.create!(name: 'Clearstream', description: 'External SMS Texting Servic
 #                        sms_message:  Faker::Movie.quote)
 #
 # log! "8. Seeding SendgridMsg and ClearstreamMsg"
-# sg1 = SendgridMsg.create!(sent_to_sendgrid: Time.now, read_by_user_at: 1.day.from_now)
+# sg1 = SendgridMsg.create!(sent_to_sendgrid: Time.current, read_by_user_at: 1.day.from_now)
 # msg1.sendgrid_msg = sg1
 # msg1.save!
 #

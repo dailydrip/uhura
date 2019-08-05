@@ -5,22 +5,19 @@
 class MessageDirector
   def self.send(message_vo)
     ret = create_message(message_vo)
-    if !ret.error.nil?
-      return ret
-    else
-      # Message request has been fully validated and populated.
-      message_vo.message_id = ret.value.id # Set message_id. Used to link SendgridMsg to Message later.
-    end
+    return ret unless ret.error.nil?
+
+    # Message request has been fully validated and populated.
+    message_vo.message_id = ret.value.id # Set message_id. Used to link SendgridMsg to Message later.
     # Send messages based on user preferences:
-    ret_sendgrid = SendgridHandler.send(message_vo) if message_vo.preferences['email']
-    ret_clearstream = ClearstreamHandler.send(message_vo) if message_vo.preferences['sms']
-    {sendgrid: ret_sendgrid, clearstream: ret_clearstream}
+    ret_sendgrid = SendgridHandler.send(message_vo) if message_vo.preferences[EMAIL_KEY]
+    ret_clearstream = ClearstreamHandler.send(message_vo) if message_vo.preferences[SMS_KEY]
+    { sendgrid: ret_sendgrid, clearstream: ret_clearstream }
   end
 
   def self.create_message(message_vo)
     if message_vo.valid?
-      message = Message.create!(#msg_target_id: message_vo.msg_target_id,
-                                manager_id: message_vo.manager_id, # <= source of message (an application)
+      message = Message.create!(manager_id: message_vo.manager_id, # <= source of message (an application)
                                 receiver_id: message_vo.receiver_id,
                                 team_id: message_vo.team_id, # <= message coming from this team
                                 email_subject: message_vo.email_subject,

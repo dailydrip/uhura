@@ -26,7 +26,6 @@ module HighlandsClient
       end
       msg = "Requested Highlands to create subscriber (#{new_subscriber_data.to_json}). Resonse: #{response.to_json}"
       log_info(msg)
-      # TODO: Verify that this status is correct when Highlands.io support increases subscriber limit
       if response['data']['status'] == 'QUEUED'
         return ReturnVo.new(value: return_accepted("highlands_msg": highlands_msg.to_json), error: nil)
       else

@@ -43,6 +43,5 @@ RSpec.describe 'MessageStatus API', type: :request do
         expect(response.parsed_body['message_status']['clearstream']).to eq('QUEUED')
       end
     end
-
   end
 end

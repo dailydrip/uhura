@@ -17,24 +17,6 @@ class Highlands
     message.save!
   end
 
-  # def self.get_user(data)
-  #   response = HighlandsClient::MessageClient.new(data: data[:highlands_data],
-  #                                                   resource: 'messages').send_message
-  #
-  #   highlands_msg = HighlandsMsg.create!(sent_to_highlands: Time.now,
-  #                                            response: { response: response['data'] })
-  #
-  #   highlands_msg.got_response_at = Time.now
-  #   highlands_msg.status = response['data']['status']
-  #
-  #   if highlands_msg.save! && link_highlands_msg_to_message(data[:message_id], highlands_msg.id)
-  #     return ReturnVo.new(value: return_accepted("highlands_msg": highlands_msg), error: nil)
-  #   else
-  #     err = highlands_msg.errors || "Error for highlands_id (#{highlands_id})"
-  #     return ReturnVo.new(value: nil, error: return_error(err, :unprocessable_entity))
-  #   end
-  # end
-
   def get_user(data)
     data = data[:highlands_data]
     response = HighlandsClient::MessageClient.new(data: data,

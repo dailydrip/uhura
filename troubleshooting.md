@@ -270,7 +270,7 @@ ret is created in MessageDirector.create_message(message_vo):
     end
 ```
 
-## <<UPDATE>  Message API  </UPDATE >
+## <UPDATE>  Message API  </UPDATE >
 A single call to the messages api can now call both Sendgrid (Email) and Clearstream (SMS).
 
 ### Response for message to receiver, whose preferences indicate they only want to get Email messages:

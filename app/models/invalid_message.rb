@@ -13,14 +13,14 @@ class InvalidMessage < ApplicationRecord
 
   def self.invalid_message_and_status(id)
     invalid_message = InvalidMessage.find(id)
-    if has_sendgrid_target(invalid_message)
+    if sendgrid_target?(invalid_message)
       sendgrid_msg_status = {
         errors: invalid_message.error_ary
       }
       clearstream_msg_status = nil
-    elsif has_clearstream_target(invalid_message)
+    elsif clearstream_target?(invalid_message)
       sendgrid_msg_status = nil
-      clearstream_msg_status = nil # TODO: implement me
+      clearstream_msg_status = nil
     else
       sendgrid_msg_status = nil
       clearstream_msg_status = nil
@@ -35,12 +35,12 @@ class InvalidMessage < ApplicationRecord
     }
   end
 
-  def has_sendgrid_target(invalid_message)
-    invalid_message&.receiver_id&.user_preferences[:email]
+  def sendgrid_target?(invalid_message)
+    invalid_message.receiver_id.user_preferences[:email] if invalid_message&.receiver_id&.user_preferences
   end
 
-  def has_clearstream_target(invalid_message)
-    invalid_message&.receiver_id&.user_preferences[:sms]
+  def clearstream_target?(invalid_message)
+    invalid_message.receiver_id.user_preferences[:sms] if invalid_message&.receiver_id&.user_preferences
   end
 
   def error_ary

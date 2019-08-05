@@ -71,7 +71,7 @@ class SendgridHandler < ServiceHandlerBase
 
   def self.send_email_and_update_sendgrid_msg(mail_obj, sendgrid_vo)
     # Request Clearstream client to send message
-    sent_to_sendgrid_at = Time.now
+    sent_to_sendgrid_at = Time.current
     response_and_mail = SendgridMailer.new.send_email(mail_obj)
     response = response_and_mail[:response]
     mail = response_and_mail[:mail]
@@ -82,7 +82,7 @@ class SendgridHandler < ServiceHandlerBase
     sendgrid_msg = SendgridMsg.find_by(id: uhura_msg_id)
     sendgrid_msg.update!(sent_to_sendgrid: sent_to_sendgrid_at,
                          mail_and_response: { mail: mail.to_json, response: response },
-                         got_response_at: Time.now,
+                         got_response_at: Time.current,
                          sendgrid_response: response[:status_code] || response['status_code'])
     sendgrid_msg
   end

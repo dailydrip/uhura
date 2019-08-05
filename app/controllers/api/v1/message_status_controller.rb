@@ -10,7 +10,7 @@ class Api::V1::MessageStatusController < Api::V1::ApiBaseController
       render_error_msg("No message found for message_id (#{params[:id]})")
     else
       render json: {
-          message_status: message.status
+        message_status: message.status
       }
     end
   end

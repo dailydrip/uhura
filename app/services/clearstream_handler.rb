@@ -50,7 +50,6 @@ class ClearstreamHandler < ServiceHandlerBase
     ).vo
   end
 
-  #TODO: check for error!
   def self.handle_clearstream_msg_error(err_msg, clearstream_vo, message_vo)
     log_error(err_msg)
     # An error occurs while processing the request. Record ERROR status.
@@ -74,9 +73,9 @@ class ClearstreamHandler < ServiceHandlerBase
     response = ClearstreamClient::MessageClient.new(data: data[:clearstream_vo],
                                                     resource: 'messages').send_message
     # Record Clearstream response
-    clearstream_msg = ClearstreamMsg.create!(sent_to_clearstream: Time.now,
+    clearstream_msg = ClearstreamMsg.create!(sent_to_clearstream: Time.current,
                                              response: response['data'] )
-    clearstream_msg.got_response_at = Time.now
+    clearstream_msg.got_response_at = Time.current
     clearstream_msg.status = response['data']['status']
     clearstream_msg.clearstream_id = response['data']['id'] # <= Use clearstream_id as correlation id in webhook
 

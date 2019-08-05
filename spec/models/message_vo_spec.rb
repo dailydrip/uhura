@@ -14,7 +14,7 @@ RSpec.describe MessageVo, type: :model do
   let(:message_params_vo) do
     MessageParamsVo.new(
       public_token: '82a1782d202d49efef87',
-      receiver_sso_id: 88543890,
+      receiver_sso_id: 88_543_890,
       email_subject: 'Picnic Saturday',
       email_message: email_message,
       template_id: 'd-f986df533e514f978f4460bedca50db0',
@@ -25,7 +25,7 @@ RSpec.describe MessageVo, type: :model do
   let(:bogus_message_params_vo) do
     MessageParamsVo.new(
       public_token: nil,
-      receiver_sso_id: 88543890,
+      receiver_sso_id: 88_543_890,
       email_subject: 'Picnic Saturday',
       email_message: email_message,
       template_id: 'd-f986df533e514f978f4460bedca50db0',
@@ -52,11 +52,10 @@ RSpec.describe MessageVo, type: :model do
   end
 
   describe 'fields' do
-
     before :each do
       stub_request(:any, /sso.highlandsapp.com/)
-          .to_return(body: get_highlands_response_data('alice_user_preferences'),
-                     status: 200)
+        .to_return(body: get_highlands_response_data('alice_user_preferences'),
+                   status: 200)
     end
 
     let(:email_message) do
@@ -70,7 +69,7 @@ RSpec.describe MessageVo, type: :model do
     let(:message_params_vo) do
       MessageParamsVo.new(
         public_token: '82a1782d202d49efef87',
-        receiver_sso_id: 88543890,
+        receiver_sso_id: 88_543_890,
         email_subject: 'Picnic Saturday',
         email_message: email_message,
         template_id: 'd-f986df533e514f978f4460bedca50db0',
@@ -109,8 +108,8 @@ RSpec.describe MessageVo, type: :model do
   describe 'initialization' do
     before :each do
       stub_request(:any, /sso.highlandsapp.com/)
-          .to_return(body: get_highlands_response_data('alice_user_preferences'),
-                     status: 200)
+        .to_return(body: get_highlands_response_data('alice_user_preferences'),
+                   status: 200)
     end
 
     it 'must have valid message_params_vo' do
@@ -126,12 +125,17 @@ RSpec.describe MessageVo, type: :model do
     end
 
     it 'has the receiver information' do
-      Template.create!(name: 'Sample Template A', template_id: 'd-f986df533e514f978f4460bedca50db0', sample_template_data: {
-                         "header": Faker::Games::Pokemon.move.titleize,
-                         "section1": Faker::Quote.matz,
-                         "button": Faker::Verb.base.capitalize
-                       })
-      create(:receiver, receiver_sso_id: 88543890, email: 'example@example.com')
+      Template.create!(
+        name: 'Sample Template A',
+        template_id: 'd-f986df533e514f978f4460bedca50db0',
+        sample_template_data:
+          {
+            "header": Faker::Games::Pokemon.move.titleize,
+            "section1": Faker::Quote.matz,
+            "button": Faker::Verb.base.capitalize
+          }
+      )
+      create(:receiver, receiver_sso_id: 88_543_890, email: 'example@example.com')
       message_vo = MessageVo.new(message_params_vo, manager_team_vo)
       # Note that the 2nd receiver is created typ the get_highlands_response_data('alice_user_preferences') stub
       expect(message_vo.receiver_id).to eq 2
@@ -142,10 +146,10 @@ RSpec.describe MessageVo, type: :model do
   describe 'validations' do
     before :each do
       stub_request(:any, /sso.highlandsapp.com/)
-          .to_return(body: get_highlands_response_data('alice_user_preferences'),
-                     status: 200)
+        .to_return(body: get_highlands_response_data('alice_user_preferences'),
+                   status: 200)
     end
-    
+
     context 'when both sets of parameter value inputs are valid' do
       it 'does not raise any exception' do
         expect do
@@ -160,7 +164,7 @@ RSpec.describe MessageVo, type: :model do
         expect(message_vo.email_subject).to eq 'Picnic Saturday'
         expect(message_vo.public_token).to eq '82a1782d202d49efef87'
         expect(message_vo.manager_email).to eq 'app1@highlands.org'
-        expect(message_vo.receiver_sso_id).to eq 88543890
+        expect(message_vo.receiver_sso_id).to eq 88_543_890
       end
     end
   end

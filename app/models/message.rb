@@ -25,23 +25,15 @@ class Message < ApplicationRecord
     }
   end
 
-  def target_names
-    target_names = []
-    preferences = Receiver.find_by(id: self.receiver_id).preferences
-    target_names << EMAIL_KEY if preferences[EMAIL_KEY]
-    target_names << SMS_KEY if preferences[SMS_KEY]
-  end
-
   def sendgrid_status
-    self.status[:sendgrid]
+    status[:sendgrid]
   end
 
   def clearstream_status
-    self.status[:clearstream]
+    status[:clearstream]
   end
 
   def status
-    { sendgrid: self.sendgrid_msg&.status, clearstream: self.clearstream_msg&.status }
+    { sendgrid: sendgrid_msg&.status, clearstream: clearstream_msg&.status }
   end
-
 end

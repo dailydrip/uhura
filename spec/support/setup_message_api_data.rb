@@ -74,7 +74,7 @@ def setup_data
                          template_id: template_a.id,
                          sms_message:  Faker::Movie.quote)
 
-  sendgrid_msg = SendgridMsg.create!(sent_to_sendgrid: Time.now,
+  sendgrid_msg = SendgridMsg.create!(sent_to_sendgrid: Time.current,
                             mail_and_response: {
                                 "mail": {
                                     "from": {

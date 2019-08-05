@@ -14,7 +14,7 @@ class Api::V1::MessagesController < Api::V1::ApiBaseController
       render_error_msg(err)
     else
       message_vo = MessageVo.new(message_params_vo, manager_team_vo)
-      if !message_vo.errors.blank?
+      if message_vo.errors.present?
         render_message_error(message_vo)
       elsif !message_vo.valid?
         render_message_error(message_vo)
@@ -40,15 +40,14 @@ class Api::V1::MessagesController < Api::V1::ApiBaseController
   private
 
   def render_message(ret_sendgrid_and_clearstream)
-
     render json: {
-        sendgrid_msg: ret_sendgrid_and_clearstream[:sendgrid],
-        clearstream_msg: ret_sendgrid_and_clearstream[:clearstream]
+      sendgrid_msg: ret_sendgrid_and_clearstream[:sendgrid],
+      clearstream_msg: ret_sendgrid_and_clearstream[:clearstream]
     }
   end
 
   def render_message_error(message_vo)
-    errors = message_vo.errors.messages.values.squash  if message_vo&.errors&.messages
+    errors = message_vo.errors.messages.values.squash if message_vo&.errors&.messages
     invalid_message = InvalidMessage.create!(
       message_vo.invalid_message_attrs.merge(
         message_params: message_params_vo.message_params,
