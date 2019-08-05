@@ -13,42 +13,40 @@ gem 'sidekiq', '~>5.2.7'      # Simple, efficient background processing for Ruby
 gem 'turbolinks', '~> 5'      # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
 gem 'webpacker', '~> 4.0'     # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
 
-gem 'chartkick'
-gem 'envied'                  # Ensure presence and type of your app's ENV-variables
-gem 'groupdate'
-gem 'rack-timeout'            # Configure Rails middleware with a default timeout of 15
-gem 'sendgrid-ruby'           # For sending emails
+gem 'chartkick', '~> 3.2.1'
+gem 'envied', '~> 0.9.3'      # Ensure presence and type of your app's ENV-variables
+gem 'groupdate', '~> 4.1.2'
+gem 'rack-timeout', '~> 0.5.1' # Configure Rails middleware with a default timeout of 15
+gem 'sendgrid-ruby', '~> 6.0.0' # For sending emails
 
 # For Clearstream
-gem 'faraday'
-gem 'faraday_middleware'
-gem 'json'
-gem 'typhoeus'
+gem 'faraday', '~> 0.15.4'
+gem 'faraday_middleware', '~> 0.13.1'
+gem 'json', '~> 2.2.0'
+gem 'typhoeus', '~> 1.3.1'
 
-gem 'haml-rails' # , "~> 2.0"
 gem 'highlands_auth', git: 'git@github.com:highlands/highlands_auth.git', branch: 'master'
 
 gem 'administrate', github: 'thoughtbot/administrate'
-gem 'administrate-field-nested_has_many'
+gem 'administrate-field-nested_has_many', '~> 1.1.0'
 gem 'font-awesome-sass', '~> 5.6', '>= 5.6.1'
-gem 'logdna'
-gem 'lograge'
-gem 'logstash-event'
-gem 'slim'
-gem 'systemu'
+gem 'logdna', '~> 1.3.0'
+gem 'lograge', '~> 0.11.2'
+gem 'logstash-event', '~> 1.2.02'
+gem 'slim', '~> 4.0.1'
+gem 'systemu', '~> 2.6.5'
 
 group :development, :test do
-  gem 'faker'
+  gem 'faker', '~> 2.1.0'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug', platforms: %i[mri mingw x64_mingw]
-  gem 'rspec'
-  gem 'webmock', '~>3.6.0'
+  gem 'awesome_print', '~> 1.8.0'
+  gem 'byebug', '~> 11.0.1', platforms: %i[mri mingw x64_mingw]
+  gem 'webmock', '~> 3.6.0'
   # https://github.com/liufengyun/hashdiff/issues/45#issuecomment-499566400
-  gem 'awesome_print'
   gem 'hashdiff', ['>= 1.0.0.beta1', '< 2.0.0']
-  gem 'hirb'
-  gem 'rubocop-performance'
-  gem 'rubocop-rails'
+  gem 'hirb', '~> 0.7.3'
+  gem 'rubocop-performance', '~> 1.4.1'
+  gem 'rubocop-rails', '~> 2.2.1'
 end
 
 group :development do
@@ -59,12 +57,11 @@ end
 
 group :test do
   gem 'capybara', '>= 2.15'
-  gem 'database_cleaner'
-  gem 'factory_bot'
-  gem 'factory_bot_rails'
-  gem 'rails-controller-testing'
-  gem 'rspec-rails'
-  gem 'selenium-webdriver'
-  gem 'shoulda-matchers'
-  gem 'webdrivers' # Easy installation and use of web drivers to run system tests with browsers
+  gem 'database_cleaner', '~> 1.7.0'
+  gem 'factory_bot_rails', '~> 5.0.2'
+  gem 'rails-controller-testing', '~> 1.0.4'
+  gem 'rspec-rails', '~> 3.8.2'
+  gem 'selenium-webdriver', '~> 3.142.3'
+  gem 'shoulda-matchers', '~> 4.1.2'
+  gem 'webdrivers', '~> 4.1.2' # Easy installation and use of web drivers to run system tests with browsers
 end
