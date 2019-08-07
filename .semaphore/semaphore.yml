@@ -77,3 +77,21 @@ blocks:
           value: f8848b7ae9da83a65f6f0f6ed462f01c
         - name: DATABASE_URL
           value: postgresql://postgres@localhost/test?encoding=utf8
+        - name: APP_NAME
+          value: uhura
+        - name: API_VER_NO
+          value: 1
+        - name: API_VER
+          value: api/v1
+        - name: APP_DOMAIN
+          value: localhost:3000
+        - name: APP_PROTOCOL
+          value: http://
+        - name: BASE_URI
+          value: http://localhost:3000
+        - name: API_ENDPOINT
+          value: http://localhost:3000/api/v1/
+        - name: ADMIN_PATH
+          value: /admin
+        - name: NUMBER_OF_SLOW_TESTS_TO_DISPLAY
+          value: 2
