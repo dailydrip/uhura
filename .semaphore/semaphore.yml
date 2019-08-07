@@ -80,7 +80,7 @@ blocks:
         - name: APP_NAME
           value: uhura
         - name: API_VER_NO
-          value: 1
+          value: '1'
         - name: API_VER
           value: api/v1
         - name: APP_DOMAIN
@@ -94,4 +94,4 @@ blocks:
         - name: ADMIN_PATH
           value: /admin
         - name: NUMBER_OF_SLOW_TESTS_TO_DISPLAY
-          value: 2
+          value: '2'
