@@ -36,7 +36,7 @@ class ClearstreamHandler < ServiceHandlerBase
         "action_required:": action_msg
       }
     end
-    handle_clearstream_msg_error(err_msg, clearstream_vo, message_vo)
+    handle_clearstream_msg_error(err_msg, message_vo)
   end
   # rubocop:enable Metrics/MethodLength
 
@@ -49,7 +49,7 @@ class ClearstreamHandler < ServiceHandlerBase
     ).vo
   end
 
-  def self.handle_clearstream_msg_error(err_msg, _clearstream_vo, message_vo)
+  def self.handle_clearstream_msg_error(err_msg, message_vo)
     log_error(err_msg)
     # An error occurs while processing the request. Record ERROR status.
     clearstream_msg = ClearstreamMsg.create!(

@@ -61,7 +61,7 @@ class MessageVo
 
   def init_attributes(message_params_vo, manager_team_vo)
     # Valid input. Now, perform lookups to fill in missing data prior to processing request.
-    assign_attributes(message_params_vo.my_attrs.merge(manager_team_vo.my_attrs))
+    assign_attributes(message_params_vo.to_h.merge(manager_team_vo.to_h))
 
     ret = Receiver.from_user_preferences(
       highlands_data: {
@@ -140,15 +140,13 @@ class MessageVo
     }
   end
 
-  def to_hash
-    # FIXME: I don't like us mapping over any instance variables to do this,
-    # I'd prefer if we could be explicit about the to_hash. also, `to_h` is the
-    # right name for a method that does this in ruby If we add an instance
-    # variable in the future it could break something elsewhere and it'd be a
-    # bear to track it to here
-    Hash[instance_variables.map do |name|
-      # Strip "@"  Example: {"@first": "Cindy"} => {"first": "Cindy"}
-      [name[1..-1], instance_variable_get(name)] unless name.eql?('@errors')
-    end ]
+  # Return a hash that includes all instance variables, less the errors attribute.
+  def to_h
+    h = {}
+    instance_variables.map do |name|
+      # name[1..-1] strips the "@"  Example: {"@first": "Cindy"} => {"first": "Cindy"}
+      h[name[1..-1]] = instance_variable_get(name) unless name.to_s.eql?('@errors')
+    end
+    h
   end
 end

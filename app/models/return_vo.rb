@@ -10,7 +10,6 @@ class ReturnVo
 
   validate :concistency_check
 
-  # FIXME: Maybe nothing to fix here, but why is this ActiveModel.initialize instead of just initialize?
   def ActiveModel.initialize(*args)
     super
     validate!
