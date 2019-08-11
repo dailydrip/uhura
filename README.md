@@ -1,11 +1,83 @@
 # Uhura
 
+Uhura is a communication system that centralizes communication preferences, policies and statistcs which is comprised of:
 
-#### Environment Variables
+* A Ruby on Rails based API server (Uhura) for processing communications
+* A UI for the administration of communication functions of Uhura
+* A Uhura Ruby gem which can be used to integrate with Rails applications
 
-To run this project, you'll need a handful of environment variables for the Highlands Auth gem, clearstream and sendgrid.
+![](docs/UhuraSystemArchitecture_20190501c.gif)
 
-```sh
+The core of the Uhura system is a Ruby on Rails application, **Uhura Comm Server** in the image above, that provides REST API endpoints for managing and sending messages over email and SMS to Highlands **SSO user**s based on their user preferences. This piece holds all of the ActiveRecord models and manages interfacing with a database, API clients, and message processors, i.e, **Sendgrid** and **Clearstream**. 
+
+Uhura also include a basic **Admin App** for viewing and administrating Uhura's data layer.
+
+The **Uhura Client** (https://github.com/dailydrip/uhura-client), is a Ruby gem provides an API Client for integrating with the message processing system. 
+
+UhuraExampleApp (https://github.com/dailydrip/uhura-example-app) is an example Rails **App**lication that uses the Uhura client gem.
+
+
+## Getting Started
+
+These instructions will get you up and running with Uhura on your local machine for development and testing purposes. 
+
+## Prerequisites
+
+- Git
+- Ruby 2.6.3
+- bundler 2.0.2
+- C++ client API for PostgreSQL
+
+### bundler 2.0.2
+``` 
+gem install bundler:2.0.2
+```
+
+### C++ client API for PostgreSQL
+#### On Ubuntu
+```
+sudo apt-get install libpq-dev
+```
+
+### Postgres
+If you want to install the PostgreSQL database locally for development purposes you can follow these steps. Replace "lex" with your username.
+``` 
+$ sudo apt update
+$ sudo apt install postgresql postgresql-contrib
+$ sudo -i -u postgres psql
+postgres=# CREATE ROLE lex SUPERUSER;
+```
+
+Giving your user role the SUPERUSER attribute allows you to run Rails database manipulation commands and migrations, e.g., `bundle exec rake db:create`
+
+## Environment Variables
+
+Uhura's environment variables have been divided into two sections.
+
+### Basic Configuration 
+
+Settings that are core to the operation of Uhura: 
+
+- Routing
+- Basic Authentication
+- Service Timeouts
+- Postgres (Database) Access
+- Testing
+- Logging.
+
+### 3rd Party Services
+
+Environment variables used to integrate with 3rd party services:
+
+- Github Access
+- Sendgrid Access
+- Clearstream Access
+- Highlands SSO Access
+
+
+
+Here's a sample .env file:
+```
 #-----------------------------------------------
 #              Basic Configuration
 #-----------------------------------------------
@@ -35,6 +107,9 @@ export TOKEN_AUTH_PASSWORD='XXXXXXXXXXXXXXXX'
 export PGUSER=$USER
 export PGPASSWORD=""
 
+# Postgres - Production
+DATABASE_URL="postgres://myuser:mypass@localhost/somedatabase"
+
 # Testing
 export NUMBER_OF_SLOW_TESTS_TO_DISPLAY=2
 
@@ -55,17 +130,11 @@ export GITHUB_TOKEN='XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
 # Sendgrid Access
 export SENDGRID_API_KEY='SG.XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
 
-# Clearstream
+# Clearstream Access
 export CLEARSTREAM_KEY='XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
 export CLEARSTREAM_BASE_URL='https://api.getclearstream.com/v1'
 export CLEARSTREAM_URL='http://localhost:3000/v1'
 export CLEARSTREAM_DEFAULT_LIST_ID=99999
-
-# Twitter Access
-export TWITTER_ACCESS_TOKEN='XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
-export TWITTER_ACCESS_TOKEN_SECRET='XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
-export TWITTER_KEY='XXXXXXXXXXXXXXXXXXXXXXXXX'
-export TWITTER_SECRET='XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
 
 # Highlands SSO Access
 export SSO_KEY='XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
@@ -80,10 +149,43 @@ export LOGDNA_KEY='XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
 
 ```
 
+You can load those environment variables into your terminal's session by sourcing your project's .env file:
+```
+source .env
+```
+
+### Installation
+
+#### 1. Install Uhura 
+```
+$ mkdir ~/Projects
+$ cd ~/Projects
+$ git clone https://github.com/dailydrip/uhura.git
+$ cd uhura
+$ bundle
+```
+
+#### 2. Run Uhura Server
+```
+$ source .env
+$ bundle exec rails server
+```
+
+#### 3. Visit Admin Application
+
+Go to `http://localhost:3000/admin` and you'll see Uhura's admin application.  
+
+Login with your Highlands SSO credentials.
+
 
 ### Tests
 
-We use Rubocop for Ruby linting, rspec for unit tests. You can run them indivdually with the following commands:
+We use `rubocop` for Ruby linting and `rspec` for running unit tests. You can run them individually with the following commands:
+```
+$ bundle exec rubocop
+$ bundle exec rspec
+```
 
-* $ bundle exec rubocop
-* $ bundle exec rspec
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
