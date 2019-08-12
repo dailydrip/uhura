@@ -26,29 +26,39 @@ These instructions will get you up and running with Uhura on your local machine 
 - Git
 - Ruby 2.6.3
 - bundler 2.0.2
-- C++ client API for PostgreSQL
+- PostgreSQL
+
+### Git
+
+Follow the [Connecting to GitHub with SSH](https://help.github.com/en/articles/connecting-to-github-with-ssh) instructions.
+
+#### Ruby 2.6.3
+
+If you might need to install more than one version of Ruby on your server, consider using [<https://github.com/rbenv/rbenv>](https://github.com/rbenv/rbenv) or [rvm](https://rvm.io/) to help you manage your Ruby version.
 
 ### bundler 2.0.2
+
+Install the bundler gem, s.t., you can later run the `bundle` command and install Uhura's Ruby dependencies:
+
 ``` 
 gem install bundler:2.0.2
 ```
 
-### C++ client API for PostgreSQL
-#### On Ubuntu
-```
-sudo apt-get install libpq-dev
-```
-
 ### Postgres
-If you want to install the PostgreSQL database locally for development purposes you can follow these steps. Replace "lex" with your username.
+If you want to install the [PostgreSQL](https://www.postgresql.org/) database sever locally for development purposes you can follow these steps on Ubuntu. 
+
+NOTE: Replace "lex" with your username.
+
 ``` 
 $ sudo apt update
 $ sudo apt install postgresql postgresql-contrib
 $ sudo -i -u postgres psql
-postgres=# CREATE ROLE lex SUPERUSER;
+postgres=# CREATE ROLE lex LOGIN SUPERUSER;
 ```
 
-Giving your user role the SUPERUSER attribute allows you to run Rails database manipulation commands and migrations, e.g., `bundle exec rake db:create`
+Giving your user role the SUPERUSER attribute allows you to run Rails database manipulation commands and migrations, e.g., `bundle exec rake db:create`. The LOGIN attribute is also required.
+
+NOTE: See Troublshooting Guide to see how to install PostgrSQL client library if you chose not to install the Postgres database server in the server instance where you install Uhura.
 
 ## Environment Variables
 
@@ -74,89 +84,16 @@ Environment variables used to integrate with 3rd party services:
 - Clearstream Access
 - Highlands SSO Access
 
+### Create Your .env File
 
-
-Here's a sample .env file:
-```
-#-----------------------------------------------
-#              Basic Configuration
-#-----------------------------------------------
-
-export PATH="$(pwd)/bin:$PATH"
-
-export APP_NAME='uhura'
-export API_VER_NO="$(cat "lib/$(basename ${APP_NAME})/version.rb" | grep VERSION | head -n 1 | awk '{print $3}' | tr -d "'" | cut -d '.' -f1)"
-export API_VER="api/v${API_VER_NO}"
-export APP_DOMAIN='localhost:3000'
-export APP_PROTOCOL='http://'
-export BASE_URI="${APP_PROTOCOL}${APP_DOMAIN}"
-export API_ENDPOINT="${BASE_URI}/${API_VER}/"
-export ADMIN_PATH='/admin'
-
-# Basic Auth
-export TOKEN_AUTH_USER='uhura'
-export TOKEN_AUTH_PASSWORD='XXXXXXXXXXXXXXXX'
-
-# Service Timeout
-#export RACK_TIMEOUT_SERVICE_TIMEOUT=15
-#export RACK_TIMEOUT_WAIT_TIMEOUT=30
-#export RACK_TIMEOUT_WAIT_OVERTIME=60
-#export RACK_TIMEOUT_SERVICE_PAST_WAIT=false
-
-## Postgres Access
-export PGUSER=$USER
-export PGPASSWORD=""
-
-# Postgres - Production
-DATABASE_URL="postgres://myuser:mypass@localhost/somedatabase"
-
-# Testing
-export NUMBER_OF_SLOW_TESTS_TO_DISPLAY=2
-
-# Logging
-export UHURA_LOGGER='RAILS_LOGGER' # 'LOGDNA', 'RAILS_LOGGER'
-export LOG_LEVEL='INFO'  # 'TRACE', 'DEBUG', 'INFO', 'WARN', 'ERROR', 'FATAL'
-export LOG_ENDPOINT='https://logs.logdna.com/logs/ingest'
-
-#-----------------------------------------------
-#             3rd Party Services
-#-----------------------------------------------
-
-# Github Access
-export GITHUB_KEY='XXXXXXXXXXXXXXXXXXXX'
-export GITHUB_SECRET='XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
-export GITHUB_TOKEN='XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
-
-# Sendgrid Access
-export SENDGRID_API_KEY='SG.XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
-
-# Clearstream Access
-export CLEARSTREAM_KEY='XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
-export CLEARSTREAM_BASE_URL='https://api.getclearstream.com/v1'
-export CLEARSTREAM_URL='http://localhost:3000/v1'
-export CLEARSTREAM_DEFAULT_LIST_ID=99999
-
-# Highlands SSO Access
-export SSO_KEY='XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
-export SSO_SECRET='XXXXXXXXXXXXXXXX'
-export HIGHLANDS_AUTH_REDIRECT='http://localhost:3000'
-export HIGHLANDS_AUTH_SUPPORT_EMAIL='name@example.com'
-export HIGHLANDS_SSO_EMAIL='sso.name@example.com'
-export HIGHLANDS_SSO_PASSWORD='XXXXXXXXXXXX'
-
-# LogDNA
-export LOGDNA_KEY='XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
-
-```
-
-You can load those environment variables into your terminal's session by sourcing your project's .env file:
-```
-source .env
-```
+See the *Create Your .env File* section below.
 
 ### Installation
 
 #### 1. Install Uhura 
+
+Let's assume our uhura project root directory is `~/Projects/uhura`
+
 ```
 $ mkdir ~/Projects
 $ cd ~/Projects
@@ -165,26 +102,67 @@ $ cd uhura
 $ bundle
 ```
 
-#### 2. Run Uhura Server
+#### 2. Create Your .env File
+
+Run the following command and edit your .env file to match your environment.
+
+```
+mv sample.env .env
+```
+
+You can load those environment variables into your terminal's session by sourcing your project's .env file:
+
+```
+source .env
+```
+
+#### 3. Create Uhura Database
+
+If you're installing Uhura in your development environment, ensure that [Postgresql](https://www.postgresql.org/) is installed. Then, from your ~/Projects/uhura directory run the following commands to create the Uhura database:
+
 ```
 $ source .env
+$ bundle exec rake db:create db:migrate db:seed
+```
+
+#### 4. Run Uhura Server
+
+```
 $ bundle exec rails server
 ```
 
-#### 3. Visit Admin Application
+### Admin Application
 
 Go to `http://localhost:3000/admin` and you'll see Uhura's admin application.  
 
 Login with your Highlands SSO credentials.
 
-
 ### Tests
 
-We use `rubocop` for Ruby linting and `rspec` for running unit tests. You can run them individually with the following commands:
+#### Unit Tests
+
+We use  `rspec` for running unit tests.. From your ~/Projects/uhura directory, run:
+
 ```
-$ bundle exec rubocop
+$ source .env
 $ bundle exec rspec
 ```
+
+#### Project Linter
+
+We use `rubocop` for Ruby linting. From your ~/Projects/uhura directory, run:
+
+```
+$ bundle exec rubocop
+```
+
+### SideKiq
+
+Uhura uses [SideKiq](https://github.com/mperham/sidekiq) for processing messages sent to Sendgrid and Clearstream.  Sidekiq is installed as a Ruby gem and is pre-configured to work with Uhura.
+
+Sidekiq uses [Redis](https://redis.io/) to store all of its job and operational data.
+
+By default, Sidekiq tries to connect to Redis at `localhost:6379`. This typically works great during development but needs [tuning in production](https://github.com/mperham/sidekiq/wiki/Using-Redis).
 
 ## License
 
