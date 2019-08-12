@@ -131,11 +131,13 @@ $ bundle exec rake db:create db:migrate db:seed
 $ bundle exec rails server
 ```
 
-### Admin Application
+#### 5. Open Admin Application
 
 Go to `http://localhost:3000/admin` and you'll see Uhura's admin application.  
 
 Login with your Highlands SSO credentials.
+
+
 
 ### Tests
 
@@ -156,6 +158,8 @@ We use `rubocop` for Ruby linting. From your ~/Projects/uhura directory, run:
 $ bundle exec rubocop
 ```
 
+### 
+
 ### SideKiq
 
 Uhura uses [SideKiq](https://github.com/mperham/sidekiq) for processing messages sent to Sendgrid and Clearstream.  Sidekiq is installed as a Ruby gem and is pre-configured to work with Uhura.
@@ -163,6 +167,8 @@ Uhura uses [SideKiq](https://github.com/mperham/sidekiq) for processing messages
 Sidekiq uses [Redis](https://redis.io/) to store all of its job and operational data.
 
 By default, Sidekiq tries to connect to Redis at `localhost:6379`. This typically works great during development but needs [tuning in production](https://github.com/mperham/sidekiq/wiki/Using-Redis).
+
+
 
 ## License
 
