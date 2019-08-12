@@ -44,7 +44,7 @@ Install the bundler gem, s.t., you can later run the `bundle` command and instal
 gem install bundler:2.0.2
 ```
 
-### Postgres
+### PostgreSQL
 If you want to install the [PostgreSQL](https://www.postgresql.org/) database sever locally for development purposes you can follow these steps on Ubuntu. 
 
 NOTE: Replace "lex" with your username.
@@ -58,7 +58,7 @@ postgres=# CREATE ROLE lex LOGIN SUPERUSER;
 
 Giving your user role the SUPERUSER attribute allows you to run Rails database manipulation commands and migrations, e.g., `bundle exec rake db:create`. The LOGIN attribute is also required.
 
-NOTE: See Troublshooting Guide to see how to install PostgrSQL client library if you chose not to install the Postgres database server in the server instance where you install Uhura.
+NOTE: See [Troubleshooting Guide](docs/troubleshooting.md) to see how to install PostgrSQL client library if you chose not to install the PostgreSQL database server in the server instance where you install Uhura.
 
 ## Environment Variables
 
@@ -71,7 +71,7 @@ Settings that are core to the operation of Uhura:
 - Routing
 - Basic Authentication
 - Service Timeouts
-- Postgres (Database) Access
+- PostgreSQL (Database) Access
 - Testing
 - Logging.
 
