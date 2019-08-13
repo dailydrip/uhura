@@ -40,7 +40,7 @@ blocks:
           - ssh-add ~/.keys/*
           - checkout
           - cache restore gems-$SEMAPHORE_GIT_BRANCH-$(checksum Gemfile.lock),gems-$SEMAPHORE_GIT_BRANCH-,gems-master-
-          - sem-version ruby 2.6.1
+          - sem-version ruby 2.6.3
           - bundle install --deployment --path vendor/bundle
       env_vars:
         - name: RAILS_ENV
@@ -66,7 +66,7 @@ blocks:
           - ssh-add ~/.keys/*
           - checkout
           - cache restore gems-$SEMAPHORE_GIT_BRANCH-$(checksum Gemfile.lock),gems-$SEMAPHORE_GIT_BRANCH-,gems-master-
-          - sem-version ruby 2.6.1
+          - sem-version ruby 2.6.3
           - sem-service start postgres
           - bundle install --deployment --path vendor/bundle
           - bundle exec rake db:setup
