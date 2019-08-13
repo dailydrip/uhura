@@ -48,7 +48,7 @@ class Api::V1::MessagesController < Api::V1::ApiBaseController
     invalid_message = InvalidMessage.create!(
       message_vo.invalid_message_attrs.merge(
         message_params: message_params_vo.message_params,
-        message_attrs: message_vo.to_hash.merge(errors: errors)
+        message_attrs: message_vo.to_h.merge(errors: errors)
       )
     )
     render_error_status(invalid_message.id)

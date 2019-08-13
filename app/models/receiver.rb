@@ -9,7 +9,6 @@ class Receiver < ApplicationRecord
   validates :mobile_number, presence: true
   validates :preferences, presence: true
 
-  # FIXME: This should probably just be `#to_s`
   def to_name
     "#{first_name} #{last_name}".strip
   end

@@ -82,34 +82,34 @@ class SendgridMailVo
     { mail: mail, personalization: personalization }
   end
 
+  def self.email_address_and_name(email_and_maybe_name)
+    maybe_name_array = email_and_maybe_name.strip.gsub('  ', ' ').split(' ')
+    email_address = maybe_name_array[0]
+    email_name = maybe_name_array[1..-1].join(' ')[1..-2] if maybe_name_array.size > 1
+    { email: email_address, name: email_name }
+  end
+
   def self.extract_cc(personalization, value)
     # ["recipient1@example.com <Alice Recipient>","recipient2@example.com"]
     value.each do |i|
-      cc_maybe_name_array = i.strip.gsub('  ', ' ').split(' ')
-      cc = cc_maybe_name_array[0]
-      cc_name = cc_maybe_name_array[1..-1].join(' ')[1..-2] if cc_maybe_name_array.size > 1
-      personalization.add_cc(Email.new(email: cc, name: cc_name))
+      email_name = email_address_and_name(i)
+      personalization.add_cc(Email.new(email: email_name[:email], name: email_name[:name]))
     end
     personalization
   end
 
-  # FIXME: We use this same code three times, can we reuse this instead?
   def self.extract_bcc(personalization, value)
     # ["recipient3@example.com","recipient4@example.com <Bob Recipient>"]
     value.each do |i|
-      bcc_maybe_name_array = i.strip.gsub('  ', ' ').split(' ')
-      bcc = bcc_maybe_name_array[0]
-      bcc_name = bcc_maybe_name_array[1..-1].join(' ')[1..-2] if bcc_maybe_name_array.size > 1
-      personalization.add_bcc(Email.new(email: bcc, name: bcc_name))
+      email_name = email_address_and_name(i)
+      personalization.add_bcc(Email.new(email: email_name[:email], name: email_name[:name]))
     end
     personalization
   end
 
   def self.extract_reply_to(value)
-    reply_to_maybe_name_array = value.strip.gsub('  ', ' ').split(' ')
-    reply_to = reply_to_maybe_name_array[0]
-    reply_to_name = reply_to_maybe_name_array[1..-1].join(' ')[1..-2] if reply_to_maybe_name_array.size > 1
-    Email.new(email: reply_to, name: reply_to_name)
+    email_name = email_address_and_name(value)
+    Email.new(email: email_name[:email], name: email_name[:name])
   end
 
   def self.mail(mail_vo)

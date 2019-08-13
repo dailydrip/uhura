@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class BaseClass
+  attr_accessor :my_attributes
+
   def self.attr_accessor(*vars)
     @attributes ||= []
     @attributes.concat vars
@@ -15,13 +17,14 @@ class BaseClass
     self.class.attributes
   end
 
-  # FIXME: Explain this to me at least, if we need it. It feels really weird.
-  def my_attrs
-    self.my_attributes = {} if my_attributes.nil?
-    attributes.reject { |attr| attr == :validation_context }.each do |i|
-      my_attributes[i] = send(i.to_s)
+  # Return a hash that includes all instance variables, less the errors and validation_context attributes.
+  def to_h
+    h = {}
+    instance_variables.map do |name|
+      unless name.to_s.eql?('@errors') || name.to_s.eql?('@validation_context')
+        h[name[1..-1]] = instance_variable_get(name)
+      end
     end
-    my_attributes.delete(:my_attributes)
-    my_attributes
+    h
   end
 end

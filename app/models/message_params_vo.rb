@@ -19,8 +19,7 @@ class MessageParamsVo < BaseClass
                 :email_message,
                 :email_options,
                 :template_id,
-                :sms_message,
-                :my_attributes
+                :sms_message
 
   def initialize(*args)
     super(args[0])

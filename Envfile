@@ -1,7 +1,7 @@
-# Most of the things are optional. If you need to use a
-# custom key, please create an application.yml for it
-
-enable_defaults! { ENV["RACK_ENV"] != "production" }
+# Default values will be/has been removed from ENVied (i.e. version > v0.9).
+# For more info see https://gitlab.com/envied/envied/tree/0-9-releases#defaults
+# enable_defaults! { ENV["RACK_ENV"] != "production" }
+# The implication is that you should populate the environment variables for each environment.
 
 #-----------------------------------------------
 #              Basic Configuration

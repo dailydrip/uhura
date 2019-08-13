@@ -13,8 +13,7 @@ class ManagerTeamVo < BaseClass
   attr_accessor :manager_id,
                 :manager_name,
                 :manager_email,
-                :team_name,
-                :my_attributes
+                :team_name
 
   def initialize(*args)
     super(args[0])
