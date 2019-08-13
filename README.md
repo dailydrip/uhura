@@ -170,6 +170,12 @@ By default, Sidekiq tries to connect to Redis at `localhost:6379`. This typicall
 
 
 
+## Other Resources
+
+See the [Troubleshooting Guide](docs/troubleshooting.md) and [Developers Notes](docs/develper_notes.md) in the [documents directory](docs/).
+
+
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details

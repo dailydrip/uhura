@@ -10,6 +10,18 @@ The coding practices found in the Uhura code base follow the community-driven [R
 
 
 
+## Uhura Database Schema Diagram
+
+
+
+![uhura-[]()_db_schema](/home/lex/Clients/Concur/Projects/uhura/docs/uhura-_db_schema.png)
+
+## Uhura Rails Model Dependency Diagram
+
+![uhura_model_dependency_diagram](/home/lex/Clients/Concur/Projects/uhura/docs/uhura_model_dependency_diagram.png)
+
+
+
 ## External Services
 
 Uhura uses Sendgrid to process emails and Clearstream to process SMS messages.
