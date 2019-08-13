@@ -14,11 +14,11 @@ The coding practices found in the Uhura code base follow the community-driven [R
 
 
 
-![uhura_db_schema](docs/uhura_db_schema.png?raw=true"Uhura DB Schema")
+![uhura_db_schema](uhura_db_schema.png?raw=true"Uhura DB Schema")
 
 ## Uhura Rails Model Dependency Diagram
 
-![uhura_model_dependency_diagram](docs/uhura_model_dependency_diagram.png?raw=true"Uhura Model Dependency Diagram")
+![uhura_model_dependency_diagram](uhura_model_dependency_diagram.png?raw=true)
 
 
 
