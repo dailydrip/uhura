@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# HighlandsClient::Message is a resource type used by HighlandsClient::MessageClient.
+# It defines message attributes, has an initializer (that deserializes data passed via a RESTful API call) and to_h.
 module HighlandsClient
   class Message < BaseResource
     validates :template_id, presence: true

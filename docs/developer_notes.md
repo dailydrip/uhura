@@ -1,3 +1,7 @@
+![Uhura Messaging](/home/lex/Clients/Concur/Projects/uhura/docs/uhura_messaging.png)
+
+
+
 # Uhura Developer Notes
 
 This guide contains information that may be helpful to Ruby developers that are interested in integrating with Uhura into there Ruby-based applications.
@@ -506,3 +510,34 @@ Since both sendgrid_msg_id and clearstream_msg_id are non-null, we know that the
 
 
 
+## Receiver Table
+
+Receivers are added to the receivers table the first time Uhura receives a request to send that receiver a message. Subsequent messages will find that receivers's record and update it's attributes if there have been any changes.
+
+### Example Receiver
+
+This receiver "Alice Green" prefers to receive only SMS messages:
+
+```
+{
+                 :id => 1,
+    :receiver_sso_id => 34430309,
+              :email => "alice@aol.com",
+      :mobile_number => "9999999999",
+         :first_name => "Alice",
+          :last_name => "Green",
+        :preferences => {
+        :email => false,
+          :sms => true
+    },
+         :created_at => "2019-08-12T20:15:01.297Z",
+         :updated_at => "2019-08-12T20:15:01.297Z"
+}
+
+```
+
+
+
+# License
+
+This project is licensed under the MIT License - See the [LICENSE](LICENSE.txt) file for details.

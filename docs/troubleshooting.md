@@ -1,3 +1,7 @@
+![Uhura Messaging](/home/lex/Clients/Concur/Projects/uhura/docs/uhura_messaging.png)
+
+
+
 # Uhura Troubleshooting Guide
 
 This document contains information that may help you troubleshoot issues you may encounter while installing, configuring and/or running Uhura.
@@ -349,3 +353,8 @@ NOTE: The response above shows that the email was sent successfully, but the SMS
 
 
 
+
+
+# License
+
+This project is licensed under the MIT License - See the [LICENSE](LICENSE.txt) file for details.

@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# ClearstreamClient::Message is a resource type used by ClearstreamClient::MessageClient.
+# It defines message attributes, has an initializer (that deserializes data passed via a RESTful API call) and to_h.
 module ClearstreamClient
   class Message < BaseResource
     validates :template_id, presence: true

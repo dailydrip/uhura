@@ -2,6 +2,13 @@
 
 require 'faraday_middleware'
 
+# The ClearstreamClient::MessageClient library is called in Uhura's ClearstreamHandler class to send SMS messages:
+#
+# class ClearstreamHandler
+#   def self.send_msg(data)
+#     . . .
+#     response = ClearstreamClient::MessageClient.new(data: data[:clearstream_vo],
+#                                                     resource: 'messages').send_message
 module ClearstreamClient
   class BaseClient
     APIError = Class.new(StandardError)

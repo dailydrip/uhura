@@ -1,10 +1,16 @@
+![Uhura Messaging](docs/uhura_messaging.png)
+
 # Uhura
 
 Uhura is a communication system that centralizes communication preferences, policies and statistcs which is comprised of:
 
 * A Ruby on Rails based API server (Uhura) for processing communications
+
 * A UI for the administration of communication functions of Uhura
+
 * A Uhura Ruby gem which can be used to integrate with Rails applications
+
+  
 
 ![](docs/UhuraSystemArchitecture_20190501c.gif)
 
@@ -158,7 +164,7 @@ We use `rubocop` for Ruby linting. From your ~/Projects/uhura directory, run:
 $ bundle exec rubocop
 ```
 
-### 
+
 
 ### SideKiq
 
@@ -178,6 +184,8 @@ Sendgrid Templates
 
 You can find several example SendGrid template files in the [doc/sendgrid_templates directory](doc/sendgrid_templates directory)
 
-## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
+
+# License
+
+This project is licensed under the MIT License - See the [LICENSE](LICENSE.txt) file for details.
