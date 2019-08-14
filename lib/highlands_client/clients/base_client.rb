@@ -2,6 +2,24 @@
 
 require 'faraday_middleware'
 
+# The HighlandsClient::MessageClient library is called in Uhura's Receiver class to get user_preference data:
+#
+# class Receiver
+# . . .
+#   def self.from_user_preferences(data)
+#     data = data[:highlands_data]
+#     response = HighlandsClient::MessageClient.new(data: data,
+#                                                   resource: data[:resource]).get_receiver(data[:id])
+#  . . .
+# class MessageVo
+#  . . .
+#     ret = Receiver.from_user_preferences(
+#       highlands_data: {
+#         resource: 'user_preferences',
+#         id: @receiver_sso_id
+#       }
+#     )
+#
 module HighlandsClient
   class BaseClient
     APIError = Class.new(StandardError)
@@ -13,22 +31,23 @@ module HighlandsClient
       @resource = options[:resource]
     end
 
-    def search_by_email(email)
-      # Build and send request
-      response = connection.get do |req|
-        req.url "#{CS_BASE_URL}/#{@resource}/?email=#{email}"
-      end
-      render_error_msg(response.body) unless response.status.eql?(200)
-
-      JSONConverter.to_hash(response.body)
-    end
-
     def user_preferences(sso_id)
       # Build and send request
       response = connection.get do |req|
         req.url "#{CS_BASE_URL}/#{@resource}?id=#{sso_id}"
       end
       return error_hash(response.body) unless response.status.eql?(200)
+
+      JSONConverter.to_hash(response.body)
+    end
+
+    # Note: user_preferences replaces the need for search_by_email
+    def search_by_email(email)
+      # Build and send request
+      response = connection.get do |req|
+        req.url "#{CS_BASE_URL}/#{@resource}/?email=#{email}"
+      end
+      render_error_msg(response.body) unless response.status.eql?(200)
 
       JSONConverter.to_hash(response.body)
     end

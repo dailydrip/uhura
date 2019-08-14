@@ -13,27 +13,6 @@ class Receiver < ApplicationRecord
     "#{first_name} #{last_name}".strip
   end
 
-  def self.find_or_enroll(message_vo)
-    receiver = Receiver.find_by(receiver_sso_id: message_vo.receiver_sso_id)
-    if receiver.nil?
-      # Create receiver
-      receiver = Receiver.create!(
-        receiver_sso_id: message_vo.receiver_sso_id,
-        first_name: message_vo.first_name,
-        last_name: message_vo.last_name,
-        email: message_vo.email,
-        mobile_number: message_vo.mobile_number,
-        preferences: message_vo.convert_preferences
-      )
-      # Lookup sso user by email and assign delivery preference, fname, lname
-    else
-      unless receiver.user_attributes.eql?(message_vo.user_attributes)
-        receiver = Receiver.update!(message_vo.user_attributes)
-      end
-    end
-    receiver
-  end
-
   def self.from_user_preferences(data)
     data = data[:highlands_data]
     response = HighlandsClient::MessageClient.new(data: data,
@@ -89,12 +68,7 @@ class Receiver < ApplicationRecord
     end
   end
 
-  def self.receiver_vo(receiver)
-    unless receiver.valid?
-      return ReturnVo.new(value: nil, error: return_error("Invalid user (#{receiver.user_attributes})",
-                                                          :unprocessable_entity))
-    end
-
+  def self.find_or_enroll(receiver)
     existing_receiver = Receiver.find_by(receiver_sso_id: receiver.receiver_sso_id)
     if existing_receiver
       unless existing_receiver.user_attributes.eql?(receiver.user_attributes)
@@ -109,6 +83,16 @@ class Receiver < ApplicationRecord
       # Create new user record
       receiver.save!
     end
+    receiver
+  end
+
+  def self.receiver_vo(receiver)
+    unless receiver.valid?
+      return ReturnVo.new(value: nil, error: return_error("Invalid user (#{receiver.user_attributes})",
+                                                          :unprocessable_entity))
+    end
+
+    receiver = find_or_enroll(receiver)
     ReturnVo.new(value: return_accepted(receiver), error: nil)
   end
 end

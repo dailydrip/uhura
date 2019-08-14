@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# HighlandsClient::List is currently not used by Uhura, but is left here to demonstrate how to extend this library.
 module HighlandsClient
   class List < BaseResource
     validates :name, presence: true
