@@ -41,7 +41,6 @@ module HighlandsClient
       JSONConverter.to_hash(response.body)
     end
 
-
     # Note: user_preferences replaces the need for search_by_email
     def search_by_email(email)
       # Build and send request

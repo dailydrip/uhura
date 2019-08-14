@@ -68,8 +68,8 @@ class Receiver < ApplicationRecord
     end
   end
 
-  def self.find_or_enroll(receiver_sso_id)
-    existing_receiver = Receiver.find_by(receiver_sso_id: receiver_sso_id)
+  def self.find_or_enroll(receiver)
+    existing_receiver = Receiver.find_by(receiver_sso_id: receiver.receiver_sso_id)
     if existing_receiver
       unless existing_receiver.user_attributes.eql?(receiver.user_attributes)
         existing_receiver.attributes = receiver.user_attributes
@@ -92,7 +92,7 @@ class Receiver < ApplicationRecord
                                                           :unprocessable_entity))
     end
 
-    receiver = find_or_enroll(receiver.receiver_sso_id)
+    receiver = find_or_enroll(receiver)
     ReturnVo.new(value: return_accepted(receiver), error: nil)
   end
 end
