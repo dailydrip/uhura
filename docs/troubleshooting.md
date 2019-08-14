@@ -1,4 +1,4 @@
-![Uhura Messaging](uhura_messaging.png)
+![Uhura Messaging](images/uhura_messaging.png)
 
 
 
@@ -352,6 +352,26 @@ Note that Uhura's message response encapsulates two message service provider res
 NOTE: The response above shows that the email was sent successfully, but the SMS message failed.
 
 
+
+## No template for interactive request
+
+When you attempt to access the Uhura administrative application, you might see the following:
+
+![highlandsauth_sessioncontroller_missing_template](images/highlandsauth_sessioncontroller_missing_template.png)
+
+
+
+### Solution
+
+Ensure that the `haml-rails` gem is in your Gemfile.  If not, put it there and run `bundle`.
+
+```
+gem 'haml-rails', '~> 2.0.1'
+```
+
+When you attempt to access the Uhura administrative application again you should see this:
+
+![highlandsauth_sso_login_page](images/highlandsauth_sso_login_page.png)
 
 
 

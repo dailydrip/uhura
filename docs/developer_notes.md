@@ -1,4 +1,4 @@
-![Uhura Messaging](uhura_messaging.png)
+![Uhura Messaging](images/uhura_messaging.png)
 
 
 
@@ -18,11 +18,11 @@ The coding practices found in the Uhura code base follow the community-driven [R
 
 
 
-![uhura_db_schema](uhura_db_schema.png?raw=true)
+![uhura_db_schema](images/uhura_db_schema.png)
 
 ## Uhura Rails Model Dependency Diagram
 
-![uhura_model_dependency_diagram](uhura_model_dependency_diagram.png?raw=true)
+![uhura_model_dependency_diagram](images/uhura_model_dependency_diagram.png)
 
 
 
@@ -534,6 +534,25 @@ This receiver "Alice Green" prefers to receive only SMS messages:
          :updated_at => "2019-08-12T20:15:01.297Z"
 }
 
+```
+
+
+
+## Aliases for Rspec and Rubocop
+
+Here's what it looks like to run Uhura's specs and linter:
+
+![](images/rspec-rubo-terminal.png)
+
+Here're the aliases used:
+
+```
+alias be-rspec='ps -ef | grep -v grep|grep "\/rspec" | while read line; do pid2kill="$(echo \"$line\" | awk '\''{print $2}'\'')"; if [ "$pid2kill" != "" ]; then kill -9 $pid2kill; fi; done; bundle exec rspec'
+lex@k2 ~ $ alias | grep rubo
+
+alias be='bundle exec'
+
+alias rubo='echo "Running rubocop..."; be rake rubocop'
 ```
 
 

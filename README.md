@@ -1,4 +1,4 @@
-![Uhura Messaging](docs/uhura_messaging.png)
+![Uhura Messaging](docs/images/uhura_messaging.png)
 
 # Uhura
 
@@ -12,7 +12,7 @@ Uhura is a communication system that centralizes communication preferences, poli
 
   
 
-![](docs/UhuraSystemArchitecture_20190501c.gif)
+![](docs/images/UhuraSystemArchitecture_20190501c.gif)
 
 The core of the Uhura system is a Ruby on Rails application, **Uhura Comm Server** in the image above, that provides REST API endpoints for managing and sending messages over email and SMS to Highlands **SSO user**s based on their user preferences. This piece holds all of the ActiveRecord models and manages interfacing with a database, API clients, and message processors, i.e, **Sendgrid** and **Clearstream**. 
 

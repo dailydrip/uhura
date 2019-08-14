@@ -26,6 +26,7 @@ gem 'json', '~> 2.2.0'
 gem 'typhoeus', '~> 1.3.1'
 
 gem 'highlands_auth', git: 'git@github.com:highlands/highlands_auth.git', branch: 'master'
+gem 'haml-rails', '~> 2.0.1'
 
 gem 'administrate', github: 'thoughtbot/administrate'
 gem 'administrate-field-nested_has_many', '~> 1.1.0'
