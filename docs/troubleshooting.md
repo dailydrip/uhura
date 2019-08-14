@@ -1,4 +1,4 @@
-![Uhura Messaging](/home/lex/Clients/Concur/Projects/uhura/docs/uhura_messaging.png)
+![Uhura Messaging](uhura_messaging.png)
 
 
 
