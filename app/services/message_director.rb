@@ -12,7 +12,7 @@ class MessageDirector
     # Send messages based on user preferences:
     ret_sendgrid = SendgridHandler.send(message_vo) if message_vo.preferences[EMAIL_KEY]
     ret_clearstream = ClearstreamHandler.send(message_vo) if message_vo.preferences[SMS_KEY]
-    { sendgrid: ret_sendgrid, clearstream: ret_clearstream }
+    { message_id: message_vo.message_id, sendgrid: ret_sendgrid, clearstream: ret_clearstream }
   end
 
   def self.create_message(message_vo)

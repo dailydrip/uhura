@@ -7,7 +7,7 @@ RSpec.describe 'MessageStatus API', type: :request do
     setup_data
   end
 
-  describe 'GET /api/v1/message_status' do
+  describe 'GET /api/v1/message_status/:id' do
     let(:manager) { Manager.first }
     let(:receiver) { Receiver.first }
 

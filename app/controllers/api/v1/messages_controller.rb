@@ -38,6 +38,7 @@ class Api::V1::MessagesController < Api::V1::ApiBaseController
 
   def render_message(ret_sendgrid_and_clearstream)
     render json: {
+      message_id: ret_sendgrid_and_clearstream[:message_id],
       sendgrid_msg: ret_sendgrid_and_clearstream[:sendgrid],
       clearstream_msg: ret_sendgrid_and_clearstream[:clearstream]
     }
@@ -108,7 +109,7 @@ class Api::V1::MessagesController < Api::V1::ApiBaseController
   end
 
   def render_error_status(invalid_message)
-    msg = "Invalid message. Go here (#{api_v1_invalid_message_status_url(invalid_message)}) for details on it later."
+    msg = "Invalid message. For details visit #{api_v1_invalid_message_status_url(invalid_message)})"
     render_error_msg(msg)
   end
 

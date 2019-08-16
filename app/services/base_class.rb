@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class BaseClass
-  attr_accessor :my_attributes
 
   def self.attr_accessor(*vars)
     @attributes ||= []

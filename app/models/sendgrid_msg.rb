@@ -15,8 +15,17 @@ class SendgridMsg < ApplicationRecord
       'accepted_by_sendgrid'
     else
       # Return the actual status_code from sendgrid if status is nil and response was not accpeted (202)
-      mail_and_response = JSON.parse(attributes['mail_and_response'])
+      mail_and_response = attribute_hash(attributes['mail_and_response'])
       mail_and_response['response']['status_code'] if mail_and_response && mail_and_response['response']
     end
+  end
+
+  private
+
+  #TODO: Check spec fixture to see why specs return diff results than runtime
+  def attribute_hash(attribute)
+    return JSON.parse(attribute) if attribute.class.eql?(String)
+
+    attribute
   end
 end

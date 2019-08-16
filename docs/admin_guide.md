@@ -93,6 +93,15 @@ After waiting 30 minutes, we try the Clearstream Msg Events page again and see t
 ![](images/admin_screenshots/admin-29-clearstream_msg_event-edit.png)
 
 
+
+## Troubleshooting a Sendgrid Error
+
+![](/home/lex/Clients/Concur/Projects/uhura/docs/images/sample_app_duplicate_email.png)
+
+
+
+![](/home/lex/Clients/Concur/Projects/uhura/docs/images/sendgrid_message_attrs_error.png)
+
 # License
 
 This project is licensed under the MIT License - See the [LICENSE](LICENSE.txt) file for details.

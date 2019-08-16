@@ -63,14 +63,14 @@ class SendgridMailVo
 
   def self.add_options(mail_vo, mail, personalization)
     email_options = JSON.parse(mail_vo[:email_options].to_json) # Convert from ActionController::Parameters
-    email_options.each do |k, value|
+    email_options&.each do |k, value|
       case k
       when 'cc'
-        personalization = extract_cc(personalization, value)
+        personalization = extract_cc(personalization, value) if value
       when 'bcc'
-        personalization = extract_bcc(personalization, value)
+        personalization = extract_bcc(personalization, value) if value
       when 'reply_to'
-        mail.reply_to = extract_reply_to(value)
+        mail.reply_to = extract_reply_to(value) if value
       when 'send_at'
         mail.send_at = value
       when 'batch_id'
@@ -83,15 +83,19 @@ class SendgridMailVo
   end
 
   def self.email_address_and_name(email_and_maybe_name)
-    maybe_name_array = email_and_maybe_name.strip.gsub('  ', ' ').split(' ')
-    email_address = maybe_name_array[0]
-    email_name = maybe_name_array[1..-1].join(' ')[1..-2] if maybe_name_array.size > 1
-    { email: email_address, name: email_name }
+    if email_and_maybe_name.blank?
+      return nil
+    else
+      maybe_name_array = email_and_maybe_name.strip.gsub('  ', ' ').split(' ')
+      email_address = maybe_name_array[0]
+      email_name = maybe_name_array[1..-1].join(' ')[1..-2] if maybe_name_array.size > 1
+      { email: email_address, name: email_name }
+    end
   end
 
   def self.extract_cc(personalization, value)
     # ["recipient1@example.com <Alice Recipient>","recipient2@example.com"]
-    value.each do |i|
+    value&.each do |i|
       email_name = email_address_and_name(i)
       personalization.add_cc(Email.new(email: email_name[:email], name: email_name[:name]))
     end
@@ -100,7 +104,7 @@ class SendgridMailVo
 
   def self.extract_bcc(personalization, value)
     # ["recipient3@example.com","recipient4@example.com <Bob Recipient>"]
-    value.each do |i|
+    value&.each do |i|
       email_name = email_address_and_name(i)
       personalization.add_bcc(Email.new(email: email_name[:email], name: email_name[:name]))
     end
@@ -109,7 +113,7 @@ class SendgridMailVo
 
   def self.extract_reply_to(value)
     email_name = email_address_and_name(value)
-    Email.new(email: email_name[:email], name: email_name[:name])
+    Email.new(email: email_name[:email], name: email_name[:name]) if email_name
   end
 
   def self.mail(mail_vo)

@@ -11,7 +11,6 @@ RSpec.describe MessageParamsVo, type: :model do
     it { is_expected.to respond_to(:email_message_sections) }
     it { is_expected.to respond_to(:template_id) }
     it { is_expected.to respond_to(:sms_message) }
-    it { is_expected.to respond_to(:my_attributes) }
   end
 
   describe 'validations' do
@@ -23,16 +22,16 @@ RSpec.describe MessageParamsVo, type: :model do
 
     def message_params(new_params = {})
       {
-        public_token: '82a1782d202d49efef87',
-        receiver_sso_id: 88_543_890,
-        email_subject: 'Picnic Saturday',
-        email_message: {
-          header: 'Rock Slide',
-          section1: 'Plant a memory, plant a tree, do it today for tomorrow.',
-          button: 'Brush'
-        },
-        template_id: 'd-f986df533e514f978f4460bedca50db0',
-        sms_message: 'Come in now for 50% off all rolls!'
+          public_token: '82a1782d202d49efef87',
+          receiver_sso_id: 88_543_890,
+          email_subject: 'Picnic Saturday',
+          email_message: {
+              header: 'Rock Slide',
+              section1: 'Plant a memory, plant a tree, do it today for tomorrow.',
+              button: 'Brush'
+          },
+          template_id: 'd-f986df533e514f978f4460bedca50db0',
+          sms_message: 'Come in now for 50% off all rolls!'
       }.merge(new_params)
     end
 
@@ -53,11 +52,15 @@ RSpec.describe MessageParamsVo, type: :model do
       end
 
       it 'must have valid section1 in email_message' do
-        message_params_vo = MessageParamsVo.new(message_params(email_message: {
-                                                                 header: 'Rock Slide',
-                                                                 section1: nil,
-                                                                 button: 'Brush'
-                                                               }))
+        message_params_vo = MessageParamsVo.new(
+          message_params(
+            email_message: {
+                header: 'Rock Slide',
+                section1: nil,
+                button: 'Brush'
+              }
+          )
+        )
         expect(message_params_vo.valid?).to eq(false)
       end
       it 'must have valid email_message' do
@@ -76,7 +79,7 @@ RSpec.describe MessageParamsVo, type: :model do
       end
 
       describe 'when message params are valid' do
-        it 'does not raise any exception' do
+        it 'is valid' do
           message_params_vo = MessageParamsVo.new(message_params)
           expect(message_params_vo.valid?).to eq(true)
         end
