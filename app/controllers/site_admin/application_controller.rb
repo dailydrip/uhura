@@ -20,6 +20,7 @@ module SiteAdmin
       direction = resource_params.fetch(:direction, 'desc')
       params[resource_name] = resource_params.merge(order: order, direction: direction)
     end
+
     def authenticate_user!
       redirect_to auth.new_session_path unless current_user
     end

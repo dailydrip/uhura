@@ -22,8 +22,6 @@ module Mac
     #
     #   Mac.addr # => first address
     #   Mac.addr.list # => all addresses
-
-    # rubocopXXX:disable Metrics/PerceivedComplexity,Metrics/CyclomaticComplexity
     def address
       # rubocop:disable Style/AndOr
       return @mac_address if defined? @mac_address and @mac_address

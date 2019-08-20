@@ -61,6 +61,7 @@ class SendgridMailVo
     { mail_vo: mail_vo, message_id: @message_id }
   end
 
+  # rubocop:disable Metrics/CyclomaticComplexity
   def self.add_options(mail_vo, mail, personalization)
     email_options = JSON.parse(mail_vo[:email_options].to_json) # Convert from ActionController::Parameters
     email_options&.each do |k, value|
@@ -81,10 +82,11 @@ class SendgridMailVo
     end
     { mail: mail, personalization: personalization }
   end
+  # rubocop:enable Metrics/CyclomaticComplexity
 
   def self.email_address_and_name(email_and_maybe_name)
     if email_and_maybe_name.blank?
-      return nil
+      nil
     else
       maybe_name_array = email_and_maybe_name.strip.gsub('  ', ' ').split(' ')
       email_address = maybe_name_array[0]

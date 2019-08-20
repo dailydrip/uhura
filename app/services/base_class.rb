@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class BaseClass
-
   def self.attr_accessor(*vars)
     @attributes ||= []
     @attributes.concat vars

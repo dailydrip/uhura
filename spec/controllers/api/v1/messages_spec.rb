@@ -192,7 +192,7 @@ RSpec.describe 'Messages API', type: :request do
     describe 'when the preferred channel is email' do
       def link_to_sendgrid
         sendgrid_msg = SendgridMsg.create!(sent_to_sendgrid: 2.seconds.from_now,
-                                           mail_and_response: get_sendgrid_response_data('read_mail_and_response'),
+                                           mail_and_response: JSON.parse(get_sendgrid_response_data('read_mail_and_response')),
                                            got_response_at: nil,
                                            sendgrid_response: nil,
                                            read_by_user_at: nil)
