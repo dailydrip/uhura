@@ -88,9 +88,15 @@ class SendgridMailVo
     if email_and_maybe_name.blank?
       nil
     else
+      email_name = ''
       maybe_name_array = email_and_maybe_name.strip.gsub('  ', ' ').split(' ')
-      email_address = maybe_name_array[0]
-      email_name = maybe_name_array[1..-1].join(' ')[1..-2] if maybe_name_array.size > 1
+      if maybe_name_array.size.eql?(1)
+        email_address = maybe_name_array[0]
+      else
+        # Bob Brown <bob@example.com>
+        email_name = maybe_name_array[0..(maybe_name_array.size - 2)].join(' ')
+        email_address = maybe_name_array[maybe_name_array.size - 1][1..-2]
+      end
       { email: email_address, name: email_name }
     end
   end

@@ -5,7 +5,9 @@ class ClearstreamHandler < ServiceHandlerBase
   def self.send(message_vo)
     # Populate attributes required for request
     clearstream_vo = create_clearstream_msg(message_vo)
-    ClearstreamMessageWorker.perform_async(clearstream_vo)
+    # ClearstreamMessageWorker.perform_async(clearstream_vo)
+    ClearstreamMessageJob.perform_later(clearstream_vo)
+
     msg = "Asynchronously sent SMS: (#{message_vo.team_name}:#{message_vo.email_subject}) "
     msg += "from (#{message_vo.manager_name}) to (#{message_vo.mobile_number})"
     log_info(msg)
@@ -50,7 +52,7 @@ class ClearstreamHandler < ServiceHandlerBase
   end
 
   def self.handle_clearstream_msg_error(err_msg, message_vo)
-    log_error(err_msg)
+    log_error("err_msg (#{err_msg}) - message_vo (#{message_vo})")
     # An error occurs while processing the request. Record ERROR status.
     clearstream_msg = ClearstreamMsg.create!(
       response: {
@@ -68,7 +70,7 @@ class ClearstreamHandler < ServiceHandlerBase
   # Called from ClearstreamMessageWorker
   # rubocop:disable Metrics/AbcSize
   def self.send_msg(data)
-    message_id = data[:clearstream_vo]['message_id']
+    message_id = data[:clearstream_vo][:message_id]
     # Request Clearstream client to send message
     response = ClearstreamClient::MessageClient.new(data: data[:clearstream_vo],
                                                     resource: 'messages').send_message

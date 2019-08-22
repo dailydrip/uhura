@@ -49,6 +49,7 @@ ActiveRecord::Schema.define(version: 2019_05_12_215905) do
     t.bigint "manager_id"
     t.bigint "receiver_id"
     t.bigint "team_id"
+    t.string "from_email"
     t.string "email_subject"
     t.text "email_message"
     t.json "email_options"
@@ -81,6 +82,7 @@ ActiveRecord::Schema.define(version: 2019_05_12_215905) do
     t.bigint "manager_id", null: false
     t.bigint "receiver_id", null: false
     t.bigint "team_id", null: false
+    t.string "from_email"
     t.string "email_subject"
     t.text "email_message"
     t.json "email_options"

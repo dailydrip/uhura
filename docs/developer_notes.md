@@ -58,7 +58,17 @@ Create an account at [https://app.getclearstream.com](https://app.getclearstream
 - Create [webhooks](https://app.getclearstream.com/settings/webhooks) to tell Uhura when Clearstream events occur
 - View sent SMS statistics
 
+#### Clearstream API Key
 
+Here's where you configure your Clearstream API Key:
+
+![](images/clearstream_api_key.png)
+
+#### Clearstream Webhooks
+
+Here's where you configure your Clearstream webhook:
+
+![](images/clearstream_webhook.png)
 
 ### Highlands SSO
 

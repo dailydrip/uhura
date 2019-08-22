@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe ClearstreamMessageWorker do
+RSpec.describe ClearstreamMessageJob, type: :job do
   before do
     Sidekiq::Worker.clear_all
   end
@@ -35,7 +35,7 @@ RSpec.describe ClearstreamMessageWorker do
           .to_raise(ClearstreamClient::BaseClient::APIError)
 
         expect do
-          ClearstreamMessageWorker.perform_async(clearstream_vo)
+          ClearstreamMessageJob.perform_later(clearstream_vo)
         end.to raise_error(ClearstreamClient::BaseClient::APIError)
       end
     end

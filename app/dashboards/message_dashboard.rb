@@ -17,6 +17,7 @@ class MessageDashboard < Administrate::BaseDashboard
     team: BelongsToLabelField,
     template: BelongsToLabelField,
     id: Field::Number,
+    from_email: Field::String,
     email_subject: Field::String,
     email_message: Field::Text,
     email_options: Field::String.with_options(searchable: false),
@@ -47,6 +48,7 @@ class MessageDashboard < Administrate::BaseDashboard
     team
     template
     id
+    from_email
     email_subject
     email_message
     email_options
@@ -65,6 +67,7 @@ class MessageDashboard < Administrate::BaseDashboard
     receiver
     team
     template
+    from_email
     email_subject
     email_message
     email_options

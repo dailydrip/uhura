@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
-RSpec.describe UpdateSendgridMsgStatusFromWebhookWorker, type: :worker do
+
+RSpec.describe UpdateSendgridMsgStatusFromWebhookJob, type: :job do
   let!(:sendgrid_msg) { create(:sendgrid_msg, id: 'e7664350-e791-4c4f-a78e-d68f1f924c2b') }
   let!(:sendgrid_msg_event) { JSON.parse(get_sendgrid_response_data('webhook_params'))['_json'][0] }
 

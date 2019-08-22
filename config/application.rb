@@ -16,7 +16,9 @@ module Uhura
     config.to_prepare do
       Administrate::ApplicationController.helper Uhura::Application.helpers
     end
-    #config.active_job.queue_adapter = :sidekiq
+
+    # https://github.com/mperham/sidekiq/wiki/Active-Job
+    config.active_job.queue_adapter = :sidekiq
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers

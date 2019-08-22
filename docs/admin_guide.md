@@ -102,6 +102,43 @@ After waiting 30 minutes, we try the Clearstream Msg Events page again and see t
 
 ![](/home/lex/Clients/Concur/Projects/uhura/docs/images/sendgrid_message_attrs_error.png)
 
+
+
+# Asynchronous Jobs
+
+Uhura has configured Sidekiq to handle  asnynchronous jobs in config/application.rb:
+
+```ruby
+class Application < Rails::Application
+  # ...
+  config.active_job.queue_adapter = :sidekiq
+end
+```
+
+### Configure Sendgrid Webhooks
+
+Configure Sendgrid webhooks as follows:
+
+![](images/sendgrid_event_notification.png)
+
+#### Ngrok
+
+The HTTP POST URL is an ngrok address.
+
+[Ngrok](https://ngrok.com/) is useful for development purposes when you need to provide a fully qualified domain name/URL to a service provider like Sendgrid.
+
+Assuming you started your Uhura Rails development server on port 3000, you can configure ngrok as follows:
+
+![](images/ngrok.png)
+
+
+
+After ngrok handles a few requests, you'll see a history like this:
+
+![](images/ngrok-history.png)
+
+
+
 # License
 
 This project is licensed under the MIT License - See the [LICENSE](LICENSE.txt) file for details.

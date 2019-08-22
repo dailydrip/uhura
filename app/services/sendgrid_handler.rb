@@ -7,7 +7,8 @@ class SendgridHandler < ServiceHandlerBase
 
     sendgrid_vo = create_sendgrid_msg(message_vo, template_data)
 
-    SendgridMessageWorker.perform_async(sendgrid_vo)
+    # SendgridMessageWorker.perform_async(sendgrid_vo)
+    SendgridMessageJob.perform_later(sendgrid_vo)
 
     msg = "Asynchronously sent email: (#{message_vo.team_name}:#{message_vo.email_subject}) "
     msg += "from (#{message_vo.manager_name}) to (#{message_vo.email} <#{message_vo.first} #{message_vo.last}>)"
@@ -18,10 +19,9 @@ class SendgridHandler < ServiceHandlerBase
     handle_sendgrid_msg_error(err_msg, sendgrid_vo, message_vo)
   end
 
-  def self.create_sendgrid_msg(message_vo, template_data)
-    sendgrid_msg_on_uhura = SendgridMsg.create
-    SendgridMailVo.new(
-      from: message_vo.manager_email,
+  def self.email_hash(message_vo, template_data, sendgrid_msg_on_uhura_id)
+    {
+      from: message_vo.sender_email_address, # Default: manager_email; overwrite with from_email
       subject: message_vo.email_subject,
       receiver_sso_id: message_vo.receiver_sso_id,
       template_id: message_vo.sendgrid_template_id,
@@ -29,11 +29,25 @@ class SendgridHandler < ServiceHandlerBase
       email_options: message_vo.email_options,
       personalizations: [
         {
-          custom_args: { uhura_msg_id: sendgrid_msg_on_uhura.id }
+          custom_args: { uhura_msg_id: sendgrid_msg_on_uhura_id }
         }
       ],
       message_id: message_vo.message_id
-    ).vo
+    }
+  end
+
+  def self.create_sendgrid_msg(message_vo, template_data)
+    sendgrid_msg_on_uhura = SendgridMsg.create
+    begin
+      SendgridMailVo.new(email_hash(message_vo, template_data, sendgrid_msg_on_uhura.id)).vo
+    rescue StandardError => e
+      err_msg = get_err_msg(e)
+      handle_sendgrid_msg_error(
+        err_msg,
+        { mail: email_hash(message_vo, template_data, sendgrid_msg_on_uhura.id) },
+        message_vo
+      )
+    end
   end
 
   def self.handle_sendgrid_msg_error(err_msg, sendgrid_vo, message_vo)

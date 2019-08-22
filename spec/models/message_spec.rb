@@ -26,7 +26,7 @@ RSpec.describe Message, type: :model do
       it 'has valid attributes' do
         message_and_status = Message.message_and_status(message.id)
         expect(message_and_status[:message]).to_not be_nil
-        expect(message_and_status[:status][:sendgrid_msg_status]).to eq('accepted_by_sendgrid')
+        expect(message_and_status[:status][:sendgrid_msg_status]).to eq('accepted')
         expect(message_and_status[:status][:clearstream_msg_status]).to eq('QUEUED')
       end
     end
@@ -37,7 +37,7 @@ RSpec.describe Message, type: :model do
       let!(:message) { create(:message) }
 
       it 'has valid attributes' do
-        expect(message.status[:sendgrid]).to eq('accepted_by_sendgrid')
+        expect(message.status[:sendgrid]).to eq('accepted')
         expect(message.status[:clearstream]).to eq('QUEUED')
       end
     end

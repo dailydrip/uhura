@@ -13,8 +13,11 @@ class MessageParamsVo < BaseClass
   validates :template_id, presence: true
   validates :sms_message, presence: true
 
+  validate :email_options_check
+
   attr_accessor :public_token,
                 :receiver_sso_id,
+                :from_email,
                 :email_subject,
                 :email_message,
                 :email_options,
@@ -40,11 +43,30 @@ class MessageParamsVo < BaseClass
     {
       public_token: @public_token,
       receiver_sso_id: @receiver_sso_id,
+      from_email: @from_email,
       email_subject: @email_subject,
       email_message: @email_message,
       email_options: @email_options,
       template_id: @template_id,
       sms_message: @sms_message
     }
+  end
+
+  def email_option_check(email_option)
+    errors.add(:email_option, "invalid email: #{email_option}") unless email_option.match(RFC5233_EMAIL_REGEXP)
+  end
+
+  # Example: ["Bob Brown <bob@example.com>", "alice@example.com"]
+  # send_at and batch_id do not have email data (only cc, bcc)
+  def email_options_check
+    if email_options
+      JSON.parse(email_options.to_json).slice('cc', 'bcc').each do |k, v|
+        if v.class.eql?(Array)
+          v.each { |i| email_option_check(i) }
+        else
+          errors.add(:email_option, "expected an array (#{k}: #{v})")
+        end
+      end
+    end
   end
 end

@@ -91,6 +91,7 @@ class Api::V1::MessagesController < Api::V1::ApiBaseController
     MessageParamsVo.new(
       public_token: params[:public_token],
       receiver_sso_id: params[:receiver_sso_id],
+      from_email: params[:from_email],
       email_subject: params[:email_subject],
       email_message: params[:email_message],
       email_options: params[:email_options],

@@ -6,6 +6,7 @@ class CreateMessages < ActiveRecord::Migration[6.0]
       t.references :manager, null: false, foreign_key: true
       t.references :receiver, null: false, foreign_key: true
       t.references :team, null: false, foreign_key: true
+      t.string :from_email
       t.string :email_subject
       t.text :email_message
       t.json :email_options

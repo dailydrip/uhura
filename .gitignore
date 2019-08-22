@@ -38,3 +38,4 @@ yarn-debug.log*
 /.idea
 /*.java
 *.vmoptions
+nohup.out

@@ -4,6 +4,7 @@ class CreateInvalidMessages < ActiveRecord::Migration[6.0]
       t.references :manager, null: true
       t.references :receiver, null: true
       t.references :team, null: true
+      t.string :from_email
       t.string :email_subject
       t.text :email_message
       t.json :email_options

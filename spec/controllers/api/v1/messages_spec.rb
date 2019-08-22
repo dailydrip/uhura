@@ -346,9 +346,9 @@ RSpec.describe 'Messages API', type: :request do
             "button": 'Action!'
           },
           "email_options": {
-            "cc": ['recipient1@example.com <Alice Recipient>', 'recipient2@example.com'],
-            "bcc": ['recipient3@example.com', 'recipient4@example.com <Bob Recipient>'],
-            "reply_to": 'recipient5@example.com <Cindy Recipient>',
+            "cc": ['Alice Recipient <recipient1@example.com>', 'recipient2@example.com'],
+            "bcc": ['recipient3@example.com', 'Bob Recipient  <recipient4@example.com>'],
+            "reply_to": 'Cindy Recipient <recipient5@example.com>',
             "send_at": 1_577_854_800,
             "batch_id": 'YOUR_BATCH_ID'
           },

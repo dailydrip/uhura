@@ -353,6 +353,16 @@ NOTE: The response above shows that the email was sent successfully, but the SMS
 
 
 
+## Emails Don't Show Up in Inbox
+
+A recipient, whose email is properly configured in Highlands SSO, complains that they didn't receive an email.
+
+###  Solution
+
+Tell 'em to look in their SPAM folder.
+
+
+
 ## No template for interactive request
 
 When you attempt to access the Uhura administrative application, you might see the following:

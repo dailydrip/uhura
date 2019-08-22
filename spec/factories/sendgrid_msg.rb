@@ -2,6 +2,6 @@
 
 FactoryBot.define do
   factory :sendgrid_msg do
-    status { 'accepted_by_sendgrid' }
+    status { 'accepted' }
   end
 end
