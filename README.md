@@ -46,16 +46,16 @@ If you might need to install more than one version of Ruby on your server, consi
 
 Install the bundler gem, s.t., you can later run the `bundle` command and install Uhura's Ruby dependencies:
 
-``` 
+``` bash
 gem install bundler:2.0.2
 ```
 
 ### PostgreSQL
 If you want to install the [PostgreSQL](https://www.postgresql.org/) database sever locally for development purposes you can follow these steps on Ubuntu. 
 
-NOTE: Replace "lex" with your username.
+NOTE: Replace `lex` with your operating system's username below:
 
-``` 
+``` bash
 $ sudo apt update
 $ sudo apt install postgresql postgresql-contrib
 $ sudo -i -u postgres psql
@@ -100,7 +100,7 @@ See the *Create Your .env File* section below.
 
 Let's assume our uhura project root directory is `~/Projects/uhura`
 
-```
+```bash
 $ mkdir ~/Projects
 $ cd ~/Projects
 $ git clone https://github.com/dailydrip/uhura.git
@@ -112,13 +112,13 @@ $ bundle
 
 Run the following command and edit your .env file to match your environment.
 
-```
+```bash
 mv sample.env .env
 ```
 
 You can load those environment variables into your terminal's session by sourcing your project's .env file:
 
-```
+```bash
 source .env
 ```
 
@@ -126,22 +126,38 @@ source .env
 
 If you're installing Uhura in your development environment, ensure that [Postgresql](https://www.postgresql.org/) is installed. Then, from your ~/Projects/uhura directory run the following commands to create the Uhura database:
 
-```
+```bash
 $ source .env
 $ bundle exec rake db:create db:migrate db:seed
 ```
 
-#### 4. Run Uhura Server
+#### 4. Add Highlands SSO Admin User
 
+Run the following rake task, replacing the parameters with valid Highlands SSO crendentials, to enable your admin user to login to the [Uhura Admin Application](https://github.com/dailydrip/uhura/blob/master/docs/admin_guide.md).
+
+```bash
+$ be rake users:add-admin['admin.name@yourdomain.com','ausername','FirstName','LastName']
+**************************************************
+⛔️ WARNING: Sidekiq testing API enabled, but this is not the test environment.  
+Your jobs will not go to Redis.
+**************************************************
+
+Admin Added!
 ```
+
+#### 5. Run Uhura Server
+
+```bash
 $ bundle exec rails server
 ```
 
-#### 5. Open Admin Application
+#### 6. Open Admin Application
 
-Go to `http://localhost:3000/admin` and you'll see Uhura's admin application.  
+Go to `http://localhost:3000/admin` and you'll be redirected to login using your Highlands SSO credentials:
 
-Login with your Highlands SSO credentials.
+![](docs/images/highlands_auth_sign_in.png)
+
+Login with your Highlands SSO credentials; the username should match what you used in the **Add Highlands SSO Admin User** section above.
 
 
 
@@ -151,7 +167,7 @@ Login with your Highlands SSO credentials.
 
 We use  `rspec` for running unit tests.. From your ~/Projects/uhura directory, run:
 
-```
+```bash
 $ source .env
 $ bundle exec rspec
 ```
@@ -160,7 +176,7 @@ $ bundle exec rspec
 
 We use `rubocop` for Ruby linting. From your ~/Projects/uhura directory, run:
 
-```
+```bash
 $ bundle exec rubocop
 ```
 
@@ -168,7 +184,7 @@ $ bundle exec rubocop
 
 ### SideKiq
 
-Uhura uses [SideKiq](https://github.com/mperham/sidekiq) for processing messages sent to Sendgrid and Clearstream.  Sidekiq is installed as a Ruby gem and is pre-configured to work with Uhura.
+Uhura uses [SideKiq](https://github.com/mperham/sidekiq) for processing messages sent to [Sendgrid](https://sendgrid.com/) and [Clearstream](https://clearstream.io/).  Sidekiq is installed as a Ruby gem and is pre-configured to work with Uhura.
 
 Sidekiq uses [Redis](https://redis.io/) to store all of its job and operational data.
 
@@ -178,7 +194,7 @@ By default, Sidekiq tries to connect to Redis at `localhost:6379`. This typicall
 
 ## Other Resources
 
-See the [Troubleshooting Guide](docs/troubleshooting.md) and [Developers Notes](docs/developer_notes.md) in the [documents directory](docs/).
+See the [Troubleshooting Guide](docs/troubleshooting.md) , [Developers Notes](docs/developer_notes.md) and [Admin Guide](docs/admin_guide.md) in the [documents directory](docs/).
 
 Sendgrid Templates
 

@@ -51,13 +51,10 @@ RSpec.describe MessageParamsVo, type: :model do
         expect(message_params_vo.valid?).to eq(false)
       end
 
-      it 'must have valid section1 in email_message' do
+      it 'must have at least one section in email_message' do
         message_params_vo = MessageParamsVo.new(
           message_params(
             email_message: {
-              header: 'Rock Slide',
-              section1: nil,
-              button: 'Brush'
             }
           )
         )

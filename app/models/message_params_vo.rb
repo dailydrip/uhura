@@ -33,8 +33,8 @@ class MessageParamsVo < BaseClass
   # by the template id and raise if any of them are missing.
   def email_message_sections
     if email_message
-      if @email_message[:section1].blank?
-        errors.add(:value, 'email_message missing sections. First section should be named "section1".')
+      if JSON.parse(@email_message.to_json).keys.size.eql?(0)  #@email_message[:section1].blank?
+        errors.add(:value, 'email_message missing sections')
       end
     end
   end
