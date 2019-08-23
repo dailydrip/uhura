@@ -11,7 +11,6 @@ RSpec.describe MessageParamsVo, type: :model do
     it { is_expected.to respond_to(:email_message_sections) }
     it { is_expected.to respond_to(:template_id) }
     it { is_expected.to respond_to(:sms_message) }
-    it { is_expected.to respond_to(:my_attributes) }
   end
 
   describe 'validations' do
@@ -52,12 +51,13 @@ RSpec.describe MessageParamsVo, type: :model do
         expect(message_params_vo.valid?).to eq(false)
       end
 
-      it 'must have valid section1 in email_message' do
-        message_params_vo = MessageParamsVo.new(message_params(email_message: {
-                                                                 header: 'Rock Slide',
-                                                                 section1: nil,
-                                                                 button: 'Brush'
-                                                               }))
+      it 'must have at least one section in email_message' do
+        message_params_vo = MessageParamsVo.new(
+          message_params(
+            email_message: {
+            }
+          )
+        )
         expect(message_params_vo.valid?).to eq(false)
       end
       it 'must have valid email_message' do
@@ -76,7 +76,7 @@ RSpec.describe MessageParamsVo, type: :model do
       end
 
       describe 'when message params are valid' do
-        it 'does not raise any exception' do
+        it 'is valid' do
           message_params_vo = MessageParamsVo.new(message_params)
           expect(message_params_vo.valid?).to eq(true)
         end

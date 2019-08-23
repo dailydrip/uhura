@@ -58,7 +58,29 @@ Create an account at [https://app.getclearstream.com](https://app.getclearstream
 - Create [webhooks](https://app.getclearstream.com/settings/webhooks) to tell Uhura when Clearstream events occur
 - View sent SMS statistics
 
+#### Clearstream API Key
 
+Here's where you configure your Clearstream API Key:
+
+![](images/clearstream_api_key.png)
+
+#### Clearstream Webhooks
+
+Here's where you configure your Clearstream webhook:
+
+![](images/clearstream_webhook.png)
+
+Ngrok
+
+You can use Ngrok during development to provide a fully qualified domain name that your external service provider, e.g., Sendgrid/Clearstream, can use.
+
+Assuming you started Uhura on Rails' default port 3000 `bundle exec rails server`
+
+You can enter `ngrok http 3000` and you'll see something like this:
+
+![](images/ngrok.png)
+
+Use the `Forwarding`url in your Sendgrid/Clearstream admin console.
 
 ### Highlands SSO
 
@@ -554,6 +576,131 @@ alias be='bundle exec'
 
 alias rubo='echo "Running rubocop..."; be rake rubocop'
 ```
+
+
+
+## Send Message and Sendgrid Templates
+
+Find some example Sendgrid Templates [here](https://github.com/dailydrip/uhura/tree/master/docs/sendgrid_templates).
+
+You'll likely want to rewrite the HTML to suit your needs.
+
+For our example, we'll use the templates from the the link above.
+
+Here's a snippet of the HTML from [template_with_1_section.html](https://github.com/dailydrip/uhura/blob/master/docs/sendgrid_templates/template_with_1_section.html).
+
+```
+<table class="module" role="module" data-type="text"
+       style="table-layout: fixed;" width="100%"
+       cellspacing="0" cellpadding="0" border="0">
+    <tbody>
+    <tr>
+        <td style="padding:30px 45px 30px 45px;line-height:22px;text-align:inherit;"
+            valign="top" height="100%" bgcolor="">
+            <div style="text-align: center;"><span
+                    style="color:#333333;">{{section1}}</span></div>
+        </td>
+    </tr>
+    </tbody>
+</table>  
+```
+
+Do you see the double curly brackets above? `{{section1}}`
+
+That should correspond to the request sent to the Uhura Messaging Server.
+
+### Send Message Using CURL
+
+```bash
+curl -X POST \
+  http://localhost:3000/api/v1/messages \
+  -H 'Cache-Control: no-cache' \
+  -H 'Content-Type: application/json' \
+  -H 'Host: localhost:3000' \
+  -H 'Authorization: Bearer b1dcc4b8287a82fe8889' \
+  -H 'X-Team-ID: 1' \
+  -d '{
+	"public_token": "42c50c442ee3ca01378e",
+    "receiver_sso_id": "63501603",
+    "from_email": "lllllll@ccccc.com",
+    "email_subject": "Picnic Saturday",
+    "email_message": {
+	  "header": "Dragon Rage",
+	  "section1": "imagine you are writing an email. you are in front of the computer. you are operating the computer, clicking a mouse and typing on a keyboard, but the message will be sent to a human over the internet. so you are working before the computer, but with a human behind the computer.",
+	  "button": "Count me in!"
+	},
+    "template_id": "d-05d33214e6994b01b577602036bfa9f5",
+    "sms_message": "Bring Drinks to the Picnic this Saturday"
+}'
+```
+
+See the `"section1"` above?  That should match the `{{section1}}` found in your Sendgrid HTML template.
+
+You can add as many sections to the `email_message` attribute as you like.  You can name them whatever you like, just so long as the attribute names you use match the names in the curly brackets in your Sendgrid template.
+
+### Send Message using Ruby
+
+Assuming you are calling Uhura using Ruby, your call should use the [Uhura Client gem](https://github.com/dailydrip/uhura-client) and your code should look something like this:
+
+```ruby
+    client = UhuraClient::MessageClient.new(
+        api_key: ENV['UHURA_API_KEY'],
+        team_id: ENV['UHURA_TEAM_ID'],
+        public_token: ENV['UHURA_PUBLIC_TOKEN']
+    )
+
+    response = client.send_message(@message)
+```
+
+You should add your template using the Sendgrid admin application.
+
+### Sendgrid Template 1
+
+#### Settings
+
+This is the settings panel for the  [template_with_1_section.html](https://github.com/dailydrip/uhura/blob/master/docs/sendgrid_templates/template_with_1_section.html) template:
+
+![](images/sendgrid_template1_settings_in_sg_admin.png)
+
+Do you see the `{{subject}}` text in the **Email Subject** field?  
+
+That should match your email message's `subject` attribute.
+
+The text in the **Template Name** field is not used, but feel free to name it if you wish.
+
+#### Transactional Template Names
+
+What does matter is the name you give your Sendgrid Transactional Templates:
+
+![](images/sendgrid_transactional_templates_in_sg_admin.png)
+
+#### HTML
+
+Click the gear icon and then the Edit link to see the code and wysiwig for your template.
+
+This is the  [template_with_1_section.html](https://github.com/dailydrip/uhura/blob/master/docs/sendgrid_templates/template_with_1_section.html) template:
+
+![](/home/lex/Clients/Concur/Projects/uhura/docs/images/sendgrid_template1_in_sg_admin.png)
+
+Do you see `{{section1}}` on line 168?  
+
+#### Section Name in Example App
+
+That should match the **Section1** field name in your application.
+
+![](/home/lex/Clients/Concur/Projects/uhura/docs/images/section1-in-example-app.png)
+
+
+
+#### Email With Section1 in Inbox
+
+After you click the **\<Send Message>** button, the recipient should receive, assuming they have set their communication preference to receive emails, should look like this:
+
+![](/home/lex/Clients/Concur/Projects/uhura/docs/images/correct_section_name_email.png)
+
+Some email clients, like ProtonMail, will warn you if the From email address is different from the sender's domain.  In this example we can see that's the case, which means that we typed an email in the **From Email Address** field of the [Uhura Example App](https://github.com/dailydrip/uhura-example-app).
+
+
 
 
 

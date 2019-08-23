@@ -7,12 +7,12 @@ class Api::V1::WebHooksController < ApplicationController
     # Rails automatically handles the JSON data and maps it into the object:  params["_json"]
     events = params['_json']
     events&.each do |event|
-      UpdateSendgridMsgStatusFromWebhookWorker.perform_async(JSON.parse(event.to_json))
+      UpdateSendgridMsgStatusFromWebhookJob.perform_later(JSON.parse(event.to_json))
     end
   end
 
   def clearstream
     message_hash = JSON.parse(params[:data][:message].to_json)
-    UpdateClearstreamMsgStatusFromWebhookWorker.perform_async(message_hash)
+    UpdateClearstreamMsgStatusFromWebhookJob.perform_later(message_hash)
   end
 end

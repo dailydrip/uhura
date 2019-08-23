@@ -353,6 +353,16 @@ NOTE: The response above shows that the email was sent successfully, but the SMS
 
 
 
+## Emails Don't Show Up in Inbox
+
+A recipient, whose email is properly configured in Highlands SSO, complains that they didn't receive an email.
+
+###  Solution
+
+Tell 'em to look in their SPAM folder.
+
+
+
 ## No template for interactive request
 
 When you attempt to access the Uhura administrative application, you might see the following:
@@ -372,6 +382,30 @@ gem 'haml-rails', '~> 2.0.1'
 When you attempt to access the Uhura administrative application again you should see this:
 
 ![highlandsauth_sso_login_page](images/highlandsauth_sso_login_page.png)
+
+
+
+## Section Empty in Sent Email
+
+### Missing Content
+
+Your email receiver might get an email with a blank section like this:
+
+![](images/wrong_section_name_email.png)
+
+See the empty lines below **Dragon Rage** and above the orange button?
+
+### Complete Content
+
+Chances are you've got a typo in your section name.
+
+This is what your email should look like, with the missing content:
+
+![](images/correct_section_name_email.png)
+
+### Solution
+
+See the **Send Message and Sendgrid Templates** section in the [Developer Notes](https://github.com/dailydrip/uhura/blob/master/docs/developer_notes.md) guide for details on how to resolve your missing content issue.
 
 
 

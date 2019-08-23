@@ -7,7 +7,7 @@ RSpec.describe 'MessageStatus API', type: :request do
     setup_data
   end
 
-  describe 'GET /api/v1/message_status' do
+  describe 'GET /api/v1/message_status/:id' do
     let(:manager) { Manager.first }
     let(:receiver) { Receiver.first }
 
@@ -29,15 +29,15 @@ RSpec.describe 'MessageStatus API', type: :request do
     end
 
     context 'when it is authorized and receiver prefers email but not sms' do
-      it 'returns accepted_by_sendgrid and nil for clearstream' do
+      it 'returns accepted and nil for clearstream' do
         get '/api/v1/message_status/1', headers: valid_headers, params: nil
-        expect(response.parsed_body['message_status']['sendgrid']).to eq('accepted_by_sendgrid')
+        expect(response.parsed_body['message_status']['sendgrid']).to eq('accepted')
         expect(response.parsed_body['message_status']['clearstream']).to eq(nil)
       end
     end
 
     context 'when it is authorized and receiver prefers sms but not email' do
-      it 'returns accepted_by_sendgrid and nil for clearstream' do
+      it 'returns accepted and nil for clearstream' do
         get '/api/v1/message_status/2', headers: valid_headers, params: nil
         expect(response.parsed_body['message_status']['sendgrid']).to eq(nil)
         expect(response.parsed_body['message_status']['clearstream']).to eq('QUEUED')

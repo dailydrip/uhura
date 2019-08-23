@@ -12,10 +12,10 @@ class SendgridMsg < ApplicationRecord
 
     if sendgrid_response.eql?('202')
       # We can fabricate this status based on the fact that sendgrid accepted the request
-      'accepted_by_sendgrid'
+      'accepted'
     else
-      # Return the actual status_code from sendgrid if status is nil and response was not accpeted (202)
-      mail_and_response = JSON.parse(attributes['mail_and_response'])
+      # Return the actual status_code from sendgrid if status is nil and response was not accepted (202)
+      mail_and_response = attributes['mail_and_response']
       mail_and_response['response']['status_code'] if mail_and_response && mail_and_response['response']
     end
   end

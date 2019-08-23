@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe SendgridMessageWorker do
+RSpec.describe SendgridMessageJob, type: :job do
   before do
     Sidekiq::Worker.clear_all
   end
@@ -61,8 +61,7 @@ RSpec.describe SendgridMessageWorker do
               'Authorization' => "Bearer #{ENV['SENDGRID_API_KEY']}",
               'Content-Type' => 'application/json'
             }
-          )
-          .to_return(status: 200, body: '', headers: {})
+          ).to_return(status: 200, body: '', headers: {})
 
         expect(SendgridHandler).to receive(:send_msg).once
         subject.perform(sendgrid_vo)
@@ -76,7 +75,7 @@ RSpec.describe SendgridMessageWorker do
 
         expect do
           sendgrid_vo = nil
-          SendgridMessageWorker.perform_async(sendgrid_vo)
+          SendgridMessageJob.perform_later(sendgrid_vo)
         end.to raise_error(NoMethodError)
       end
     end

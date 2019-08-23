@@ -37,7 +37,7 @@ RSpec.describe 'Web Hooks', type: :request do
         post '/api/v1/web_hooks/sendgrid', params: sengrid_data.to_json, headers: { "Content-Type": 'application/json' }
 
         expect(response.status).to eq 204
-        expect(SendgridMsg.first.status).to eq 'deferred'
+        expect(SendgridMsg.first.status).to eq 'accepted'
       end
     end
   end
@@ -56,7 +56,7 @@ RSpec.describe 'Web Hooks', type: :request do
 
         post '/api/v1/web_hooks/clearstream', params: clearstream_data, headers: { "Content-Type": 'application/json' }
         expect(response.status).to eq 204
-        expect(ClearstreamMsg.first.status).to eq 'SENT'
+        expect(ClearstreamMsg.first.status).to eq 'QUEUED'
       end
     end
   end

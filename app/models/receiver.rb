@@ -19,8 +19,8 @@ class Receiver < ApplicationRecord
                                                   resource: data[:resource]).get_receiver(data[:id])
     if response.nil?
       return ReturnVo.new(value: nil, error: return_error('get_user_preferences not found', :unprocessable_entity))
-    elsif response[:error] && response[:error][:message]
-      return ReturnVo.new(value: nil, error: return_error(JSON.parse(response[:error][:message])['error'],
+    elsif response[:error]
+      return ReturnVo.new(value: nil, error: return_error(JSON.parse(response[:error]),
                                                           :unprocessable_entity))
     else
       return receiver_vo(receiver_from_response(response))

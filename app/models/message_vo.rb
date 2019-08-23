@@ -33,6 +33,7 @@ class MessageVo
                 :receiver_sso_id,
                 :receiver_id, # Required by Message.create!
                 :receiver_email, # Populated when receiver_sso_id is assigned a value
+                :from_email, # Optional
                 :email_subject,
                 :email_message,
                 :email_options,
@@ -121,6 +122,7 @@ class MessageVo
       manager_id: @manager_id,
       receiver_id: @receiver_id,
       team_id: @team_id,
+      from_email: @from_email,
       email_subject: @email_subject,
       email_message: @email_message,
       email_options: @email_options,
@@ -138,6 +140,12 @@ class MessageVo
       last_name: @last_name,
       preferences: convert_preferences(@preferences)
     }
+  end
+
+  def sender_email_address
+    return @from_email if @from_email
+
+    @manager_email
   end
 
   # Return a hash that includes all instance variables, less the errors attribute.
