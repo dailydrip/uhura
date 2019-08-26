@@ -33,14 +33,15 @@ These instructions will get you up and running with Uhura on your local machine 
 - Ruby 2.6.3
 - bundler 2.0.2
 - PostgreSQL
+- Yarn
 
 ### Git
 
 Follow the [Connecting to GitHub with SSH](https://help.github.com/en/articles/connecting-to-github-with-ssh) instructions.
 
-#### Ruby 2.6.3
+### Ruby 2.6.3
 
-If you might need to install more than one version of Ruby on your server, consider using [<https://github.com/rbenv/rbenv>](https://github.com/rbenv/rbenv) or [rvm](https://rvm.io/) to help you manage your Ruby version.
+If you might need to install more than one version of Ruby on your server, consider using [rbenv](https://github.com/rbenv/rbenv) or [rvm](https://rvm.io/) to help you manage your Ruby version.
 
 ### bundler 2.0.2
 
@@ -65,6 +66,22 @@ postgres=# CREATE ROLE lex LOGIN SUPERUSER;
 Giving your user role the SUPERUSER attribute allows you to run Rails database manipulation commands and migrations, e.g., `bundle exec rake db:create`. The LOGIN attribute is also required.
 
 NOTE: See [Troubleshooting Guide](docs/troubleshooting.md) to see how to install PostgrSQL client library if you chose not to install the PostgreSQL database server in the server instance where you install Uhura.
+
+### Yarn
+
+Install the Yarn package on your workstation.  For an Ubuntu server:
+
+```bash
+sudo apt update
+sudo apt install yarn
+```
+
+#### Install NPM Packages
+```
+yarn install --check-files
+```
+
+
 
 ## Environment Variables
 
@@ -94,11 +111,13 @@ Environment variables used to integrate with 3rd party services:
 
 See the *Create Your .env File* section below.
 
-### Installation
+
+
+## Installation
 
 #### 1. Install Uhura 
 
-Let's assume our uhura project root directory is `~/Projects/uhura`
+Let's assume our Uhura project root directory is `~/Projects/uhura`
 
 ```bash
 $ mkdir ~/Projects
@@ -106,6 +125,7 @@ $ cd ~/Projects
 $ git clone https://github.com/dailydrip/uhura.git
 $ cd uhura
 $ bundle
+$ bundle exec rails webpacker:install
 ```
 
 #### 2. Create Your .env File
@@ -136,7 +156,7 @@ $ bundle exec rake db:create db:migrate db:seed
 Run the following rake task, replacing the parameters with valid Highlands SSO crendentials, to enable your admin user to login to the [Uhura Admin Application](https://github.com/dailydrip/uhura/blob/master/docs/admin_guide.md).
 
 ```bash
-$ be rake users:add-admin['admin.name@yourdomain.com','ausername','FirstName','LastName']
+$ bundle exec rake users:add-admin['admin.name@yourdomain.com','ausername','FirstName','LastName']
 **************************************************
 ⛔️ WARNING: Sidekiq testing API enabled, but this is not the test environment.  
 Your jobs will not go to Redis.
@@ -161,9 +181,9 @@ Login with your Highlands SSO credentials; the username should match what you us
 
 
 
-### Tests
+## Tests
 
-#### Unit Tests
+### Unit Tests
 
 We use  `rspec` for running unit tests.. From your ~/Projects/uhura directory, run:
 
@@ -172,7 +192,7 @@ $ source .env
 $ bundle exec rspec
 ```
 
-#### Project Linter
+### Project Linter
 
 We use `rubocop` for Ruby linting. From your ~/Projects/uhura directory, run:
 
@@ -181,6 +201,8 @@ $ bundle exec rubocop
 ```
 
 
+
+## Asynchronous Processing
 
 ### SideKiq
 
